@@ -77,6 +77,9 @@
     <delete dir="javadoc" failonerror="false" verbose="true" />  <!-- the local copy -->
     <mkdir dir="javadoc" />
   </target>
-
+  <target name="run" description="run the snake program">
+  <java classpath="build" classname="edu.ucsb.cs56.projects.games.snake.SnakeFrame" fork="true">
+  </java>
+  </target>
 
 </project>
