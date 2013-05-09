@@ -2,10 +2,7 @@ package edu.ucsb.cs56.projects.games.snake;
 /* ------------------------------------------------
  *                      Snake
  * ------------------------------------------------
- * high score: 140
  * Sam Dowell
- * Period 2
- * Mr. Forster's Class
  */
 
 /*

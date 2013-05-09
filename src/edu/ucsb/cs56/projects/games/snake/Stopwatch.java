@@ -10,7 +10,6 @@ package edu.ucsb.cs56.projects.games.snake;
  */
 
 /* Sam Dowell
- * Period 2
  * 12/16/2011
  */
 
