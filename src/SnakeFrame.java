@@ -57,31 +57,31 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
         // Initialize components
         initComponents();
         // Set boundaries for playing field
-        this.setSize(495, 495);
+        this.setSize(500,500);
         setLocationRelativeTo(null);
         this.setResizable(false);
         // Add a KeyListener
         addKeyListener(this);
-        // Establish starting X and Y coordinate for Snake
-        playerx = 105;
-        playery = 405;
+	// Set player starting position
+     	playerx=this.getWidth()/5*3;
+	playery=this.getHeight()/5*3;
         // Create random starting X and Y coordinate for fruit
-        particlex = (gen.nextInt(27) + 3) * 15;
-        particley = (gen.nextInt(27) + 4) * 15;
+        particlex = (gen.nextInt(this.getWidth()));
+        particley = (gen.nextInt(this.getHeight()));
         // Create 3 starting blocks for Tail
         for (int i = 0; i < 3; i++) {
             tail.add(new Tail(playerx, playery));
         }
         // Set starting positions for the tail
-        tail.get(0).setPos(this.getWidth() - 90, 405);
-        tail.get(1).setPos(this.getWidth() - 90, 420);
-        tail.get(2).setPos(this.getWidth() - 90, 435);
+        tail.get(0).setPos(playerx,playery);
+        tail.get(1).setPos(playerx,playery+WIDTH);
+        tail.get(2).setPos(playerx,playery+(2*WIDTH));
         for (int i = 0; i < 3; i++) {
             player2.add(new Tail(400, 400));
         }
-        player2.get(0).setPos(150, 600);
-        player2.get(1).setPos(150, 615);
-        player2.get(2).setPos(150, 630);
+        player2.get(0).setPos(playerx/3*2, playery);
+        player2.get(1).setPos(playerx/3*2, playery+WIDTH);
+        player2.get(2).setPos(playerx/3*2, playery+(2*WIDTH));
         // Create offscreen image
         offscreen = this.createImage(this.getWidth(), this.getHeight());
         // Create an ActionListener
@@ -173,7 +173,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
         if (loser > 0) {
             // If user chooses yes, restart the program
             if (playagainyes == true) {
-                this.setSize(495, 495);
+                //this.setSize(600, 600);
                 setLocationRelativeTo(null);
                 frameresized = false;
                 controls = false;
@@ -184,8 +184,8 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 size1 = 3;
                 size2 = 3;
                 // Establish starting X and Y coordinate for Snake
-                playerx = 105;
-                playery = 405;
+                playerx = this.getWidth()/2;
+                playery = this.getHeight()/2;
                 // Create random starting X and Y coordinate for fruit
                 particlex = (gen.nextInt(27) + 3) * 15;
                 particley = (gen.nextInt(27) + 4) * 15;
@@ -195,16 +195,16 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     tail.add(new Tail(playerx, playery));
                 }
                 // Set starting positions for the tail
-                tail.get(0).setPos(this.getWidth() - 90, this.getHeight() - 90);
-                tail.get(1).setPos(this.getWidth() - 90, this.getHeight() - 75);
-                tail.get(2).setPos(this.getWidth() - 90, this.getHeight() - 60);
+                tail.get(0).setPos(playerx,playery);
+                tail.get(1).setPos(playerx,playery+WIDTH);
+                tail.get(2).setPos(playerx,playery+(2*WIDTH));
                 player2.clear();
                 for (int i = 0; i < 3; i++) {
                     player2.add(new Tail(650, 650));
                 }
-                player2.get(0).setPos(150, 600);
-                player2.get(1).setPos(150, 615);
-                player2.get(2).setPos(150, 630);
+                player2.get(0).setPos(playerx/3*2, playery);
+                player2.get(1).setPos(playerx/3*2, playery+WIDTH);
+                player2.get(2).setPos(playerx/3*2, playery+(2*WIDTH));
                 // Start stopwatch
                 watch.start();
                 // Reinitialize direction variables
@@ -609,11 +609,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         hasIntersected = false;
                         for (int i = 0; i < tail.size(); i++) {
                             Rectangle r = new Rectangle(tail.get(i).getX(), tail.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                            Rectangle fruit = new Rectangle(particlex, particley, WIDTH, WIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, 15, 15)) {
-                                    particlex = (gen.nextInt(42) + 4) * 15;
-                                    particley = (gen.nextInt(37) + 10) * 15;
+                                while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
+                                    particlex = (gen.nextInt(42) + 4) * WIDTH;
+                                    particley = (gen.nextInt(37) + 10) * WIDTH;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -621,11 +621,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         }
                         for (int i = 0; i < player2.size(); i++) {
                             Rectangle r = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                            Rectangle fruit = new Rectangle(particlex, particley, WIDTH, WIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, 15, 15)) {
-                                    particlex = (gen.nextInt(42) + 4) * 15;
-                                    particley = (gen.nextInt(37) + 10) * 15;
+                                while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
+                                    particlex = (gen.nextInt(42) + 4) * WIDTH;
+                                    particley = (gen.nextInt(37) + 10) * WIDTH;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -679,12 +679,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                 for (int j = 0; j < 3; j++) {
                                     tail.add(new Tail(playerx, playery));
                                 }
-                                int x = (gen.nextInt(31) + 10) * 15;
-                                int y = (gen.nextInt(31) + 10) * 15;
+                                int x = (gen.nextInt(31) + 10) * WIDTH;
+                                int y = (gen.nextInt(31) + 10) * WIDTH;
                                 // Set starting positions for the tail
                                 tail.get(0).setPos(x, y);
-                                tail.get(1).setPos(x, y + 15);
-                                tail.get(2).setPos(x, y + 30);
+                                tail.get(1).setPos(x, y + WIDTH);
+                                tail.get(2).setPos(x, y + (2*WIDTH));
                                 size1 = 3;
                                 hasIntersected = true;
                                 break;
@@ -704,12 +704,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         for (int p = 0; p < 3; p++) {
                                             tail.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * WIDTH;
                                         // Set starting positions for the tail
                                         tail.get(0).setPos(x, y);
-                                        tail.get(1).setPos(x, y + 15);
-                                        tail.get(2).setPos(x, y + 30);
+                                        tail.get(1).setPos(x, y + WIDTH);
+                                        tail.get(2).setPos(x, y + WIDTH);
                                         System.out.println("tail reset");
                                     }
                                 }
@@ -768,12 +768,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                     for (int j = 0; j < 3; j++) {
                                         tail.add(new Tail(playerx, playery));
                                     }
-                                    int x = (gen.nextInt(31) + 10) * 15;
-                                    int y = (gen.nextInt(31) + 10) * 15;
+                                    int x = (gen.nextInt(31) + 10) * WIDTH;
+                                    int y = (gen.nextInt(31) + 10) * WIDTH;
                                     // Set starting positions for the tail
                                     tail.get(0).setPos(x, y);
-                                    tail.get(1).setPos(x, y + 15);
-                                    tail.get(2).setPos(x, y + 30);
+                                    tail.get(1).setPos(x, y + WIDTH);
+                                    tail.get(2).setPos(x, y + (2*WIDTH));
                                     size1 = 3;
                                 }
                             }
@@ -791,12 +791,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         for (int p = 0; p < 3; p++) {
                                             tail.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * (2*WIDTH);
                                         // Set starting positions for the tail
                                         tail.get(0).setPos(x, y);
-                                        tail.get(1).setPos(x, y + 15);
-                                        tail.get(2).setPos(x, y + 30);
+                                        tail.get(1).setPos(x, y + WIDTH);
+                                        tail.get(2).setPos(x, y + (2*WIDTH));
                                         System.out.println("tail reset");
                                     }
                                 }
@@ -817,11 +817,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                 for (int j = 0; j < 3; j++) {
                                     player2.add(new Tail(400, 400));
                                 }
-                                int x = (gen.nextInt(31) + 10) * 15;
-                                int y = (gen.nextInt(31) + 10) * 15;
+                                int x = (gen.nextInt(31) + 10) * WIDTH;
+                                int y = (gen.nextInt(31) + 10) * WIDTH;
                                 player2.get(0).setPos(x, y);
-                                player2.get(1).setPos(x, y + 15);
-                                player2.get(2).setPos(x, y + 30);
+                                player2.get(1).setPos(x, y + WIDTH);
+                                player2.get(2).setPos(x, y + (2*WIDTH));
                                 size2 = 3;
                                 break;
                             }
@@ -839,12 +839,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         for (int p = 0; p < 3; p++) {
                                             player2.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * WIDTH;
                                         // Set starting positions for the tail
                                         player2.get(0).setPos(x, y);
-                                        player2.get(1).setPos(x, y + 15);
-                                        player2.get(2).setPos(x, y + 30);
+                                        player2.get(1).setPos(x, y + WIDTH);
+                                        player2.get(2).setPos(x, y + (2*WIDTH));
                                         System.out.println("tail reset");
                                     }
                                 }
@@ -864,11 +864,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                 for (int j = 0; j < 3; j++) {
                                     player2.add(new Tail(400, 400));
                                 }
-                                int x = (gen.nextInt(31) + 10) * 15;
-                                int y = (gen.nextInt(31) + 10) * 15;
+                                int x = (gen.nextInt(31) + 10) * WIDTH;
+                                int y = (gen.nextInt(31) + 10) * WIDTH;
                                 player2.get(0).setPos(x, y);
-                                player2.get(1).setPos(x, y + 15);
-                                player2.get(2).setPos(x, y + 30);
+                                player2.get(1).setPos(x, y + WIDTH);
+                                player2.get(2).setPos(x, y + (2*WIDTH));
                                 size2 = 3;
                             }
 
@@ -887,12 +887,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         for (int p = 0; p < 3; p++) {
                                             player2.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * WIDTH;
                                         // Set starting positions for the tail
                                         player2.get(0).setPos(x, y);
-                                        player2.get(1).setPos(x, y + 15);
-                                        player2.get(2).setPos(x, y + 30);
+                                        player2.get(1).setPos(x, y + WIDTH);
+                                        player2.get(2).setPos(x, y + (2*WIDTH));
                                         System.out.println("tail reset");
                                     }
                                 }
