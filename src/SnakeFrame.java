@@ -261,7 +261,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
             tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
         }
         
-        if ((menu != 0) && (players == 1) && (frameresized == false)) {
+        /*if ((menu != 0) && (players == 1) && (frameresized == false)) {
 			if (screenSize == 0){this.setSize(500,500);}
             else if (screenSize == 1){this.setSize(600,600);}
             else if (screenSize == 2){this.setSize(700,700);}
@@ -280,7 +280,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
             tail.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
             tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
 
-		}
+		}*/
         
         // If game is in progress and is not paused, send one block from the back to the front
         if ((menu != 0) && (pause == false) && (players == 1)) {
@@ -499,8 +499,22 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
                             while (head.intersects(particlex, particley, WIDTH, WIDTH)) {
-                                particlex = (gen.nextInt(27) + 3) * WIDTH;
-                                particley = (gen.nextInt(27) + 4) * WIDTH;
+                                //test
+                                if (screenSize == 0)
+                                {
+									particlex = (gen.nextInt(27) + 3) * WIDTH;
+									particley = (gen.nextInt(27) + 4) * WIDTH;
+								}	
+                                else if (screenSize == 1)
+                                {
+									particlex = (gen.nextInt(34) + 3) * WIDTH;
+									particley = (gen.nextInt(32) + 7) * WIDTH;
+								}
+                                else if (screenSize == 2)
+                                {
+									particlex = (gen.nextInt(42) + 4) * WIDTH;
+									particley = (gen.nextInt(37) + 10) * WIDTH;
+								}
                             }
                             // Set growsnake to true to increase size of snake by 1
                             growsnake = true;
