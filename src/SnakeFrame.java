@@ -13,8 +13,10 @@
  * Created on Dec 24, 2011, 11:42:55 AM
  */
 /**
- *
- * @author Sam
+ * A class that paint the snake and modify its attribute depending
+ * on user input
+ * edited by Sam Min and Eric Huang for CS56, project 02, Spring 2013
+ * @author Sam Dowell
  */
 import java.awt.*;
 import java.awt.event.*;
@@ -52,8 +54,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
     private Stopwatch watch = new Stopwatch();
     private Stopwatch fruittimer = new Stopwatch();
     
-    JLabel label, m;
-    JButton button;
+    //JLabel label, m;
+    //JButton button;
     
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
@@ -63,7 +65,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
         // Set boundaries for playing field
         this.setSize(500,500);
         setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
 	
         // Add a KeyListener
         addKeyListener(this);
@@ -261,7 +263,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
             tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
         }
         
-        /*if ((menu != 0) && (players == 1) && (frameresized == false)) {
+        if ((menu != 0) && (players == 1) && (frameresized == false)) {
 			if (screenSize == 0){this.setSize(500,500);}
             else if (screenSize == 1){this.setSize(600,600);}
             else if (screenSize == 2){this.setSize(700,700);}
@@ -280,7 +282,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
             tail.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
             tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
 
-		}*/
+		}
         
         // If game is in progress and is not paused, send one block from the back to the front
         if ((menu != 0) && (pause == false) && (players == 1)) {
@@ -463,14 +465,28 @@ public class SnakeFrame extends JFrame implements KeyListener {
             if (players == 1) {
                 // If the player has not yet lost, paint the next image of snake movement
                 if (loser == 0) {
-                    //Set window size
-                    if (screenSize == 0){this.setSize(500,500);}
-                    else if (screenSize == 1){this.setSize(600,600);}
-                    else if (screenSize == 2){this.setSize(700,700);}
+                    // Set the color to white to paint the background
+					g.setColor(Color.WHITE);
+					//Set window size
+                    if (screenSize == 0)
+                    {
+						this.setSize(500,500);
+						g.fillRect(0, 0, 500, 500);
+					}
+                    else if (screenSize == 1)
+                    {
+						this.setSize(600,600);
+						g.fillRect(0, 0, 600, 600);
+					}
+                    else if (screenSize == 2)
+                    {
+						this.setSize(700,700);
+						g.fillRect(0, 0, 700, 700);
+					}
                     
                     // Set background to white
-                    g.setColor(Color.WHITE);
-                    g.fillRect(0, 0, this.getWidth(), this.getHeight());
+                    //g.setColor(Color.WHITE);
+                    //g.fillRect(0, 0, this.getWidth(), this.getHeight());
                     // Set color to red and paint the fruit
                     g.setColor(Color.RED);
                     g.fillRect(particlex, particley, WIDTH, WIDTH);
@@ -499,7 +515,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
                             while (head.intersects(particlex, particley, WIDTH, WIDTH)) {
-                                //test
                                 if (screenSize == 0)
                                 {
 									particlex = (gen.nextInt(27) + 3) * WIDTH;
@@ -565,6 +580,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                     g.setColor(Color.BLACK);
                     g.drawString("Score: " + score, 50, 50);
                     g.drawString("High Score: " + highScore,50,80);
+                    //test
+                    g.drawString(" " + this.getWidth() + " " + screenSize, 50, 100);
                     g.drawString("Time: " + watch.toString(), this.getWidth() - 50 - fm.stringWidth("Time: " + watch.toString()), 50);
                     //350
                     // Display Pause option if game is in progress
@@ -583,13 +600,26 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 }
             } else if (players == 2) {
                 if (loser == 0) {
+					// Set the color to white to paint the background
+					g.setColor(Color.WHITE);
 					//Set window size
-                    if (screenSize == 0){this.setSize(500,500);}
-                    else if (screenSize == 1){this.setSize(600,600);}
-                    else if (screenSize == 2){this.setSize(700,700);}
-                    // Set background to white
-                    g.setColor(Color.WHITE);
-                    g.fillRect(0, 0, this.getWidth(), this.getHeight());
+                    if (screenSize == 0)
+                    {
+						this.setSize(500,500);
+						g.fillRect(0, 0, 500, 500);
+					}
+                    else if (screenSize == 1)
+                    {
+						this.setSize(600,600);
+						g.fillRect(0, 0, 600, 600);
+					}
+                    else if (screenSize == 2)
+                    {
+						this.setSize(700,700);
+						g.fillRect(0, 0, 700, 700);
+					}
+                    
+                    
                     // Set color to Orange and paint the fruit                    
                     g.setColor(Color.RED);
                     g.fillRect(particlex, particley, WIDTH, WIDTH);
