@@ -31,7 +31,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
     // Variable "turn" indicates if a directional change has been displayed
     private int particlex, particley, turn, turn2;
     // Score of fruit eaten, Head color counter, win/loss variable
-    private int score = 0, highScore=0, score1 = 0, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50;
+    private int score = 0, highScore=0, score1 = 0, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
     // Width of the snake
     private final int WIDTH = 15;
     // Create random generator
@@ -64,8 +64,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
         this.setSize(500,500);
         setLocationRelativeTo(null);
         this.setResizable(false);
-        m=new JLabel("Snake@#@");
-        this.getContentPane().add(BorderLayout.CENTER, m);
+
         // Add a KeyListener
         addKeyListener(this);
 	// Set player starting position
@@ -179,7 +178,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
         if (loser > 0) {
             // If user chooses yes, restart the program
             if (playagainyes == true) {
-                //this.setSize(600, 600);
+                //Set window size
+                if (screenSize == 0){this.setSize(500,500);}
+                else if (screenSize == 1){this.setSize(600,600);}
+                else if (screenSize == 2){this.setSize(700,700);}
                 if(score>highScore){highScore=score;}
                 setLocationRelativeTo(null);
                 frameresized = false;
@@ -236,7 +238,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
         }
         if ((menu != 0) && (players == 2) && (frameresized == false)) {
             // If the game starts as 2 player, initialize two player settings
-            this.setSize(750, 750);
+            //Set window size
+            if (screenSize == 0){this.setSize(500,500);}
+            else if (screenSize == 1){this.setSize(600,600);}
+            else if (screenSize == 2){this.setSize(700,700);}
             setLocationRelativeTo(null);
             this.setVisible(true);
             frameresized = true;
@@ -345,8 +350,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
     public void paint(Graphics graph) {
         // Create font
-        Font font1 = new Font("Helvetica", Font.PLAIN, 11);
-
+        Font font1 = new Font("Helvetica", Font.PLAIN, 15);
+		Font font2 = new Font("Comic Sans", Font.BOLD, 20);
         // Begin painting
         // Get the offscreen graphics for double buffer
         g = offscreen.getGraphics();
@@ -356,22 +361,38 @@ public class SnakeFrame extends JFrame implements KeyListener {
         if (menu == 0) {
             if (controls == false) {
                 // Paint display for main menu
+                this.setSize(500,500);
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
-                g.drawString("Snake", this.getWidth() / 2 - fm.stringWidth("Snake") / 2, 200);
-                g.drawString("By: Sam Dowell", this.getWidth() / 2 - fm.stringWidth("By: Sam Dowell") / 2, 230);
+                g.drawString("Snake", this.getWidth()/2-fm.stringWidth("Snake")/2, 80);
+                g.drawString("By: Sam Dowell", this.getWidth()/2-fm.stringWidth("By: Sam Dowell")/2, 110);
                 // Paint box displaying whether 1 or 2 players is selected
                 g.setColor(Color.WHITE);
                 if (players == 1) {
-                    g.fillRect(271, 354, WIDTH, WIDTH);
+                    g.fillRect(208, 182, 22, 22);
                 } else if (players == 2) {
-                    g.fillRect(305, 354, WIDTH, WIDTH);
-                }
-                g.setColor(Color.orange);
-                g.drawString("Number of Players:  [1]  or  [2]", this.getWidth() / 2 - fm.stringWidth("Number of Players:  [1]  or  [2]") / 2, 365);
-                g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 380);
-                g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 395);
+                    g.fillRect(264, 182, 22, 22);
+				}
+                
+                // Paint box for window size preference
+                if (screenSize == 0){g.fillOval(40,270,140,25);}
+                else if (screenSize == 1){g.fillOval(180,270,140,25);}
+                else if (screenSize == 2){g.fillOval(320,270,140,25);}
+                
+                g.setColor(Color.RED);
+                g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
+                g.setFont(font2);
+                g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
+                g.drawString("500 X 500    600 X 600    700 X 700", 55,290);
+                g.setFont(font1);
+                g.drawString("Select window size", this.getWidth() /2 - fm.stringWidth("Select window size")/2, 250);
+                g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 410);
+                g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 380);
+				g.setFont(font1);
+				
+				
+				
             } else {
                 // Display Control screen
                 g.setColor(Color.BLACK);
@@ -416,7 +437,12 @@ public class SnakeFrame extends JFrame implements KeyListener {
             if (players == 1) {
                 // If the player has not yet lost, paint the next image of snake movement
                 if (loser == 0) {
+                    //Set window size
+                    if (screenSize == 0){this.setSize(500,500);}
+                    else if (screenSize == 1){this.setSize(600,600);}
+                    else if (screenSize == 2){this.setSize(700,700);}
                     // Set background to white
+                    
                     g.setColor(Color.WHITE);
                     g.fillRect(0, 0, this.getWidth(), this.getHeight());
                     // Set color to Orange and paint the fruit
@@ -440,7 +466,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         headcolor++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                        Rectangle fruit = new Rectangle(particlex, particley, WIDTH, WIDTH);
                         Rectangle head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
@@ -517,6 +543,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 }
             } else if (players == 2) {
                 if (loser == 0) {
+					//Set window size
+                    if (screenSize == 0){this.setSize(500,500);}
+                    else if (screenSize == 1){this.setSize(600,600);}
+                    else if (screenSize == 2){this.setSize(700,700);}
                     // Set background to white
                     g.setColor(Color.WHITE);
                     g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -1095,8 +1125,22 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 controls = !(controls);
             }
         }
-
-
+        //key listeners for window sizes
+		else if (key == KeyEvent.VK_3){
+			if (menu == 0 && controls == false){
+					screenSize = 0;
+			}
+		}
+		else if (key == KeyEvent.VK_4){
+			if (menu == 0 && controls == false){
+					screenSize = 1;
+			}
+		}
+		else if (key == KeyEvent.VK_5){
+			if (menu == 0 && controls == false){
+					screenSize = 2;
+			}
+		}
     }
 
     @Override
