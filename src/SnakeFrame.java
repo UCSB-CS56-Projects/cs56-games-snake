@@ -350,6 +350,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
     public void paint(Graphics graph) {
         // Create font
+        Font font0 = new Font("Times New Roman", Font.PLAIN, 12);
         Font font1 = new Font("Helvetica", Font.PLAIN, 15);
 		Font font2 = new Font("Comic Sans", Font.BOLD, 20);
         // Begin painting
@@ -376,17 +377,17 @@ public class SnakeFrame extends JFrame implements KeyListener {
 				}
                 
                 // Paint box for window size preference
-                if (screenSize == 0){g.fillOval(40,270,140,25);}
-                else if (screenSize == 1){g.fillOval(180,270,140,25);}
-                else if (screenSize == 2){g.fillOval(320,270,140,25);}
+                if (screenSize == 0){g.fillOval(11,263,160,40);}
+                else if (screenSize == 1){g.fillOval(171,263,160,40);}
+                else if (screenSize == 2){g.fillOval(331,263,160,40);}
                 
                 g.setColor(Color.RED);
                 g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
                 g.setFont(font2);
                 g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
-                g.drawString("500 X 500    600 X 600    700 X 700", 55,290);
+                g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
                 g.setFont(font1);
-                g.drawString("Select window size", this.getWidth() /2 - fm.stringWidth("Select window size")/2, 250);
+                g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
                 g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 410);
                 g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 380);
 				g.setFont(font1);
@@ -398,9 +399,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
+                g.setFont(font0);
                 g.drawString("Single Player", 50, 50);
                 g.drawString("Controls:", 50, 70);
-                g.drawString("← →", 105, 70);
+                g.drawString("←  →", 105, 70);
                 g.drawString(" ↑ ", 111, 63);
                 g.drawString(" ↓ ", 111, 78);
                 g.drawString("How to Play:", 50, 90);
@@ -411,7 +413,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.drawString("Two Player", 250, 50);
                 g.drawString("Controls:", 250, 70);
                 g.drawString("Green Snake:", 305, 70);
-                g.drawString("← →", 395, 70);
+                g.drawString("←  →", 395, 70);
                 g.drawString(" ↑ ", 401, 63);
                 g.drawString(" ↓ ", 401, 78);
                 g.drawString("Orange Snake:  WASD", 305, 90);
