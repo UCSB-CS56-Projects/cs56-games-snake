@@ -1,3 +1,5 @@
+package edu.ucsb.cs56.projects.games.snake;
+
 /*
  * The stop watch class will allow a program to start and stop a stopwatch as
  * well as return the stopwatch as a string, a total ms's, or the hour, min, and 

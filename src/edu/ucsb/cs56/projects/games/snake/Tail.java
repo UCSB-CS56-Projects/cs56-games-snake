@@ -1,3 +1,5 @@
+package edu.ucsb.cs56.projects.games.snake;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
