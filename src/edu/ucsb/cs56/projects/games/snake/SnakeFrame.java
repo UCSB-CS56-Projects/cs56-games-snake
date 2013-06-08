@@ -1,8 +1,12 @@
 package edu.ucsb.cs56.projects.games.snake;
+
 /* ------------------------------------------------
  *                      Snake
  * ------------------------------------------------
+ * high score: 140
  * Sam Dowell
+ * Period 2
+ * Mr. Forster's Class
  */
 
 /*
@@ -11,30 +15,34 @@ package edu.ucsb.cs56.projects.games.snake;
  * Created on Dec 24, 2011, 11:42:55 AM
  */
 /**
- *
- * @author Sam
+ * A class that paint the snake and modify its attribute depending
+ * on user input
+ * edited by Sam Min and Eric Huang for CS56, project 03, Spring 2013
+ * @author Sam Dowell
  */
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.Timer;
+import javax.swing.*;
 
-public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
+public class SnakeFrame extends JFrame implements KeyListener {
     // Establish variables
     // Starting X and Y coordinates for the snake playerx and playery
-
+    
     private int playerx, playery;
     // X and Y coordinates for the fruit
     // Variable "turn" indicates if a directional change has been displayed
     private int particlex, particley, turn, turn2;
     // Score of fruit eaten, Head color counter, win/loss variable
-    private int score = 0, score1 = 0, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50;
+    private int score = 0, highScore=0, score1 = 0, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
     // Width of the snake
     private final int WIDTH = 15;
+	private final int fWIDTH = 8;
     // Create random generator
     private Random gen = new Random();
     // Create an ArrayList for the Tail
-    private ArrayList<Tail> tail = new ArrayList<Tail>(3);
+    private ArrayList<Tail> player1 = new ArrayList<Tail>(3);
     private ArrayList<Tail> player2 = new ArrayList<Tail>(3);
     // Create boolean values for direction of movement; and for snake growth when a fruit is eaten
     private boolean ismovingLEFT = false, ismovingRIGHT = false, ismovingUP = true, ismovingDOWN = false, growsnake = false;
@@ -48,89 +56,96 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
     // Create stopwatch
     private Stopwatch watch = new Stopwatch();
     private Stopwatch fruittimer = new Stopwatch();
-
+    private boolean puddles = false;
+    //JLabel label, m;
+    //JButton button;
+    
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
         super("Snake");
         // Initialize components
         initComponents();
         // Set boundaries for playing field
-        this.setSize(495, 495);
+        this.setSize(500,500);
         setLocationRelativeTo(null);
         this.setResizable(false);
+	
         // Add a KeyListener
         addKeyListener(this);
-        // Establish starting X and Y coordinate for Snake
-        playerx = 105;
-        playery = 405;
+        
+		// Set player starting position
+     	playerx=this.getWidth()/5*3;
+		playery=this.getHeight()/5*3;
         // Create random starting X and Y coordinate for fruit
-        particlex = (gen.nextInt(27) + 3) * 15;
-        particley = (gen.nextInt(27) + 4) * 15;
+        particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+		particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
         // Create 3 starting blocks for Tail
         for (int i = 0; i < 3; i++) {
-            tail.add(new Tail(playerx, playery));
+            player1.add(new Tail(playerx, playery));
         }
         // Set starting positions for the tail
-        tail.get(0).setPos(this.getWidth() - 90, 405);
-        tail.get(1).setPos(this.getWidth() - 90, 420);
-        tail.get(2).setPos(this.getWidth() - 90, 435);
+        player1.get(0).setPos(playerx,playery);
+        player1.get(1).setPos(playerx,playery+WIDTH);
+        player1.get(2).setPos(playerx,playery+(2*WIDTH));
         for (int i = 0; i < 3; i++) {
             player2.add(new Tail(400, 400));
         }
-        player2.get(0).setPos(150, 600);
-        player2.get(1).setPos(150, 615);
-        player2.get(2).setPos(150, 630);
+        player2.get(0).setPos(playerx/3*2, playery);
+        player2.get(1).setPos(playerx/3*2, playery+WIDTH);
+        player2.get(2).setPos(playerx/3*2, playery+(2*WIDTH));
         // Create offscreen image
         offscreen = this.createImage(this.getWidth(), this.getHeight());
         // Create an ActionListener
         ActionListener task = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                doaction();
-            }
-        };
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    doaction();
+		    
+		}
+	    };
         // Create Timer
         new Timer(75, task).start();
     }
-
+    
     public void shiftSnake() {
         // Create a new Tail in front of the Snake based on the direction moving and set it to the 0th element
         if (ismovingLEFT) {
             // If the tail movement is within the boundaries, move it forward one space
-            if (tail.get(0).getX() >= WIDTH) {
-                tail.add(0, new Tail(tail.get(0).getX() - WIDTH, tail.get(0).getY()));
+            if (player1.get(0).getX() >= WIDTH) {
+                player1.add(0, new Tail(player1.get(0).getX() - WIDTH, player1.get(0).getY()));
+               
                 // Otherwise loop it to the opposite end of the window
             } else {
-                tail.add(0, new Tail(tail.get(0).getX() + this.getWidth() - WIDTH, tail.get(0).getY()));
-
+                player1.add(0, new Tail(player1.get(0).getX() + this.getWidth() - WIDTH, player1.get(0).getY()));
+		
             }
         } else if (ismovingRIGHT) {
             // Same method repeated for if it is moving RIGHT, etc...
-            if (tail.get(0).getX() <= (this.getWidth() - WIDTH)) {
-                tail.add(0, new Tail(tail.get(0).getX() + WIDTH, tail.get(0).getY()));
+            if (player1.get(0).getX() <= (this.getWidth() - WIDTH)) {
+                player1.add(0, new Tail(player1.get(0).getX() + WIDTH, player1.get(0).getY()));
             } else {
-                tail.add(0, new Tail(tail.get(0).getX() - this.getWidth() - WIDTH, tail.get(0).getY()));
-
+                player1.add(0, new Tail(player1.get(0).getX() - this.getWidth() - WIDTH, player1.get(0).getY()));
+		
             }
         } else if (ismovingUP) {
-            if (tail.get(0).getY() >= WIDTH) {
-                tail.add(0, new Tail(tail.get(0).getX(), tail.get(0).getY() - WIDTH));
+            if (player1.get(0).getY() >= WIDTH) {
+                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() - WIDTH));
             } else {
-                tail.add(0, new Tail(tail.get(0).getX(), tail.get(0).getY() + this.getHeight() - WIDTH));
-
+                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() + this.getHeight() - WIDTH));
+		
             }
         } else if (ismovingDOWN) {
-            if (tail.get(0).getY() <= this.getHeight() - WIDTH) {
-                tail.add(0, new Tail(tail.get(0).getX(), tail.get(0).getY() + WIDTH));
+            if (player1.get(0).getY() <= this.getHeight() - WIDTH) {
+                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() + WIDTH));
             } else {
-                tail.add(0, new Tail(tail.get(0).getX(), tail.get(0).getY() - this.getHeight() + WIDTH));
-
+                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() - this.getHeight() + WIDTH));
+		
             }
         }
-
+	
     }
-
+    
     public void shiftSnake2() {
         // Create a new Tail in front of the Snake based on the direction moving and set it to the 0th element
         if (ismovingLEFT2) {
@@ -140,7 +155,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 // Otherwise loop it to the opposite end of the window
             } else {
                 player2.add(0, new Tail(player2.get(0).getX() + this.getWidth() - WIDTH, player2.get(0).getY()));
-
+		
             }
         } else if (ismovingRIGHT2) {
             // Same method repeated for if it is moving RIGHT, etc...
@@ -148,30 +163,35 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 player2.add(0, new Tail(player2.get(0).getX() + WIDTH, player2.get(0).getY()));
             } else {
                 player2.add(0, new Tail(player2.get(0).getX() - this.getWidth() - WIDTH, player2.get(0).getY()));
-
+		
             }
         } else if (ismovingUP2) {
             if (player2.get(0).getY() >= WIDTH) {
                 player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() - WIDTH));
             } else {
                 player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() + this.getHeight() - WIDTH));
-
+		
             }
         } else if (ismovingDOWN2) {
             if (player2.get(0).getY() <= this.getHeight() - WIDTH) {
                 player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() + WIDTH));
             } else {
                 player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() - this.getHeight() + WIDTH));
-
+		
             }
         }
     }
-
+    
     public void doaction() {
         if (loser > 0) {
             // If user chooses yes, restart the program
             if (playagainyes == true) {
-                this.setSize(495, 495);
+                //Set window size
+                
+                if (screenSize == 0){this.setSize(500,500);}
+                else if (screenSize == 1){this.setSize(600,600);}
+                else if (screenSize == 2){this.setSize(700,700);}
+                if(score>highScore){highScore=score;}
                 setLocationRelativeTo(null);
                 frameresized = false;
                 controls = false;
@@ -182,27 +202,27 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 size1 = 3;
                 size2 = 3;
                 // Establish starting X and Y coordinate for Snake
-                playerx = 105;
-                playery = 405;
+                playerx = this.getWidth()/2;
+                playery = this.getHeight()/2;
                 // Create random starting X and Y coordinate for fruit
-                particlex = (gen.nextInt(27) + 3) * 15;
-                particley = (gen.nextInt(27) + 4) * 15;
+                particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+				particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                 // Create 3 starting blocks for Tail
-                tail.clear();
+                player1.clear();
                 for (int i = 0; i < 3; i++) {
-                    tail.add(new Tail(playerx, playery));
+                    player1.add(new Tail(playerx, playery));
                 }
                 // Set starting positions for the tail
-                tail.get(0).setPos(this.getWidth() - 90, this.getHeight() - 90);
-                tail.get(1).setPos(this.getWidth() - 90, this.getHeight() - 75);
-                tail.get(2).setPos(this.getWidth() - 90, this.getHeight() - 60);
+                player1.get(0).setPos(playerx,playery);
+                player1.get(1).setPos(playerx,playery+WIDTH);
+                player1.get(2).setPos(playerx,playery+(2*WIDTH));
                 player2.clear();
                 for (int i = 0; i < 3; i++) {
                     player2.add(new Tail(650, 650));
                 }
-                player2.get(0).setPos(150, 600);
-                player2.get(1).setPos(150, 615);
-                player2.get(2).setPos(150, 630);
+                player2.get(0).setPos(playerx/3*2, playery);
+                player2.get(1).setPos(playerx/3*2, playery+WIDTH);
+                player2.get(2).setPos(playerx/3*2, playery+(2*WIDTH));
                 // Start stopwatch
                 watch.start();
                 // Reinitialize direction variables
@@ -223,35 +243,64 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
             if (playagainno == true) {
                 System.exit(0);
             }
-
+	    
         }
         if ((menu != 0) && (players == 2) && (frameresized == false)) {
             // If the game starts as 2 player, initialize two player settings
-            this.setSize(750, 750);
+            //Set window size
+            if (screenSize == 0){this.setSize(500,500);}
+            else if (screenSize == 1){this.setSize(600,600);}
+            else if (screenSize == 2){this.setSize(700,700);}
             setLocationRelativeTo(null);
             this.setVisible(true);
             frameresized = true;
             offscreen = this.createImage(this.getWidth(), this.getHeight());
-            particlex = (gen.nextInt(42) + 4) * 15;
-            particley = (gen.nextInt(37) + 10) * 15;
-            tail.clear();
+            particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+			particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+            player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i++) {
-                tail.add(new Tail(playerx, playery));
+                player1.add(new Tail(playerx, playery));
             }
             // Set starting positions for the tail
-            tail.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
-            tail.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
-            tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
+            player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
+            player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
+            player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
         }
+        
+        if ((menu != 0) && (players == 1) && (frameresized == false)) {
+			
+			if (screenSize == 0){this.setSize(500,500);}
+            else if (screenSize == 1){this.setSize(600,600);}
+            else if (screenSize == 2){this.setSize(700,700);}
+            setLocationRelativeTo(null);
+            this.setVisible(true);
+            frameresized = true;
+            offscreen = this.createImage(this.getWidth(), this.getHeight());
+            particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+			particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+            player1.clear();
+            fruittimer.start();
+            for (int i = 0; i < 3; i ++)
+			player1.add(new Tail(playerx, playery));
+			
+			player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
+            player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
+            player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
+
+		}
+        
         // If game is in progress and is not paused, send one block from the back to the front
+        
         if ((menu != 0) && (pause == false) && (players == 1)) {
-            shiftSnake();
-            tail.remove(tail.size() - 1);
+			shiftSnake();
+            player1.remove(player1.size() - 1);
+            
+            
             // Do the same for two player except with both arraylists
         } else if ((menu != 0) && (pause == false) && (players == 2)) {
             shiftSnake();
-            tail.remove(tail.size() - 1);
+            player1.remove(player1.size() - 1);
             shiftSnake2();
             player2.remove(player2.size() - 1);
         }
@@ -261,20 +310,20 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
         }
         // If in two player, and a fruit has not been eaten for 30 seconds, create new random location for fruit
         if (players == 2 && loser == 0 && fruittimer.getSeconds() >= 30 && menu != 0) {
-            Rectangle fruit = new Rectangle(particlex, particley, 7, 7);
+            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH); 
             Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-            Rectangle head2 = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+            Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
             do {
-                particlex = (gen.nextInt(42) + 4) * 15;
-                particley = (gen.nextInt(37) + 10) * 15;
+		        particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+				particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                 System.out.println("fruittime reset");
-            } while (head2.intersects(particlex, particley, 15, 15) || head.intersects(particlex, particley, 15, 15));
+            } while (head2.intersects(particlex, particley, fWIDTH, fWIDTH) || head.intersects(particlex, particley, fWIDTH, fWIDTH));
             fruittimer.start();
-
+	    
         }
         repaint();
     }
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -283,23 +332,23 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+	
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
+	
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
+				  layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				  .addGap(0, 400, Short.MAX_VALUE)
+				  );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGap(0, 300, Short.MAX_VALUE)
+				);
+	
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -323,21 +372,22 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
             java.util.logging.Logger.getLogger(SnakeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+	
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                new SnakeFrame().setVisible(true);
-            }
-        });
+		
+		@Override
+		public void run() {
+		    new SnakeFrame().setVisible(true);
+		}
+	    });
     }
-
+    
     public void paint(Graphics graph) {
         // Create font
-        Font font1 = new Font("Helvetica", Font.PLAIN, 11);
-
+        Font font0 = new Font("Times New Roman", Font.PLAIN, 12);
+        Font font1 = new Font("Helvetica", Font.PLAIN, 15);
+		Font font2 = new Font("Comic Sans", Font.BOLD, 20);
         // Begin painting
         // Get the offscreen graphics for double buffer
         g = offscreen.getGraphics();
@@ -347,31 +397,55 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
         if (menu == 0) {
             if (controls == false) {
                 // Paint display for main menu
+                this.setSize(500,500);
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
-                g.drawString("Snake", this.getWidth() / 2 - fm.stringWidth("Snake") / 2, 200);
-                g.drawString("By: Sam Dowell", this.getWidth() / 2 - fm.stringWidth("By: Sam Dowell") / 2, 230);
+                g.drawString("Snake", this.getWidth()/2-fm.stringWidth("Snake")/2, 80);
+                g.drawString("By: Sam Dowell", this.getWidth()/2-fm.stringWidth("By: Sam Dowell")/2, 110);
+                
+                
                 // Paint box displaying whether 1 or 2 players is selected
                 g.setColor(Color.WHITE);
                 if (players == 1) {
-                    g.fillRect(271, 354, 15, 15);
+                    g.fillRect(208, 182, 22, 22);
                 } else if (players == 2) {
-                    g.fillRect(305, 354, 15, 15);
-                }
-                g.setColor(Color.orange);
-                g.drawString("Number of Players:  [1]  or  [2]", this.getWidth() / 2 - fm.stringWidth("Number of Players:  [1]  or  [2]") / 2, 365);
-                //g.drawString("Number of Players:  [1]  or  [2]", 170, 365);
-                g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 380);
-                g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 395);
+                    g.fillRect(264, 182, 22, 22);
+				}
+                
+                // Paint box for window size preference
+                if (screenSize == 0){g.fillOval(11,263,160,40);}
+                else if (screenSize == 1){g.fillOval(171,263,160,40);}
+                else if (screenSize == 2){g.fillOval(331,263,160,40);}
+                
+                if (puddles == false){g.fillOval(150, 325, 140, 40);}
+                else if(puddles == true){g.fillOval(290,325, 140,40);}
+                
+                
+                g.setColor(Color.RED);
+                g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
+                g.setFont(font2);
+                g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
+                g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
+                g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2, 350);
+                g.setFont(font1);
+                g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
+                g.drawString("Select mode: ", this.getWidth() /2 - fm.stringWidth("Select mode: ")/2, 320);
+                g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 410);
+                g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 380);
+				g.setFont(font1);
+		
+		
+		
             } else {
                 // Display Control screen
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
+                g.setFont(font0);
                 g.drawString("Single Player", 50, 50);
                 g.drawString("Controls:", 50, 70);
-                g.drawString("← →", 105, 70);
+                g.drawString("←  →", 105, 70);
                 g.drawString(" ↑ ", 111, 63);
                 g.drawString(" ↓ ", 111, 78);
                 g.drawString("How to Play:", 50, 90);
@@ -382,7 +456,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 g.drawString("Two Player", 250, 50);
                 g.drawString("Controls:", 250, 70);
                 g.drawString("Green Snake:", 305, 70);
-                g.drawString("← →", 395, 70);
+                g.drawString("←  →", 395, 70);
                 g.drawString(" ↑ ", 401, 63);
                 g.drawString(" ↓ ", 401, 78);
                 g.drawString("Orange Snake:  WASD", 305, 90);
@@ -399,26 +473,58 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 g.drawString("thirty seconds if not eaten.", 250, 265);
                 g.drawString("Have the biggest size when", 250, 280);
                 g.drawString("the apples run out to win.", 250, 295);
+                g.setColor(Color.WHITE);
+                g.drawString("Puddle Mode:",50,190);
+                g.drawString("In this mode, there will be", 40, 205);
+                g.drawString("several puddles placed around", 40,220);
+                g.drawString("the map which will hide some", 40,235);
+                g.drawString("fruits as they spawn. The", 40,250);
+                g.drawString("objective remains the same", 40,265);
+                g.drawString("but are you up for the challenge?", 40,280);
                 g.setColor(Color.ORANGE);
                 g.drawString("Return to Menu [M]", this.getWidth() - 125, this.getHeight() - 25);
 
             }
-
+	    
         } else if (pause == false) {
             if (players == 1) {
                 // If the player has not yet lost, paint the next image of snake movement
                 if (loser == 0) {
-                    // Set background to white
-                    g.setColor(Color.WHITE);
-                    g.fillRect(0, 0, this.getWidth(), this.getHeight());
-                    // Set color to Orange and paint the fruit
+                    // Set the color to green to paint the background
+                    Color c = new Color(24,107,31);
+                    Color b = new Color(61,226,235);
+					g.setColor(c);
+					//Set window size
+                    if (screenSize == 0)
+                    {
+						this.setSize(500,500);
+					}
+                    else if (screenSize == 1)
+                    {
+						this.setSize(600,600);
+					}
+                    else if (screenSize == 2)
+                    {
+						this.setSize(700,700);
+					}
+                    g.fillRect(0,0,700,700);
+                    
+                    // Set color to red and paint the fruit
                     g.setColor(Color.RED);
-                    g.fillRect(particlex, particley, 15, 15);
+                    g.fillRect(particlex, particley, fWIDTH, fWIDTH);
+                    if(puddles){
+						g.setColor(b);
+						g.fillOval(50,90,100,50);
+						g.fillOval(this.getWidth()-120,200, 60, 90);
+						g.fillOval(this.getWidth()/3,this.getHeight()-300,80,30); 
+						g.fillOval(80,this.getHeight()-100,110,60);
+						g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
+                    }
                     // Set the growsnake value to false
                     growsnake = false;
                     // Set the headcolor value to 0
                     headcolor = 0;
-                    for (Tail t : tail) {
+                    for (Tail t : player1) {
                         // Make color of first block (head) black
                         if (headcolor == 0) {
                             g.setColor(Color.BLACK);
@@ -432,25 +538,25 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         headcolor++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
-                        Rectangle head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+                        Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, 15, 15)) {
-                                particlex = (gen.nextInt(27) + 3) * 15;
-                                particley = (gen.nextInt(27) + 4) * 15;
+                            while (head.intersects(particlex, particley, WIDTH, WIDTH)) {
+                                                particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                             }
                             // Set growsnake to true to increase size of snake by 1
                             growsnake = true;
                             // Add to score
                             score++;
                         }
-
-
+			
+			
                     }
-
+		    
                     // If the Snake ate a fruit, make the snake grow one block 
                     if (growsnake) {
                         shiftSnake();
@@ -458,13 +564,13 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     // Check for if fruit relocated on top of tail
                     do {
                         hasIntersected = false;
-                        for (int i = 0; i < tail.size(); i++) {
-                            Rectangle r = new Rectangle(tail.get(i).getX(), tail.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                        for (int i = 0; i < player1.size(); i++) {
+                            Rectangle r = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
+                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, 15, 15)) {
-                                    particlex = (gen.nextInt(27) + 3) * 15;
-                                    particley = (gen.nextInt(27) + 4) * 15;
+                                while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+                                    particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -472,24 +578,27 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         }
                     } while (hasIntersected);
                     // Create loop to check if the head has intersected the tail (Game Over)
-                    for (int i = tail.size() - 1; i > 1; i--) {
+                    for (int i = player1.size() - 1; i > 1; i--) {
                         // Create rectangle for head and for a Tail in the ArrayList
-                        Rectangle p = new Rectangle(tail.get(i).getX(), tail.get(i).getY(), WIDTH, WIDTH);
-                        Rectangle head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                        Rectangle p = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
+                        Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         // If the head intersects with the Tail, add one to loss counter
                         if (head.intersects(p)) {
                             loser++;
                             // This is to prevent the head from being overlapped by the green tail in the final image
                             g.setColor(Color.BLACK);
-                            g.fillRect(tail.get(1).getX(), tail.get(1).getY(), WIDTH, WIDTH);
+                            g.fillRect(player1.get(1).getX(), player1.get(1).getY(), WIDTH, WIDTH);
                             // Set color to red and fill the tail block which the head intersected with
                             g.setColor(Color.RED);
-                            g.fillRect(tail.get(i).getX(), tail.get(i).getY(), WIDTH, WIDTH);
+                            g.fillRect(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
                         }
                     }
                     // Display the score and time
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.WHITE);
                     g.drawString("Score: " + score, 50, 50);
+                    g.drawString("High Score: " + highScore,50,80);
+                    //display variables
+                    //g.drawString("getWidth: " + this.getWidth() + ", screenSize: " + screenSize + ", loser: " + loser, 50, 100);
                     g.drawString("Time: " + watch.toString(), this.getWidth() - 50 - fm.stringWidth("Time: " + watch.toString()), 50);
                     //350
                     // Display Pause option if game is in progress
@@ -501,25 +610,49 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     // If the player has lost, display message
                     g.setColor(Color.RED);
                     g.drawString("Game Over!", this.getWidth() / 2 - fm.stringWidth("Game Over!") / 2, 240);
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.WHITE);
                     g.drawString("Do you want to play again?", this.getWidth() / 2 - fm.stringWidth("Do you want to play again?") / 2, 260);
                     g.drawString("Yes [Y] or No [N]", this.getWidth() / 2 - fm.stringWidth("Yes [Y] or No [N]") / 2, 280);
                     g.drawString("Return to Menu [M]", this.getWidth() / 2 - fm.stringWidth("Return to Menu [M]") / 2, 300);
                 }
             } else if (players == 2) {
                 if (loser == 0) {
-                    // Set background to white
-                    g.setColor(Color.WHITE);
-                    g.fillRect(0, 0, this.getWidth(), this.getHeight());
+					Color c = new Color(24,107,31);
+                    Color b = new Color(61,226,235);
+					// Set the color to white to paint the background
+					g.setColor(c);
+					//Set window size
+                    if (screenSize == 0)
+                    {
+						this.setSize(500,500);
+					}
+                    else if (screenSize == 1)
+                    {
+						this.setSize(600,600);
+					}
+                    else if (screenSize == 2)
+                    {
+						this.setSize(700,700);
+					}
+                    g.fillRect(0,0,700,700);
+                    
                     // Set color to Orange and paint the fruit                    
                     g.setColor(Color.RED);
-                    g.fillRect(particlex, particley, 15, 15);
+                    g.fillRect(particlex, particley, fWIDTH, fWIDTH);
+                    if(puddles){
+						g.setColor(b);
+						g.fillOval(50,90,100,50);
+						g.fillOval(this.getWidth()-120,200, 60, 90);
+						g.fillOval(this.getWidth()/3,this.getHeight()-300,80,30); 
+						g.fillOval(80,this.getHeight()-100,110,60);
+						g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
+                    }
                     // Set the growsnake value to false
                     growsnake = false;
                     growsnake2 = false;
                     // Set the headcolor value to 0
                     headcolor = 0;
-                    for (Tail t : tail) {
+                    for (Tail t : player1) {
                         // Make color of first block (head) black
                         if (headcolor == 0) {
                             g.setColor(Color.BLACK);
@@ -533,20 +666,20 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         headcolor++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
-                        Rectangle head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+                        Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         Rectangle head2 = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, 15, 15) || head2.intersects(particlex, particley, 15, 15)) {
-                                particlex = (gen.nextInt(42) + 4) * 15;
-                                particley = (gen.nextInt(37) + 10) * 15;
+                            while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+                                                particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                             }
                             // Set growsnake to true to increase size of snake by 1
                             growsnake = true;
-
+			    
                             // Add to score
                             score1++;
                             size1++;
@@ -569,16 +702,16 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         headcolor2++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                         Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-                        Rectangle head2 = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                        Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, 15, 15) || head2.intersects(particlex, particley, 15, 15)) {
-                                particlex = (gen.nextInt(42) + 4) * 15;
-                                particley = (gen.nextInt(37) + 10) * 15;
+                            while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+								particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                 
                             }
                             // Set growsnake to true to increase size of snake by 1
@@ -591,10 +724,10 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                             fruittimer.start();
                         }
 
-
+			
                     }
-
-
+		    
+		    
                     // If the Snake ate a fruit, make the snake grow one block 
                     if (growsnake) {
                         shiftSnake();
@@ -605,13 +738,13 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     // Check for if fruit relocated on top of either snake, if so create new location and check again
                     do {
                         hasIntersected = false;
-                        for (int i = 0; i < tail.size(); i++) {
-                            Rectangle r = new Rectangle(tail.get(i).getX(), tail.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                        for (int i = 0; i < player1.size(); i++) {
+                            Rectangle r = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
+                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, 15, 15)) {
-                                    particlex = (gen.nextInt(42) + 4) * 15;
-                                    particley = (gen.nextInt(37) + 10) * 15;
+                                while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+									particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -619,11 +752,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         }
                         for (int i = 0; i < player2.size(); i++) {
                             Rectangle r = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, 15, 15);
+                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, 15, 15)) {
-                                    particlex = (gen.nextInt(42) + 4) * 15;
-                                    particley = (gen.nextInt(37) + 10) * 15;
+                                while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
+									particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -632,21 +765,21 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     } while (hasIntersected);
                     // Check for collisions between snakes if the game has not yet ended
                     if (fruits > 0) {
-                        Rectangle p1head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                        Rectangle p1head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         Rectangle p2head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
                         if (p1head.intersects(p2head)) {
                             ismovingRIGHT = false;
                             ismovingLEFT = false;
                             ismovingUP = true;
                             ismovingDOWN = false;
-                            tail.clear();
+                            player1.clear();
                             for (int j = 0; j < 3; j++) {
-                                tail.add(new Tail(playerx, playery));
+                                player1.add(new Tail(playerx, playery));
                             }
                             // Set starting positions for the tail
-                            tail.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
-                            tail.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
-                            tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
+                            player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
+                            player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
+                            player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
                             ismovingRIGHT2 = false;
                             ismovingLEFT2 = false;
                             ismovingUP2 = true;
@@ -663,26 +796,26 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         }
                         // Create loop to check if the head has intersected the tail (Game Over)
                         hasIntersected = false;
-                        for (int i = tail.size() - 1; i > 1; i--) {
+                        for (int i = player1.size() - 1; i > 1; i--) {
                             // Create rectangle for head and for a Tail in the ArrayList
-                            Rectangle p = new Rectangle(tail.get(i).getX(), tail.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                            Rectangle p = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
+                            Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                             // If the head intersects with the Tail, add one to loss counter
                             if (head.intersects(p)) {
                                 ismovingRIGHT = false;
                                 ismovingLEFT = false;
                                 ismovingUP = true;
                                 ismovingDOWN = false;
-                                tail.clear();
+                                player1.clear();
                                 for (int j = 0; j < 3; j++) {
-                                    tail.add(new Tail(playerx, playery));
+                                    player1.add(new Tail(playerx, playery));
                                 }
-                                int x = (gen.nextInt(31) + 10) * 15;
-                                int y = (gen.nextInt(31) + 10) * 15;
+                                int x = (gen.nextInt(31) + 10) * WIDTH;
+                                int y = (gen.nextInt(31) + 10) * WIDTH;
                                 // Set starting positions for the tail
-                                tail.get(0).setPos(x, y);
-                                tail.get(1).setPos(x, y + 15);
-                                tail.get(2).setPos(x, y + 30);
+                                player1.get(0).setPos(x, y);
+                                player1.get(1).setPos(x, y + WIDTH);
+                                player1.get(2).setPos(x, y + (2*WIDTH));
                                 size1 = 3;
                                 hasIntersected = true;
                                 break;
@@ -692,22 +825,22 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         // In this case create a new random location
                         while (hasIntersected) {
                             hasIntersected = false;
-                            for (int j = 0; j < tail.size(); j++) {
+                            for (int j = 0; j < player1.size(); j++) {
                                 for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(tail.get(j).getX(), tail.get(j).getY(), WIDTH, WIDTH);
+                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
                                     Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
                                     if (box1.intersects(box2)) {
                                         hasIntersected = true;
-                                        tail.clear();
+                                        player1.clear();
                                         for (int p = 0; p < 3; p++) {
-                                            tail.add(new Tail(playerx, playery));
+                                            player1.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * WIDTH;
                                         // Set starting positions for the tail
-                                        tail.get(0).setPos(x, y);
-                                        tail.get(1).setPos(x, y + 15);
-                                        tail.get(2).setPos(x, y + 30);
+                                        player1.get(0).setPos(x, y);
+                                        player1.get(1).setPos(x, y + WIDTH);
+                                        player1.get(2).setPos(x, y + WIDTH);
                                         System.out.println("tail reset");
                                     }
                                 }
@@ -717,10 +850,10 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         boolean headon = false;
                         for (int q = player2.size() - 1; q > 0; q--) {
                             Rectangle p2tail = new Rectangle(player2.get(q).getX(), player2.get(q).getY(), WIDTH, WIDTH);
-                            Rectangle head = new Rectangle(tail.get(0).getX(), tail.get(0).getY(), WIDTH, WIDTH);
+                            Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                             if (head.intersects(p2tail)) {
-                                for (int w = tail.size() - 1; w > 0; w--) {
-                                    Rectangle p1tail = new Rectangle(tail.get(w).getX(), tail.get(w).getY(), WIDTH, WIDTH);
+                                for (int w = player1.size() - 1; w > 0; w--) {
+                                    Rectangle p1tail = new Rectangle(player1.get(w).getX(), player1.get(w).getY(), WIDTH, WIDTH);
                                     Rectangle head1 = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
                                     // If both heads intersect the tail of the other respective tail, a head on collision has occured
                                     // In this case reset both tails
@@ -729,14 +862,14 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         ismovingLEFT = false;
                                         ismovingUP = true;
                                         ismovingDOWN = false;
-                                        tail.clear();
+                                        player1.clear();
                                         for (int j = 0; j < 3; j++) {
-                                            tail.add(new Tail(playerx, playery));
+                                            player1.add(new Tail(playerx, playery));
                                         }
                                         // Set starting positions for the tail
-                                        tail.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
-                                        tail.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
-                                        tail.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
+                                        player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
+                                        player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
+                                        player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
                                         ismovingRIGHT2 = false;
                                         ismovingLEFT2 = false;
                                         ismovingUP2 = true;
@@ -753,7 +886,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         headon = true;
                                         break;
                                     }
-
+				    
                                 }
                                 // Otherwise, just reset player 1's tail
                                 if (!headon) {
@@ -762,16 +895,16 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                     ismovingLEFT = false;
                                     ismovingUP = true;
                                     ismovingDOWN = false;
-                                    tail.clear();
+                                    player1.clear();
                                     for (int j = 0; j < 3; j++) {
-                                        tail.add(new Tail(playerx, playery));
+                                        player1.add(new Tail(playerx, playery));
                                     }
-                                    int x = (gen.nextInt(31) + 10) * 15;
-                                    int y = (gen.nextInt(31) + 10) * 15;
+                                    int x = (gen.nextInt(31) + 10) * WIDTH;
+                                    int y = (gen.nextInt(31) + 10) * WIDTH;
                                     // Set starting positions for the tail
-                                    tail.get(0).setPos(x, y);
-                                    tail.get(1).setPos(x, y + 15);
-                                    tail.get(2).setPos(x, y + 30);
+                                    player1.get(0).setPos(x, y);
+                                    player1.get(1).setPos(x, y + WIDTH);
+                                    player1.get(2).setPos(x, y + (2*WIDTH));
                                     size1 = 3;
                                 }
                             }
@@ -779,22 +912,22 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         // If the new random location for one snake if on top of the others tail, create new random location
                         while (hasIntersected) {
                             hasIntersected = false;
-                            for (int j = 0; j < tail.size(); j++) {
+                            for (int j = 0; j < player1.size(); j++) {
                                 for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(tail.get(j).getX(), tail.get(j).getY(), WIDTH, WIDTH);
+                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
                                     Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
                                     if (box1.intersects(box2)) {
                                         hasIntersected = true;
-                                        tail.clear();
+                                        player1.clear();
                                         for (int p = 0; p < 3; p++) {
-                                            tail.add(new Tail(playerx, playery));
+                                            player1.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * (2*WIDTH);
                                         // Set starting positions for the tail
-                                        tail.get(0).setPos(x, y);
-                                        tail.get(1).setPos(x, y + 15);
-                                        tail.get(2).setPos(x, y + 30);
+                                        player1.get(0).setPos(x, y);
+                                        player1.get(1).setPos(x, y + WIDTH);
+                                        player1.get(2).setPos(x, y + (2*WIDTH));
                                         System.out.println("tail reset");
                                     }
                                 }
@@ -815,11 +948,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                 for (int j = 0; j < 3; j++) {
                                     player2.add(new Tail(400, 400));
                                 }
-                                int x = (gen.nextInt(31) + 10) * 15;
-                                int y = (gen.nextInt(31) + 10) * 15;
+                                int x = (gen.nextInt(31) + 10) * WIDTH;
+                                int y = (gen.nextInt(31) + 10) * WIDTH;
                                 player2.get(0).setPos(x, y);
-                                player2.get(1).setPos(x, y + 15);
-                                player2.get(2).setPos(x, y + 30);
+                                player2.get(1).setPos(x, y + WIDTH);
+                                player2.get(2).setPos(x, y + (2*WIDTH));
                                 size2 = 3;
                                 break;
                             }
@@ -827,9 +960,9 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         // If the new location for player 2 is on player 1's tail, create new random location for player 2's tail
                         while (hasIntersected) {
                             hasIntersected = false;
-                            for (int j = 0; j < tail.size(); j++) {
+                            for (int j = 0; j < player1.size(); j++) {
                                 for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(tail.get(j).getX(), tail.get(j).getY(), WIDTH, WIDTH);
+                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
                                     Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
                                     if (box1.intersects(box2)) {
                                         hasIntersected = true;
@@ -837,20 +970,20 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         for (int p = 0; p < 3; p++) {
                                             player2.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * WIDTH;
                                         // Set starting positions for the tail
                                         player2.get(0).setPos(x, y);
-                                        player2.get(1).setPos(x, y + 15);
-                                        player2.get(2).setPos(x, y + 30);
+                                        player2.get(1).setPos(x, y + WIDTH);
+                                        player2.get(2).setPos(x, y + (2*WIDTH));
                                         System.out.println("tail reset");
                                     }
                                 }
                             }
                         }
                         // Check for intersection from player 2's head to player 1's tail
-                        for (int w = tail.size() - 1; w > 0; w--) {
-                            Rectangle p1tail = new Rectangle(tail.get(w).getX(), tail.get(w).getY(), WIDTH, WIDTH);
+                        for (int w = player1.size() - 1; w > 0; w--) {
+                            Rectangle p1tail = new Rectangle(player1.get(w).getX(), player1.get(w).getY(), WIDTH, WIDTH);
                             Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
                             if (head.intersects(p1tail)) {
                                 hasIntersected = true;
@@ -862,11 +995,11 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                 for (int j = 0; j < 3; j++) {
                                     player2.add(new Tail(400, 400));
                                 }
-                                int x = (gen.nextInt(31) + 10) * 15;
-                                int y = (gen.nextInt(31) + 10) * 15;
+                                int x = (gen.nextInt(31) + 10) * WIDTH;
+                                int y = (gen.nextInt(31) + 10) * WIDTH;
                                 player2.get(0).setPos(x, y);
-                                player2.get(1).setPos(x, y + 15);
-                                player2.get(2).setPos(x, y + 30);
+                                player2.get(1).setPos(x, y + WIDTH);
+                                player2.get(2).setPos(x, y + (2*WIDTH));
                                 size2 = 3;
                             }
 
@@ -875,9 +1008,9 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         // Create new random location until a good location is found
                         while (hasIntersected) {
                             hasIntersected = false;
-                            for (int j = 0; j < tail.size(); j++) {
+                            for (int j = 0; j < player1.size(); j++) {
                                 for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(tail.get(j).getX(), tail.get(j).getY(), WIDTH, WIDTH);
+                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
                                     Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
                                     if (box1.intersects(box2)) {
                                         hasIntersected = true;
@@ -885,12 +1018,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                                         for (int p = 0; p < 3; p++) {
                                             player2.add(new Tail(playerx, playery));
                                         }
-                                        int x = (gen.nextInt(31) + 10) * 15;
-                                        int y = (gen.nextInt(31) + 10) * 15;
+                                        int x = (gen.nextInt(31) + 10) * WIDTH;
+                                        int y = (gen.nextInt(31) + 10) * WIDTH;
                                         // Set starting positions for the tail
                                         player2.get(0).setPos(x, y);
-                                        player2.get(1).setPos(x, y + 15);
-                                        player2.get(2).setPos(x, y + 30);
+                                        player2.get(1).setPos(x, y + WIDTH);
+                                        player2.get(2).setPos(x, y + (2*WIDTH));
                                         System.out.println("tail reset");
                                     }
                                 }
@@ -898,7 +1031,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                         }
                     }
                     // Display the score and time
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.WHITE);
                     g.drawString("Orange Score: " + score2, 50, 50);
                     g.drawString("Orange Size: " + size2, 50, 75);
                     g.drawString("Time: " + watch.toString(), this.getWidth() / 2 - fm.stringWidth("Time: " + watch.toString()) / 2, 50);
@@ -906,6 +1039,8 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     g.drawString("Fruit Remaining: " + fruits, this.getWidth() / 2 - fm.stringWidth("Fruit Remaining: " + fruits) / 2, 75);
                     g.drawString("Green Score: " + score1, this.getWidth() - 50 - fm.stringWidth("Green score: " + 1), 50);
                     g.drawString("Green Size: " + size1, this.getWidth() - 50 - fm.stringWidth("Green score: " + 1), 75);
+                    //display varaibles
+                    //g.drawString("getWidth: " + this.getWidth() + ", screenSize: " + screenSize + ", loser: " + loser, 50, 120);
                     // Display Pause option if game is in progress
                     if (loser == 0) {
                         g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), this.getHeight() - 25);
@@ -915,7 +1050,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                     // If the player has lost, display message
                     g.setColor(Color.RED);
                     g.drawString("Game Over!", this.getWidth() / 2 - fm.stringWidth("Game Over!") / 2, 280);
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.WHITE);
                     if (size1 == size2) {
                         g.drawString("Tie Game!", this.getWidth() / 2 - fm.stringWidth("Tie Game!") / 2, 300);
                     } else if (size1 > size2) {
@@ -931,23 +1066,20 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
 
         }            // If the player pauses, display that the game is paused and the resume option
 
-        if (pause
-                == true && players
-                == 1) {
+        if (pause == true && players == 1) {
+			g.setColor(Color.WHITE);
             g.drawString("Paused", this.getWidth() / 2 - fm.stringWidth("Paused") / 2, 250);
             g.drawString("[P] to Resume", this.getWidth() / 2 - fm.stringWidth("[P] to Resume") / 2, 270);
             g.drawString("[M] Return to Menu", this.getWidth() / 2 - fm.stringWidth("[M] Return to Menu") / 2, 290);
-        } else if (pause
-                == true && players
-                == 2) {
+        } else if (pause == true && players== 2) {
+            g.setColor(Color.WHITE);
             g.drawString("Paused", this.getWidth() / 2 - fm.stringWidth("Paused") / 2, 375);
             g.drawString("[P] to Resume", this.getWidth() / 2 - fm.stringWidth("[P] to Resume") / 2, 395);
             g.drawString("[M] Return to Menu", this.getWidth() / 2 - fm.stringWidth("[M] Return to Menu") / 2, 415);
         }
         // Prepare next image for double buffer
 
-        graph.drawImage(offscreen,
-                0, 0, this);
+        graph.drawImage(offscreen, 0, 0, this);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -963,7 +1095,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
         // If the user presses an arrow key, change the direction values
         // Don't allow the direction to directly reverse; and dont allow direction to change near the edges
         if (key == KeyEvent.VK_LEFT) {
-            if ((!ismovingRIGHT) && (tail.get(0).getY() > WIDTH) && (tail.get(0).getY() < (this.getHeight() - WIDTH)) && (turn == 0)) {
+            if ((!ismovingRIGHT) && (player1.get(0).getY() > WIDTH) && (player1.get(0).getY() < (this.getHeight() - WIDTH)) && (turn == 0)) {
                 ismovingRIGHT = false;
                 ismovingLEFT = true;
                 ismovingUP = false;
@@ -971,7 +1103,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 turn++;
             }
         } else if (key == KeyEvent.VK_RIGHT) {
-            if ((!ismovingLEFT) && (tail.get(0).getY() > WIDTH) && (tail.get(0).getY() < (this.getHeight() - WIDTH)) && (turn == 0)) {
+            if ((!ismovingLEFT) && (player1.get(0).getY() > WIDTH) && (player1.get(0).getY() < (this.getHeight() - WIDTH)) && (turn == 0)) {
                 ismovingRIGHT = true;
                 ismovingLEFT = false;
                 ismovingUP = false;
@@ -979,7 +1111,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 turn++;
             }
         } else if (key == KeyEvent.VK_UP) {
-            if ((!ismovingDOWN) && (tail.get(0).getX() < (this.getWidth() - WIDTH)) && (tail.get(0).getX() > WIDTH) && (turn == 0)) {
+            if ((!ismovingDOWN) && (player1.get(0).getX() < (this.getWidth() - WIDTH)) && (player1.get(0).getX() > WIDTH) && (turn == 0)) {
                 ismovingRIGHT = false;
                 ismovingLEFT = false;
                 ismovingUP = true;
@@ -988,7 +1120,7 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
             }
         } else if (key == KeyEvent.VK_DOWN) {
 
-            if ((!ismovingUP) && (tail.get(0).getX() < (this.getWidth() - WIDTH)) && (tail.get(0).getX() > WIDTH) && (turn == 0)) {
+            if ((!ismovingUP) && (player1.get(0).getX() < (this.getWidth() - WIDTH)) && (player1.get(0).getX() > WIDTH) && (turn == 0)) {
                 ismovingRIGHT = false;
                 ismovingLEFT = false;
                 ismovingUP = false;
@@ -1050,11 +1182,12 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
             }
             // If "m" key is pressed when the game has ended, restart game and return to menu screen
         } else if (key == KeyEvent.VK_M) {
-            if ((loser > 0) || (pause)) {
+            if (((loser > 0) || (pause))&&(menu != 0)) {
                 playagainyes = true;
                 playagainno = false;
                 menu = 0;
                 players = 1;
+                screenSize = 0;
                 pause = false;
                 loser = 1;
             } else if (controls == true) {
@@ -1086,8 +1219,32 @@ public class SnakeFrame extends javax.swing.JFrame implements KeyListener {
                 controls = !(controls);
             }
         }
-
-
+        //key listeners for window sizes
+		else if (key == KeyEvent.VK_3){
+			if (menu == 0 && controls == false){
+				screenSize = 0;
+			}
+		}
+		else if (key == KeyEvent.VK_4){
+			if (menu == 0 && controls == false){
+				screenSize = 1;
+			}
+		}
+		else if (key == KeyEvent.VK_5){
+			if (menu == 0 && controls == false){
+				screenSize = 2;
+			}
+		}
+		else if (key == KeyEvent.VK_6){
+			if (menu == 0 && controls == false){
+				puddles = false;
+			}
+		}
+		else if (key == KeyEvent.VK_7){
+			if (menu == 0 && controls == false){
+				puddles = true;
+			}
+		}
     }
 
     @Override
