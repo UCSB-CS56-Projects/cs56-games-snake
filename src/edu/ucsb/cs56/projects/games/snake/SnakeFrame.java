@@ -1,25 +1,12 @@
 package edu.ucsb.cs56.projects.games.snake;
 
-/* ------------------------------------------------
- *                      Snake
- * ------------------------------------------------
- * high score: 140
- * Sam Dowell
- * Period 2
- * Mr. Forster's Class
- */
-
-/*
- * SnakeFrame.java
- *
- * Created on Dec 24, 2011, 11:42:55 AM
- */
 /**
  * A class that paint the snake and modify its attribute depending
  * on user input
- * edited by Sam Min and Eric Huang for CS56, project 03, Spring 2013
- * @author Sam Dowell
+ * @author Sam Dowell (original)
+ * @author Sam Min, Eric Huang (CS56, Spring 2013)
  */
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -387,6 +374,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
         // Create font
         Font font0 = new Font("Times New Roman", Font.PLAIN, 12);
         Font font1 = new Font("Helvetica", Font.PLAIN, 15);
+
 		Font font2 = new Font("Comic Sans", Font.BOLD, 20);
         // Begin painting
         // Get the offscreen graphics for double buffer
@@ -401,11 +389,15 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
+		// TODO: Make the centering calculation below a method
                 g.drawString("Snake", this.getWidth()/2-fm.stringWidth("Snake")/2, 80);
-                g.drawString("By: Sam Dowell", this.getWidth()/2-fm.stringWidth("By: Sam Dowell")/2, 110);
+		String authorTitle="By: Sam Dowell, with Eric Huang, Sam Min";
+                g.drawString(authorTitle, this.getWidth()/2-fm.stringWidth(authorTitle)/2, 110);
                 
                 
                 // Paint box displaying whether 1 or 2 players is selected
+		// TODO: explain these magic numbers.
+
                 g.setColor(Color.WHITE);
                 if (players == 1) {
                     g.fillRect(208, 182, 22, 22);
@@ -445,9 +437,9 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.setFont(font0);
                 g.drawString("Single Player", 50, 50);
                 g.drawString("Controls:", 50, 70);
-                g.drawString("←  →", 105, 70);
-                g.drawString(" ↑ ", 111, 63);
-                g.drawString(" ↓ ", 111, 78);
+                g.drawString("\u2190\u2192", 105, 70); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
+                g.drawString(" \u2191 ", 111, 63);
+                g.drawString(" \u2193 ", 111, 78);
                 g.drawString("How to Play:", 50, 90);
                 g.drawString("Use the arrow keys to control", 50, 110);
                 g.drawString("the snake and eat as many", 50, 125);
@@ -456,9 +448,9 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.drawString("Two Player", 250, 50);
                 g.drawString("Controls:", 250, 70);
                 g.drawString("Green Snake:", 305, 70);
-                g.drawString("←  →", 395, 70);
-                g.drawString(" ↑ ", 401, 63);
-                g.drawString(" ↓ ", 401, 78);
+                g.drawString("\u2190\u2192", 395, 70); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
+                g.drawString(" \u2191 ", 401, 63);
+                g.drawString(" \u2193 ", 401, 78);
                 g.drawString("Orange Snake:  WASD", 305, 90);
                 g.drawString("How to Play:", 250, 110);
                 g.drawString("Each player must try to eat", 250, 130);
