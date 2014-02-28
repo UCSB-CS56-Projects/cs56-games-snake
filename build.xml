@@ -83,7 +83,7 @@
   </target>
 
   <target name="run" depends="compile" description="run the snake program">
-  <java classpath="build" classname="edu.ucsb.cs56.projects.games.snake.SnakeFrame" fork="true">
+  <java classpath="build" classname="edu.ucsb.cs56.projects.games.snake.Main" fork="true"> <!-- changed classname to Main -->
   </java>
   </target>
 
