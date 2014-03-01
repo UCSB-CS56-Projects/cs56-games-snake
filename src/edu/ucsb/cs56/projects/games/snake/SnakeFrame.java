@@ -23,17 +23,20 @@ public class SnakeFrame extends JFrame implements KeyListener {
     // X and Y coordinates for the fruit
     // Variable "turn" indicates if a directional change has been displayed
     private int particlex, particley, turn, turn2;
+    //ihscore 
+    //Highscore object
+    //private HighScore highscore = new HighScore(
     // Score of fruit eaten, Head color counter, win/loss variable
-    private int score = 0, highScore=0, score1 = 0, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
+    private int score = 0,score1 = 0, highScore = 0, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
     // Width of the snake
     private final int WIDTH = 15;
 	private final int fWIDTH = 8;
     // Create random generator
     private Random gen = new Random();
     // Create an ArrayList for the Tail
-    private ArrayList<Tail> player1 = new ArrayList<Tail>(3);
-    private ArrayList<Tail> player2 = new ArrayList<Tail>(3);
-    // Create boolean values for direction of movement; and for snake growth when a fruit is eaten
+    private ArrayList<GameObject> player1 = new ArrayList<GameObject>(3);
+    private ArrayList<GameObject> player2 = new ArrayList<GameObject>(3);
+
     private boolean ismovingLEFT = false, ismovingRIGHT = false, ismovingUP = true, ismovingDOWN = false, growsnake = false;
     private boolean ismovingLEFT2 = false, ismovingRIGHT2 = false, ismovingUP2 = true, ismovingDOWN2 = false, growsnake2 = false;
     // Create boolean values for when to play again
@@ -46,6 +49,12 @@ public class SnakeFrame extends JFrame implements KeyListener {
     private Stopwatch watch = new Stopwatch();
     private Stopwatch fruittimer = new Stopwatch();
     private boolean puddles = false;
+    
+    public int getPlayers(){ return players;}
+
+    public int getScreenSize(){ return screenSize;}
+
+        public boolean getPuddles(){ return puddles;}  
     //JLabel label, m;
     //JButton button;
     
@@ -71,14 +80,14 @@ public class SnakeFrame extends JFrame implements KeyListener {
 		particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
         // Create 3 starting blocks for Tail
         for (int i = 0; i < 3; i++) {
-            player1.add(new Tail(playerx, playery));
+            player1.add(new GameObject(playerx, playery));
         }
         // Set starting positions for the tail
         player1.get(0).setPos(playerx,playery);
         player1.get(1).setPos(playerx,playery+WIDTH);
         player1.get(2).setPos(playerx,playery+(2*WIDTH));
         for (int i = 0; i < 3; i++) {
-            player2.add(new Tail(400, 400));
+            player2.add(new GameObject(400, 400));
         }
         player2.get(0).setPos(playerx/3*2, playery);
         player2.get(1).setPos(playerx/3*2, playery+WIDTH);
@@ -103,33 +112,33 @@ public class SnakeFrame extends JFrame implements KeyListener {
         if (ismovingLEFT) {
             // If the tail movement is within the boundaries, move it forward one space
             if (player1.get(0).getX() >= WIDTH) {
-                player1.add(0, new Tail(player1.get(0).getX() - WIDTH, player1.get(0).getY()));
+                player1.add(0, new GameObject(player1.get(0).getX() - WIDTH, player1.get(0).getY()));
                
                 // Otherwise loop it to the opposite end of the window
             } else {
-                player1.add(0, new Tail(player1.get(0).getX() + this.getWidth() - WIDTH, player1.get(0).getY()));
+                player1.add(0, new GameObject(player1.get(0).getX() + this.getWidth() - WIDTH, player1.get(0).getY()));
 		
             }
         } else if (ismovingRIGHT) {
             // Same method repeated for if it is moving RIGHT, etc...
             if (player1.get(0).getX() <= (this.getWidth() - WIDTH)) {
-                player1.add(0, new Tail(player1.get(0).getX() + WIDTH, player1.get(0).getY()));
+                player1.add(0, new GameObject(player1.get(0).getX() + WIDTH, player1.get(0).getY()));
             } else {
-                player1.add(0, new Tail(player1.get(0).getX() - this.getWidth() - WIDTH, player1.get(0).getY()));
+                player1.add(0, new GameObject(player1.get(0).getX() - this.getWidth() - WIDTH, player1.get(0).getY()));
 		
             }
         } else if (ismovingUP) {
             if (player1.get(0).getY() >= WIDTH) {
-                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() - WIDTH));
+                player1.add(0, new GameObject(player1.get(0).getX(), player1.get(0).getY() - WIDTH));
             } else {
-                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() + this.getHeight() - WIDTH));
+                player1.add(0, new GameObject(player1.get(0).getX(), player1.get(0).getY() + this.getHeight() - WIDTH));
 		
             }
         } else if (ismovingDOWN) {
             if (player1.get(0).getY() <= this.getHeight() - WIDTH) {
-                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() + WIDTH));
+                player1.add(0, new GameObject(player1.get(0).getX(), player1.get(0).getY() + WIDTH));
             } else {
-                player1.add(0, new Tail(player1.get(0).getX(), player1.get(0).getY() - this.getHeight() + WIDTH));
+                player1.add(0, new GameObject(player1.get(0).getX(), player1.get(0).getY() - this.getHeight() + WIDTH));
 		
             }
         }
@@ -141,32 +150,32 @@ public class SnakeFrame extends JFrame implements KeyListener {
         if (ismovingLEFT2) {
             // If the tail movement is within the boundaries, move it forward one space
             if (player2.get(0).getX() >= WIDTH) {
-                player2.add(0, new Tail(player2.get(0).getX() - WIDTH, player2.get(0).getY()));
+                player2.add(0, new GameObject(player2.get(0).getX() - WIDTH, player2.get(0).getY()));
                 // Otherwise loop it to the opposite end of the window
             } else {
-                player2.add(0, new Tail(player2.get(0).getX() + this.getWidth() - WIDTH, player2.get(0).getY()));
+                player2.add(0, new GameObject(player2.get(0).getX() + this.getWidth() - WIDTH, player2.get(0).getY()));
 		
             }
         } else if (ismovingRIGHT2) {
             // Same method repeated for if it is moving RIGHT, etc...
             if (player2.get(0).getX() <= (this.getWidth() - WIDTH)) {
-                player2.add(0, new Tail(player2.get(0).getX() + WIDTH, player2.get(0).getY()));
+                player2.add(0, new GameObject(player2.get(0).getX() + WIDTH, player2.get(0).getY()));
             } else {
-                player2.add(0, new Tail(player2.get(0).getX() - this.getWidth() - WIDTH, player2.get(0).getY()));
+                player2.add(0, new GameObject(player2.get(0).getX() - this.getWidth() - WIDTH, player2.get(0).getY()));
 		
             }
         } else if (ismovingUP2) {
             if (player2.get(0).getY() >= WIDTH) {
-                player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() - WIDTH));
+                player2.add(0, new GameObject(player2.get(0).getX(), player2.get(0).getY() - WIDTH));
             } else {
-                player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() + this.getHeight() - WIDTH));
+                player2.add(0, new GameObject(player2.get(0).getX(), player2.get(0).getY() + this.getHeight() - WIDTH));
 		
             }
         } else if (ismovingDOWN2) {
             if (player2.get(0).getY() <= this.getHeight() - WIDTH) {
-                player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() + WIDTH));
+                player2.add(0, new GameObject(player2.get(0).getX(), player2.get(0).getY() + WIDTH));
             } else {
-                player2.add(0, new Tail(player2.get(0).getX(), player2.get(0).getY() - this.getHeight() + WIDTH));
+                player2.add(0, new GameObject(player2.get(0).getX(), player2.get(0).getY() - this.getHeight() + WIDTH));
 		
             }
         }
@@ -197,10 +206,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 // Create random starting X and Y coordinate for fruit
                 particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 				particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-                // Create 3 starting blocks for Tail
+                // Create 3 starting blocks for GameObject
                 player1.clear();
                 for (int i = 0; i < 3; i++) {
-                    player1.add(new Tail(playerx, playery));
+                    player1.add(new GameObject(playerx, playery));
                 }
                 // Set starting positions for the tail
                 player1.get(0).setPos(playerx,playery);
@@ -208,7 +217,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 player1.get(2).setPos(playerx,playery+(2*WIDTH));
                 player2.clear();
                 for (int i = 0; i < 3; i++) {
-                    player2.add(new Tail(650, 650));
+                    player2.add(new GameObject(650, 650));
                 }
                 player2.get(0).setPos(playerx/3*2, playery);
                 player2.get(1).setPos(playerx/3*2, playery+WIDTH);
@@ -250,7 +259,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
             player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i++) {
-                player1.add(new Tail(playerx, playery));
+                player1.add(new GameObject(playerx, playery));
             }
             // Set starting positions for the tail
             player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
@@ -272,7 +281,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
             player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i ++)
-			player1.add(new Tail(playerx, playery));
+			player1.add(new GameObject(playerx, playery));
 			
 			player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
             player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
@@ -340,21 +349,30 @@ public class SnakeFrame extends JFrame implements KeyListener {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    
-   public void paint(Graphics graph) {
-        // Create font
-        Font font0 = new Font("Times New Roman", Font.PLAIN, 12);
-        Font font1 = new Font("Helvetica", Font.PLAIN, 15);
+   Font font0 = new Font("Times New Roman", Font.PLAIN, 12);
+   Font font1 = new Font("Helvetica", Font.PLAIN, 15);
+   Font font2 = new Font("Comic Sans", Font.BOLD, 20);
+   FontMetrics fm = this.getFontMetrics(font1);
+ 
+   public Font getFont0(){ return font0; }
+   public Font getFont1(){ return font1; }
+   public Font getFont2(){ return font2; }
+   public FontMetrics getFm(){ return fm;}
 
-		Font font2 = new Font("Comic Sans", Font.BOLD, 20);
-        // Begin painting
+
+
+         
+   public void paint(Graphics graph) {
+	//Painter paint = new Painter();
+        // Create font
+       // Begin painting
         // Get the offscreen graphics for double buffer
         g = offscreen.getGraphics();
         g.setFont(font1);
-        FontMetrics fm = this.getFontMetrics(font1);
-        // Create a menu screen for the initial launch, leave menu when spacebar is pressed
+              // Create a menu screen for the initial launch, leave menu when spacebar is pressed
         if (menu == 0) {
             if (controls == false) {
+	//	paint.paintFrame(this);
                 // Paint display for main menu
                 this.setSize(500,500);
                 g.setColor(Color.BLACK);
@@ -487,7 +505,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                     growsnake = false;
                     // Set the headcolor value to 0
                     headcolor = 0;
-                    for (Tail t : player1) {
+                    for (GameObject t : player1) {
                         // Make color of first block (head) black
                         if (headcolor == 0) {
                             g.setColor(Color.BLACK);
@@ -615,7 +633,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                     growsnake2 = false;
                     // Set the headcolor value to 0
                     headcolor = 0;
-                    for (Tail t : player1) {
+                    for (GameObject t : player1) {
                         // Make color of first block (head) black
                         if (headcolor == 0) {
                             g.setColor(Color.BLACK);
@@ -651,7 +669,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         }
                     }
                     headcolor2 = 0;
-                    for (Tail t : player2) {
+                    for (GameObject t : player2) {
                         // Make color of first block (head) black
                         if (headcolor2 == 0) {
                             g.setColor(Color.BLACK);
@@ -737,7 +755,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                             ismovingDOWN = false;
                             player1.clear();
                             for (int j = 0; j < 3; j++) {
-                                player1.add(new Tail(playerx, playery));
+                                player1.add(new GameObject(playerx, playery));
                             }
                             // Set starting positions for the tail
                             player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
@@ -749,7 +767,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                             ismovingDOWN2 = false;
                             player2.clear();
                             for (int j = 0; j < 3; j++) {
-                                player2.add(new Tail(400, 400));
+                                player2.add(new GameObject(400, 400));
                             }
                             player2.get(0).setPos(150, this.getHeight() - 150);
                             player2.get(1).setPos(150, this.getHeight() - 135);
@@ -771,7 +789,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                 ismovingDOWN = false;
                                 player1.clear();
                                 for (int j = 0; j < 3; j++) {
-                                    player1.add(new Tail(playerx, playery));
+                                    player1.add(new GameObject(playerx, playery));
                                 }
                                 int x = (gen.nextInt(31) + 10) * WIDTH;
                                 int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -796,7 +814,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                         hasIntersected = true;
                                         player1.clear();
                                         for (int p = 0; p < 3; p++) {
-                                            player1.add(new Tail(playerx, playery));
+                                            player1.add(new GameObject(playerx, playery));
                                         }
                                         int x = (gen.nextInt(31) + 10) * WIDTH;
                                         int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -827,7 +845,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                         ismovingDOWN = false;
                                         player1.clear();
                                         for (int j = 0; j < 3; j++) {
-                                            player1.add(new Tail(playerx, playery));
+                                            player1.add(new GameObject(playerx, playery));
                                         }
                                         // Set starting positions for the tail
                                         player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
@@ -839,7 +857,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                         ismovingDOWN2 = false;
                                         player2.clear();
                                         for (int j = 0; j < 3; j++) {
-                                            player2.add(new Tail(400, 400));
+                                            player2.add(new GameObject(400, 400));
                                         }
                                         player2.get(0).setPos(150, this.getHeight() - 150);
                                         player2.get(1).setPos(150, this.getHeight() - 135);
@@ -860,7 +878,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                     ismovingDOWN = false;
                                     player1.clear();
                                     for (int j = 0; j < 3; j++) {
-                                        player1.add(new Tail(playerx, playery));
+                                        player1.add(new GameObject(playerx, playery));
                                     }
                                     int x = (gen.nextInt(31) + 10) * WIDTH;
                                     int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -883,7 +901,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                         hasIntersected = true;
                                         player1.clear();
                                         for (int p = 0; p < 3; p++) {
-                                            player1.add(new Tail(playerx, playery));
+                                            player1.add(new GameObject(playerx, playery));
                                         }
                                         int x = (gen.nextInt(31) + 10) * WIDTH;
                                         int y = (gen.nextInt(31) + 10) * (2*WIDTH);
@@ -909,7 +927,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                 ismovingDOWN2 = false;
                                 player2.clear();
                                 for (int j = 0; j < 3; j++) {
-                                    player2.add(new Tail(400, 400));
+                                    player2.add(new GameObject(400, 400));
                                 }
                                 int x = (gen.nextInt(31) + 10) * WIDTH;
                                 int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -931,7 +949,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                         hasIntersected = true;
                                         player2.clear();
                                         for (int p = 0; p < 3; p++) {
-                                            player2.add(new Tail(playerx, playery));
+                                            player2.add(new GameObject(playerx, playery));
                                         }
                                         int x = (gen.nextInt(31) + 10) * WIDTH;
                                         int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -956,7 +974,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                 ismovingDOWN2 = false;
                                 player2.clear();
                                 for (int j = 0; j < 3; j++) {
-                                    player2.add(new Tail(400, 400));
+                                    player2.add(new GameObject(400, 400));
                                 }
                                 int x = (gen.nextInt(31) + 10) * WIDTH;
                                 int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -979,7 +997,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                         hasIntersected = true;
                                         player2.clear();
                                         for (int p = 0; p < 3; p++) {
-                                            player2.add(new Tail(playerx, playery));
+                                            player2.add(new GameObject(playerx, playery));
                                         }
                                         int x = (gen.nextInt(31) + 10) * WIDTH;
                                         int y = (gen.nextInt(31) + 10) * WIDTH;
@@ -1211,6 +1229,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent ke) {
+    public void keyReleased(KeyEvent key) {
     }
 }
