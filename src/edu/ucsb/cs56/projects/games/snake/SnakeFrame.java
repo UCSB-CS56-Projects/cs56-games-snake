@@ -193,6 +193,18 @@ public class SnakeFrame extends JFrame implements KeyListener {
     
     public void doaction() {
         if (loser > 0) {
+        
+             if(score>highScore){
+		  highScore=score;
+		  hScore.setScore(highScore);	
+		 try{
+                     hScore.saveHighScore();
+                 }catch(Exception exc) {
+		    exc.printStackTrace(); 
+		 }
+
+                }
+	
             // If user chooses yes, restart the program
             if (playagainyes == true) {
                 //Set window size
@@ -202,13 +214,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 else if (screenSize == 2){this.setSize(700,700);}
                 if(score>highScore){
 		  highScore=score;
-		  hScore.setScore(highScore);	
-		 try{
-                     hScore.saveHighScore();
-                 }catch(Exception exc) {
-		    exc.printStackTrace(); 
-		 }
-
                 }
 		
                 setLocationRelativeTo(null);
