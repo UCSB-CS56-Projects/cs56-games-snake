@@ -4,7 +4,7 @@ import java.io.*;
 
 public class HighScore implements Serializable {
 
-    private final int score;
+    private int score;
 
     public HighScore(int score){
 	this.score = score;
@@ -15,6 +15,8 @@ public class HighScore implements Serializable {
     }
 
     public int getScore(){ return this.score; }
+   
+    public void setScore(int x){ this.score = x; } 
 
     public void saveHighScore() throws IOException { 
         FileOutputStream fileOut = new FileOutputStream("src/edu/ucsb/cs56/projects/games/snake/Highscore.ser");
@@ -35,6 +37,7 @@ public class HighScore implements Serializable {
             fileIn.close();
 
         } catch (Exception ex){
+	     ex.printStackTrace();
 	     hs = new HighScore(0);
         }
         if(hs == null){

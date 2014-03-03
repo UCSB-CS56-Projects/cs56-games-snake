@@ -202,10 +202,11 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 else if (screenSize == 2){this.setSize(700,700);}
                 if(score>highScore){
 		  highScore=score;
+		  hScore.setScore(highScore);	
 		 try{
                      hScore.saveHighScore();
                  }catch(Exception exc) {
-		  
+		    exc.printStackTrace(); 
 		 }
 
                 }
