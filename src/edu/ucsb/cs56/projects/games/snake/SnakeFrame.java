@@ -25,11 +25,19 @@ public class SnakeFrame extends JFrame implements KeyListener {
     private int particlex, particley, turn, turn2;
     //private HighScore highscore = new HighScore(
     //HighScoreStorage hssScore = new HighScoreStorage();
-    //HighScore hScore = new HighScore(0);
+    HighScore temp = new HighScore(0);
+
+    //try{
+       HighScore hScore = temp.loadHighScore();
+
+    //} catch (ex){
+    //	 hScore = new HighScore(0);
+    //}
+
     //HighScoreStorage temp = new HighScoreStorage();
     //temp = hssScore.loadHighScore();     	
     // Score of fruit eaten, Head color counter, win/loss variable
-    private int score = 0,score1 = 0, highScore = 0/*hScore.getScore*/, score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
+    private int score = 0,score1 = 0, highScore = hScore.getScore(), score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
     // Width of the snake
     private final int WIDTH = 15;
 	private final int fWIDTH = 8;
@@ -192,8 +200,16 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 if (screenSize == 0){this.setSize(500,500);}
                 else if (screenSize == 1){this.setSize(600,600);}
                 else if (screenSize == 2){this.setSize(700,700);}
-                if(score>highScore){highScore=score;}
-         	//hssScore.saveHighScore(); 
+                if(score>highScore){
+		  highScore=score;
+		 try{
+                     hScore.saveHighScore();
+                 }catch(Exception exc) {
+		  
+		 }
+
+                }
+		
                 setLocationRelativeTo(null);
                 frameresized = false;
                 controls = false;
