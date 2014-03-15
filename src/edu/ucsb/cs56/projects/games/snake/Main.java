@@ -39,7 +39,8 @@ public class Main extends SnakeFrame
 		
 		@Override
 		public void run() {
-		    new SnakeFrame().setVisible(true);
+		    new SnakeFrame().setVisible(true);  
+
 		}
 	    });
     }

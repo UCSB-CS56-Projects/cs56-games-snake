@@ -23,19 +23,9 @@ public class SnakeFrame extends JFrame implements KeyListener {
     // X and Y coordinates for the fruit
     // Variable "turn" indicates if a directional change has been displayed
     private int particlex, particley, turn, turn2;
-    //private HighScore highscore = new HighScore(
-    //HighScoreStorage hssScore = new HighScoreStorage();
     HighScore temp = new HighScore(0);
+    HighScore hScore = temp.loadHighScore();
 
-    //try{
-       HighScore hScore = temp.loadHighScore();
-
-    //} catch (ex){
-    //	 hScore = new HighScore(0);
-    //}
-
-    //HighScoreStorage temp = new HighScoreStorage();
-    //temp = hssScore.loadHighScore();     	
     // Score of fruit eaten, Head color counter, win/loss variable
     private int score = 0,score1 = 0, highScore = hScore.getScore(), score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1, headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
     // Width of the snake
@@ -64,14 +54,13 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
     public int getScreenSize(){ return screenSize;}
 
-        public boolean getPuddles(){ return puddles;}  
+    public boolean getPuddles(){ return puddles;}  
     //JLabel label, m;
     //JButton button;
     
     /** Creates new form SnakeFrame */
-    /*note to self: Leave SnakeFrame() in this class*/
     public SnakeFrame() {
-        super("Snake");
+        super("Snake");//Super is Jframe
         // Initialize components
         initComponents();
         // Set boundaries for playing field
@@ -138,7 +127,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
 		
             }
         } else if (ismovingUP) {
-            if (player1.get(0).getY() >= WIDTH) {
+            if (player1.get(0).getY() >= WIDTH + WIDTH + WIDTH) {
                 player1.add(0, new GameObject(player1.get(0).getX(), player1.get(0).getY() - WIDTH));
             } else {
                 player1.add(0, new GameObject(player1.get(0).getX(), player1.get(0).getY() + this.getHeight() - WIDTH));
@@ -384,11 +373,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
    public Font getFont2(){ return font2; }
    public FontMetrics getFm(){ return fm;}
 
-
-
-         
    public void paint(Graphics graph) {
-	//Painter paint = new Painter();
         // Create font
        // Begin painting
         // Get the offscreen graphics for double buffer
