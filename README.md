@@ -1,6 +1,11 @@
-W14 Ready! (Bronwyn Perry-Huston)
 cs56-games-snake
 ================
+
+project history
+===============
+```
+ W14 | bronhuston 4pm | vinlara | Snake game
+```
 
 A Snake game, originally by Sam Dowell, and edited by Samuel Min Eric Huang.
 edited by Vincente Lara 02/28/2014 
