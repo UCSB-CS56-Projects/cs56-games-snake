@@ -4,7 +4,7 @@ cs56-games-snake
 project history
 ===============
 ```
- YES | bronhuston | vinlara | Snake game
+ W14 | bronhuston 4pm | vinlara | Snake game
 ```
 
 A Snake game, originally by Sam Dowell, and edited by Samuel Min Eric Huang.
