@@ -19,7 +19,7 @@ public class GameObject
 
     public GameObject(int a, int b, int w, int h){
 	x = a;
-	y = a;
+	y = b; // was originally a. typo?
 	width = w;
 	height = h;
     }
@@ -29,13 +29,8 @@ public class GameObject
 	y = b;
     }
 
-    public int getX(){ return x;}
-
-    public int getY(){ return y;}
-
-    public int getWidth(){ return width;}
-
-    public int getHeight(){
-	return height;
-    }
+    public int getX(){ return x; }
+    public int getY(){ return y; }
+    public int getWidth(){ return width; }
+    public int getHeight(){ return height; }
 } 
