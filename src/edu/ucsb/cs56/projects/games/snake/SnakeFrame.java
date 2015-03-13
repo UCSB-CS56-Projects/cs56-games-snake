@@ -5,6 +5,7 @@ package edu.ucsb.cs56.projects.games.snake;
  * on user input
  * @author Sam Dowell (original)
  * @author Sam Min, Eric Huang (CS56, Spring 2013)
+ * @author Elliott Hong (CS56, Winter 2015)
  */
 
 import java.awt.*;
@@ -71,24 +72,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
     //JLabel label, m;
     //JButton button;
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
 
     
     ActionListener oneP = new ActionListener() {
@@ -158,19 +141,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
 	// Super is JFrame
@@ -213,14 +183,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
         // Create offscreen image
         offscreen = this.createImage(this.getWidth(), this.getHeight());
-
-
-
-
-
-
-
-
 
 
 
@@ -313,8 +275,6 @@ public class SnakeFrame extends JFrame implements KeyListener {
 	    }
         }
     }
-
-
 
 
     public void doaction() {
