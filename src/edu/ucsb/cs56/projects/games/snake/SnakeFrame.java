@@ -72,6 +72,105 @@ public class SnakeFrame extends JFrame implements KeyListener {
     //JLabel label, m;
     //JButton button;
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+    
+    ActionListener oneP = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		set1P();
+	    }
+	};
+    
+    ActionListener twoP = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		set2P();
+	    }
+	};
+    
+    ActionListener window5 = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		setWindow500();
+	    }
+	};
+    
+    ActionListener window6 = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		setWindow600();
+	    }
+	};
+    
+    ActionListener window7 = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		setWindow700();
+	    }
+	};
+    
+    ActionListener normalG = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		setNormal();
+	    }
+	};
+    
+    ActionListener puddlesG = new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		setPuddles();
+	    }
+	};
+    
+    
+    
+    public void set1P() { players = 1; }
+    
+    public void set2P() { players = 2; }
+    
+    public void setWindow500() { screenSize = 0; }
+    
+    public void setWindow600() { screenSize = 1; }
+
+    public void setWindow700() { screenSize = 2; }
+
+    public void setNormal() { puddles = false; }
+
+    public void setPuddles() { puddles = true; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
 	// Super is JFrame
@@ -115,13 +214,24 @@ public class SnakeFrame extends JFrame implements KeyListener {
         // Create offscreen image
         offscreen = this.createImage(this.getWidth(), this.getHeight());
 
+
+
+
+
+
+
+
+
+
+
         // Create an ActionListener
-        ActionListener task = new ActionListener() {		
+	ActionListener task = new ActionListener() {		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    doaction();
 		}
 	    };
+
 
         // Create Timer
         new Timer(75, task).start();
@@ -203,7 +313,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
 	    }
         }
     }
-    
+
+
+
+
     public void doaction() {
         if (loser > 0) {   
 	    if(score>highScore){
@@ -358,14 +471,16 @@ public class SnakeFrame extends JFrame implements KeyListener {
         // If in two player, and a fruit has not been eaten for 30 seconds
 	// create new random location for fruit
         if (players == 2 && loser == 0 && fruittimer.getSeconds() >= 30 && menu != 0) {
-            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH); 
+	    Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+            //Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH); 
             Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
             Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
             do {
 		particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 		particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                 System.out.println("fruittime reset");
-            } while (head2.intersects(particlex, particley, fWIDTH, fWIDTH) || head.intersects(particlex, particley, fWIDTH, fWIDTH));
+            } while (head2.intersects(particlex, particley,  WIDTH,  WIDTH) || head.intersects(particlex, particley,  WIDTH,  WIDTH));
+	    //while (head2.intersects(particlex, particley, fWIDTH, fWIDTH) || head.intersects(particlex, particley, fWIDTH, fWIDTH));
             fruittimer.start();
         }
         repaint();
@@ -424,7 +539,38 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 
                 // Paint box displaying whether 1 or 2 players is selected
 		// TODO: explain these magic numbers.
-		
+		JButton onePl, twoPl, wi5, wi6, wi7, normGa, puddGa;
+
+		onePl = new JButton();
+		twoPl = new JButton();
+		wi5 = new JButton();
+		wi6 = new JButton();
+		wi7 = new JButton();
+		normGa = new JButton();
+		puddGa = new JButton();
+
+		onePl.addActionListener(oneP);
+		twoPl.addActionListener(twoP);
+		wi5.addActionListener(window5);
+		wi6.addActionListener(window6);
+		wi7.addActionListener(window7);
+		normGa.addActionListener(normalG);
+		puddGa.addActionListener(puddlesG);
+
+		// Adding Main Menu Buttons
+		this.getContentPane().add(onePl);
+		this.getContentPane().add(twoPl);
+		this.getContentPane().add(wi5);
+		this.getContentPane().add(wi6);
+		this.getContentPane().add(wi7);
+		this.getContentPane().add(normGa);
+		this.getContentPane().add(puddGa);
+
+		//public void actionPerformed(ActionEvent event) {
+		    
+		//}
+
+
                 g.setColor(Color.WHITE);
                 if (players == 1) {
                     g.fillRect(208, 182, 22, 22);
@@ -530,7 +676,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                     
                     // Set color to red and paint the fruit
                     g.setColor(Color.RED);
-                    g.fillRect(particlex, particley, fWIDTH, fWIDTH);
+		    g.fillRect(particlex, particley,  WIDTH,  WIDTH);
+                    //g.fillRect(particlex, particley, fWIDTH, fWIDTH);
                     if(puddles){
 						g.setColor(b);
 						g.fillOval(50,90,100,50);
@@ -557,7 +704,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         headcolor++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+			Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+                        //Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                         Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
@@ -585,9 +733,11 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         hasIntersected = false;
                         for (int i = 0; i < player1.size(); i++) {
                             Rectangle r = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+			    Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+                            //Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+                                while (r.intersects(particlex, particley,  WIDTH,  WIDTH)) {
+				    //while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
                                     particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                     hasIntersected = true;
@@ -657,7 +807,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                     
                     // Set color to Orange and paint the fruit                    
                     g.setColor(Color.RED);
-                    g.fillRect(particlex, particley, fWIDTH, fWIDTH);
+                    g.fillRect(particlex, particley,  WIDTH,  WIDTH);
+		    //g.fillRect(particlex, particley, fWIDTH, fWIDTH);
                     if(puddles){
 						g.setColor(b);
 						g.fillOval(50,90,100,50);
@@ -685,14 +836,16 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         headcolor++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+			Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+                        //Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                         Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         Rectangle head2 = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+			    while (head.intersects(particlex, particley,  WIDTH,  WIDTH) || head2.intersects(particlex, particley,  WIDTH,  WIDTH)) {
+				//while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
                                                 particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                             }
@@ -721,14 +874,16 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         headcolor2++;
                         // Create rectangles for the snake head and the fruit in order to check for intersection
                         Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+                        Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+			//Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                         Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
                         Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
                         // Paint the snake
                         g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+                            while (head.intersects(particlex, particley,  WIDTH,  WIDTH) || head2.intersects(particlex, particley,  WIDTH,  WIDTH)) {
+				//while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
 								particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                 
@@ -759,9 +914,11 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         hasIntersected = false;
                         for (int i = 0; i < player1.size(); i++) {
                             Rectangle r = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+                            Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+			    //Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+                                while (r.intersects(particlex, particley,  WIDTH,  WIDTH)) {
+				    //while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
 									particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                     hasIntersected = true;
@@ -771,9 +928,10 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         }
                         for (int i = 0; i < player2.size(); i++) {
                             Rectangle r = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+                            Rectangle fruit = new Rectangle(particlex, particley,  WIDTH,  WIDTH);
+			    //Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
+				while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
 									particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
 									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
                                     hasIntersected = true;
