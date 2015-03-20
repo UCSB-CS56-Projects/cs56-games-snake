@@ -15,17 +15,12 @@ public class Tail {
     //Cool kids way to make variables
 
     public Tail(){
-        x = 50;
-	y = 50;
-	width = 15;
-	height = 15;
+        
     }
     
     public Tail(int a, int b){
         x = a;
         y = b;
-	width = 15;
-	height = 15;
     }
     
     public Tail(int a, int b, int c, int d){
