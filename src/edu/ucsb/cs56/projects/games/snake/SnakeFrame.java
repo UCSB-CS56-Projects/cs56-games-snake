@@ -462,46 +462,44 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
                 g.setFont(font0);
-                g.drawString("Single Player", 50, 50);
-                g.drawString("Controls:", 50, 70);
-                g.drawString("\u2190\u2192", 105, 70); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
-                g.drawString(" \u2191 ", 111, 63);
-                g.drawString(" \u2193 ", 111, 78);
-                g.drawString("How to Play:", 50, 90);
-                g.drawString("Use the arrow keys to control", 50, 110);
-                g.drawString("the snake and eat as many", 50, 125);
-                g.drawString("apples as possible without", 50, 140);
-                g.drawString("running into the tail.", 50, 155);
-                g.drawString("Two Player", 250, 50);
-                g.drawString("Controls:", 250, 70);
-                g.drawString("Green Snake:", 305, 70);
-                g.drawString("\u2190\u2192", 395, 70); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
-                g.drawString(" \u2191 ", 401, 63);
-                g.drawString(" \u2193 ", 401, 78);
-                g.drawString("Orange Snake:  WASD", 305, 90);
-                g.drawString("How to Play:", 250, 110);
-                g.drawString("Each player must try to eat", 250, 130);
-                g.drawString("as many apples as possible.", 250, 145);
-                g.drawString("If you collide with your", 250, 160);
-                g.drawString("tail or the other snake, your", 250, 175);
-                g.drawString("tail will revert back to its", 250, 190);
-                g.drawString("original size. If the heads", 250, 205);
-                g.drawString("collide, both snakes will", 250, 220);
-                g.drawString("revert to their original size.", 250, 235);
-                g.drawString("A new fruit will appear every", 250, 250);
-                g.drawString("thirty seconds if not eaten.", 250, 265);
-                g.drawString("Have the biggest size when", 250, 280);
-                g.drawString("the apples run out to win.", 250, 295);
+                g.drawString("Single Player",85, 50);
+                g.drawString("\u2191 ", 91, 67);
+                g.drawString("Controls: \u2190   \u2192", 20, 75); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
+		g.drawString("\u2193", 91, 79);
+		g.drawString("How to Play:", 20, 115);
+                g.drawString("Use the arrow keys to control the", 20, 135);
+                g.drawString("snake and eat as many apples as", 20, 150);
+                g.drawString("possible without running into the", 20, 165);
+                g.drawString("tail.", 20, 180);
+
+
+                g.drawString("Two Player", 325, 50);
+                g.drawString("Controls:   Green Snake: \u2190   \u2192", 250, 75);
+                g.drawString(" \u2191 ", 414, 67);
+                g.drawString(" \u2193 ", 414, 79);
+                g.drawString("  Orange Snake: WASD", 302, 93);
+                g.drawString("How to Play:", 250, 115);
+                g.drawString("Each player must try to eat as many", 250, 135);
+                g.drawString("apples as possible. If you collide with", 250, 150);
+                g.drawString("any part of a tail, you will revert back", 250, 165);
+                g.drawString("to your original size. If your heads", 250, 180);
+                g.drawString("collide, you will both revert back to", 250, 195);
+                g.drawString("your original sizes. A new fruit will", 250, 210);
+                g.drawString("appear every 30 seconds if not eaten.", 250, 225);
+		g.drawString("Act quickly! There are only 50 apples!", 250, 240);
+                g.drawString("To win, have the bigger size when the", 250, 255);
+                g.drawString("the apples run out", 250, 270);
+
+
                 g.setColor(Color.WHITE);
-                g.drawString("Puddle Mode:",50,190);
-                g.drawString("In this mode, there will be", 40, 205);
-                g.drawString("several puddles placed around", 40,220);
-                g.drawString("the map which will hide some", 40,235);
-                g.drawString("fruits as they spawn. The", 40,250);
-                g.drawString("objective remains the same", 40,265);
-                g.drawString("but are you up for the challenge?", 40,280);
+                g.drawString("Puddle Mode:",200,310);
+                g.drawString("In this mode, there will be several puddles placed around the map", 40, 330);
+                g.drawString("which will hide some fruits as they spawn. The objective remains", 45,345);
+                g.drawString("the same but are you up for the challenge?", 100,360);
+
+
                 g.setColor(Color.ORANGE);
-                g.drawString("Return to Menu [M]", this.getWidth() - 125, this.getHeight() - 25);
+                g.drawString("Return to Menu [M]", this.getWidth() - 135, this.getHeight() - 15);
 
             }
 	    
