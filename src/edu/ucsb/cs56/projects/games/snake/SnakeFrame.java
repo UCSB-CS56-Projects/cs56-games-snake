@@ -83,7 +83,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
 	    };
 
     private task atask=new task();
-    private Timer atime=new Timer(75,atask);
+    private Timer atime=new Timer(speed,atask);
     //JLabel label, m;
     //JButton button;
     
@@ -131,15 +131,15 @@ public class SnakeFrame extends JFrame implements KeyListener {
         offscreen = this.createImage(this.getWidth(), this.getHeight());
 
         // Create an ActionListener
-        ActionListener task = new ActionListener() {		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		    doaction();
-		}
-	    };
+	// ActionListener task = new ActionListener() {		
+	//	@Override
+	//	public void actionPerformed(ActionEvent e) {
+	//	    doaction();
+	//	}
+	//  };
 
         // Create Timer
-        new Timer(75, task).start();
+        atime.start();
     }
     
     public void shiftSnake() {
