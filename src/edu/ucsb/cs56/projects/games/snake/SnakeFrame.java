@@ -17,6 +17,8 @@ import javax.swing.*;
 
 public class SnakeFrame extends JFrame implements KeyListener {
 
+    ///////////////////////////
+    private int speed=75;
     // Establish variables
     // Starting X and Y coordinates for the snake playerx and playery
     private int playerx, playery;
@@ -69,6 +71,17 @@ public class SnakeFrame extends JFrame implements KeyListener {
     public int getScreenSize(){ return screenSize;}
     public boolean getPuddles(){ return puddles;}  
 
+
+	class task implements ActionListener{		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    doaction();
+		}
+	    };
+
+    private task atask=new task();
+    private Timer atime=new Timer(75,atask);
+
     //JLabel label, m;
     //JButton button;
     
@@ -116,15 +129,16 @@ public class SnakeFrame extends JFrame implements KeyListener {
         offscreen = this.createImage(this.getWidth(), this.getHeight());
 
         // Create an ActionListener
-        ActionListener task = new ActionListener() {		
+	/*	ActionListener task = new ActionListener() {		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    doaction();
 		}
 	    };
-
+	*/
         // Create Timer
-        new Timer(75, task).start();
+	//	new Timer(speed,task).start();
+	
     }
     
     public void shiftSnake() {
@@ -440,18 +454,26 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 if (puddles == false){g.fillOval(150, 325, 140, 40);}
                 else if(puddles == true){g.fillOval(290,325, 140,40);}
                 
+              if (speed == 75) {
+                    g.fillRect(100, 415, 50, 30);
+                } else if (speed == 50) {
+                    g.fillRect(225, 415, 50, 30);
+	      } else if (speed ==25) {
+                    g.fillRect(350, 415, 50, 30);
+	      }
                 
                 g.setColor(Color.RED);
                 g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
                 g.setFont(font2);
                 g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
                 g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
-                g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2, 350);
+                g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2 -20, 350);
+		g.drawString("8)Easy    9)Medium    0)Difficult", this.getWidth() /2 - fm.stringWidth("8)Easy    9)Medium    0)Difficult")/2-50, 430);
                 g.setFont(font1);
                 g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
                 g.drawString("Select mode: ", this.getWidth() /2 - fm.stringWidth("Select mode: ")/2, 320);
-                g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 410);
-                g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 380);
+                g.drawString("Select difficulty:", this.getWidth() / 2 - fm.stringWidth("Select difficulty:") / 2, 400);
+                g.drawString("Press Spacebar to Begin_____ How to Play [H]", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin_____ How to Play [H]") / 2 - 20, 490);
 				g.setFont(font1);
 		
 		
@@ -1194,6 +1216,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
         else if (key == KeyEvent.VK_SPACE) {
             if (menu == 0 && controls == false) {
                 menu++;
+		new SnakeFrame();
                 // Start stopwatch
                 watch.start();
             }
@@ -1219,6 +1242,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 } else if (pause == false) {
                     watch.unpause();
                 }
+
             }
             // Key listener for menu screen 1/2 players
         } else if (key == KeyEvent.VK_1) {
@@ -1237,34 +1261,59 @@ public class SnakeFrame extends JFrame implements KeyListener {
             }
         }
         //key listeners for window sizes
-		else if (key == KeyEvent.VK_3){
-			if (menu == 0 && controls == false){
-				screenSize = 0;
-			}
-		}
-		else if (key == KeyEvent.VK_4){
-			if (menu == 0 && controls == false){
-				screenSize = 1;
-			}
-		}
-		else if (key == KeyEvent.VK_5){
-			if (menu == 0 && controls == false){
-				screenSize = 2;
-			}
-		}
-		else if (key == KeyEvent.VK_6){
-			if (menu == 0 && controls == false){
-				puddles = false;
-			}
-		}
-		else if (key == KeyEvent.VK_7){
-			if (menu == 0 && controls == false){
-				puddles = true;
-			}
-		}
+	else if (key == KeyEvent.VK_3){
+	    if (menu == 0 && controls == false){
+		screenSize = 0;
+	    }
+	}
+	else if (key == KeyEvent.VK_4){
+	    if (menu == 0 && controls == false){
+		screenSize = 1;
+	    }
+	}
+	else if (key == KeyEvent.VK_5){
+	    if (menu == 0 && controls == false){
+		screenSize = 2;
+	    }
+	}
+	else if (key == KeyEvent.VK_6){
+	    if (menu == 0 && controls == false){
+		puddles = false;
+	    }
+	}
+	else if (key == KeyEvent.VK_7){
+	    if (menu == 0 && controls == false){
+		puddles = true;
+	    }
+	}
+	else if (key == KeyEvent.VK_8){
+	    if (menu == 0 ){
+		speed=75;
+		atime.stop();
+		atime.setDelay(speed);
+		atime.restart();
+	    }
+	}
+	else if (key == KeyEvent.VK_9){
+	    if (menu == 0 ){
+		speed=50;
+		atime.stop();
+		atime.setDelay(speed);
+		atime.restart();
+	    }
+	}
+	else if (key == KeyEvent.VK_0){
+	    if (menu == 0 ){
+		speed=25;
+		atime.stop();
+		atime.setDelay(speed);
+		atime.restart();
+              
+	    }
+	}
     }
-
+    
     @Override
-    public void keyReleased(KeyEvent key) {
+	public void keyReleased(KeyEvent key) {
     }
 }
