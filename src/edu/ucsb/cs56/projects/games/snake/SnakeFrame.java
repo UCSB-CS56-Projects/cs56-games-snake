@@ -453,9 +453,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		}
                 
                 // Paint box for window size preference
-                if (screenSize == 0){g.fillOval(11,263,160,40);}
-                else if (screenSize == 1){g.fillOval(171,263,160,40);}
-                else if (screenSize == 2){g.fillOval(331,263,160,40);}
+		// if (screenSize == 0){g.fillOval(11,263,160,40);}
+		// else if (screenSize == 1){g.fillOval(171,263,160,40);}
+		// else if (screenSize == 2){g.fillOval(331,263,160,40);}
                 
                 if (puddles == false){g.fillOval(150, 325, 140, 40);}
                 else if(puddles == true){g.fillOval(290,325, 140,40);}
@@ -474,11 +474,11 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
                 g.setFont(font2);
                 g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
-                g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
+		// g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
                 g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2 -20, 350);
 		g.drawString("8)Easy    9)Medium    0)Difficult", this.getWidth() /2 - fm.stringWidth("8)Easy    9)Medium    0)Difficult")/2-50, 430);
                 g.setFont(font1);
-                g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
+                //g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
                 g.drawString("Select mode: ", this.getWidth() /2 - fm.stringWidth("Select mode: ")/2, 320);
                 g.drawString("Select difficulty:", this.getWidth() / 2 - fm.stringWidth("Select difficulty:") / 2, 400);
                 g.drawString("Press Spacebar to Begin_____ How to Play [H]", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin_____ How to Play [H]") / 2 - 20, 490);
@@ -814,7 +814,11 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                                 }
                             }
                         }
-                    } while (hasIntersected);
+                    }  while (hasIntersected);
+
+		    while (hasIntersected){
+			loser++;
+		    }
                     // Check for collisions between snakes if the game has not yet ended
                     if (fruits > 0) {
                         Rectangle p1head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
@@ -873,6 +877,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                                 break;
                             }
                         }
+
+
+
                         // Check for if the new random location is on top of the other snake
                         // In this case create a new random location
                         while (hasIntersected) {
