@@ -816,9 +816,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                         }
                     }  while (hasIntersected);
 
-		    while (hasIntersected){
-			loser++;
-		    }
+
                     // Check for collisions between snakes if the game has not yet ended
                     if (fruits > 0) {
                         Rectangle p1head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
