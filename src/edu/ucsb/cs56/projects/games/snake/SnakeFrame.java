@@ -539,7 +539,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 // If the player has not yet lost, paint the next image of snake movement
                 if (loser == 0) {
                     // Set the color to green to paint the background
-                    Color c = new Color(24,107,31);
+                    Color c = new Color(2,115,153);
                     Color b = new Color(61,226,235);
 					g.setColor(c);
 					//Set window size
@@ -669,7 +669,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 }
             } else if (players == 2) {
                 if (loser == 0) {
-					Color c = new Color(24,107,31);
+					Color c = new Color(2,115,153);
                     Color b = new Color(61,226,235);
 					// Set the color to white to paint the background
 					g.setColor(c);
