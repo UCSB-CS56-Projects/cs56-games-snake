@@ -36,7 +36,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
     // Width of the snake
     private final int WIDTH = 15;
-    private final int fWIDTH = 8;
+    private final int fWIDTH = 15;
 
     // Create random generator
     private Random gen = new Random();
