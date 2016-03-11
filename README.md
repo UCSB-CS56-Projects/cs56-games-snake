@@ -5,6 +5,7 @@ project history
 ===============
 ```
  W14 | bronhuston 4pm | vinlara | Snake game
+ W16 | omeedrabani 6pm| rkuang, robingorge (zehaoli)| Snake game
 ```
 
 A Snake game, originally by Sam Dowell, and edited by Samuel Min Eric Huang.
@@ -51,6 +52,7 @@ original size. Whoever is the biggest in the end is the winner.
 
 
 W16 final remarks
+=================
 
 1,what the code does
 In this legacy code, the Jframe, game object and the controller are all in only one class. The snake is formed by an arraylist of the game object. When you eat a fruit, there will be an additional object in the arraylist. When you chang the direction, the next object in the arraylist will be created in different x coordinate or y coordinate (according to the direction key you press).
