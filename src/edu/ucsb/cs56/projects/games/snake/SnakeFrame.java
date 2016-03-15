@@ -15,7 +15,8 @@ import javax.swing.*;
 
 //Note to self: SnakeFrame is similar to Game.java
 
-public class SnakeFrame extends JFrame implements KeyListener {
+public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
+    private int speed= 75;
 
     // Establish variables
     // Starting X and Y coordinates for the snake playerx and playery
@@ -35,7 +36,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
 
     // Width of the snake
     private final int WIDTH = 15;
-    private final int fWIDTH = 8;
+    private final int fWIDTH = 15;
 
     // Create random generator
     private Random gen = new Random();
@@ -69,6 +70,20 @@ public class SnakeFrame extends JFrame implements KeyListener {
     public int getScreenSize(){ return screenSize;}
     public boolean getPuddles(){ return puddles;}  
 
+
+
+
+
+
+	class task implements ActionListener{		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    doaction();
+		}
+	    };
+
+    private task atask=new task();
+    private Timer atime=new Timer(speed,atask);
     //JLabel label, m;
     //JButton button;
     
@@ -88,13 +103,18 @@ public class SnakeFrame extends JFrame implements KeyListener {
         // Add a KeyListener
         addKeyListener(this);
         
+
+	//mouse listener...........this is mouse listener
+	addMouseListener(this);
+
+
 	// Set player starting position
      	playerx=this.getWidth()/5*3;
 	playery=this.getHeight()/5*3;
 
         // Create random starting X and Y coordinate for fruit
-        particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-	particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
         
 	// Create 3 starting blocks for Tail
         for (int i = 0; i < 3; i++) {
@@ -116,15 +136,15 @@ public class SnakeFrame extends JFrame implements KeyListener {
         offscreen = this.createImage(this.getWidth(), this.getHeight());
 
         // Create an ActionListener
-        ActionListener task = new ActionListener() {		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		    doaction();
-		}
-	    };
+	// ActionListener task = new ActionListener() {		
+	//	@Override
+	//	public void actionPerformed(ActionEvent e) {
+	//	    doaction();
+	//	}
+	//  };
 
         // Create Timer
-        new Timer(75, task).start();
+        atime.start();
     }
     
     public void shiftSnake() {
@@ -244,8 +264,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
 		playery = this.getHeight()/2;
 		
 		// Create random starting X and Y coordinate for fruit
-		particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-		particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
 		
 		// Create 3 starting blocks for GameObject
 		player1.clear();
@@ -301,8 +321,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
             this.setVisible(true);
             frameresized = true;
             offscreen = this.createImage(this.getWidth(), this.getHeight());
-            particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-	    particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
             player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i++) {
@@ -323,8 +343,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
             this.setVisible(true);
             frameresized = true;
             offscreen = this.createImage(this.getWidth(), this.getHeight());
-            particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-	    particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
             player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i ++)
@@ -362,8 +382,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
             Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
             Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
             do {
-		particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-		particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                 System.out.println("fruittime reset");
             } while (head2.intersects(particlex, particley, fWIDTH, fWIDTH) || head.intersects(particlex, particley, fWIDTH, fWIDTH));
             fruittimer.start();
@@ -433,26 +453,37 @@ public class SnakeFrame extends JFrame implements KeyListener {
 		}
                 
                 // Paint box for window size preference
-                if (screenSize == 0){g.fillOval(11,263,160,40);}
-                else if (screenSize == 1){g.fillOval(171,263,160,40);}
-                else if (screenSize == 2){g.fillOval(331,263,160,40);}
+		// if (screenSize == 0){g.fillOval(11,263,160,40);}
+		// else if (screenSize == 1){g.fillOval(171,263,160,40);}
+		// else if (screenSize == 2){g.fillOval(331,263,160,40);}
                 
                 if (puddles == false){g.fillOval(150, 325, 140, 40);}
                 else if(puddles == true){g.fillOval(290,325, 140,40);}
                 
                 
+              if (speed == 75) {
+                    g.fillRect(100, 415, 50, 30);
+                } else if (speed == 50) {
+                    g.fillRect(225, 415, 50, 30);
+	      } else if (speed ==25) {
+                    g.fillRect(350, 415, 50, 30);
+	      }
+
+
                 g.setColor(Color.RED);
                 g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
                 g.setFont(font2);
                 g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
-                g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
-                g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2, 350);
+		// g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
+                g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2 -20, 350);
+		g.drawString("8)Easy    9)Medium    0)Difficult", this.getWidth() /2 - fm.stringWidth("8)Easy    9)Medium    0)Difficult")/2-50, 430);
                 g.setFont(font1);
-                g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
+                //g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
                 g.drawString("Select mode: ", this.getWidth() /2 - fm.stringWidth("Select mode: ")/2, 320);
-                g.drawString("Press Spacebar to Begin", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin") / 2, 410);
-                g.drawString("How to Play [H]", this.getWidth() / 2 - fm.stringWidth("How to Play [H]") / 2, 380);
+                g.drawString("Select difficulty:", this.getWidth() / 2 - fm.stringWidth("Select difficulty:") / 2, 400);
+                g.drawString("Press Spacebar to Begin_____ How to Play [H]", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin_____ How to Play [H]") / 2 - 20, 490);
 				g.setFont(font1);
+		
 		
 		
 		
@@ -462,46 +493,44 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
                 g.setFont(font0);
-                g.drawString("Single Player", 50, 50);
-                g.drawString("Controls:", 50, 70);
-                g.drawString("\u2190\u2192", 105, 70); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
-                g.drawString(" \u2191 ", 111, 63);
-                g.drawString(" \u2193 ", 111, 78);
-                g.drawString("How to Play:", 50, 90);
-                g.drawString("Use the arrow keys to control", 50, 110);
-                g.drawString("the snake and eat as many", 50, 125);
-                g.drawString("apples as possible without", 50, 140);
-                g.drawString("running into the tail.", 50, 155);
-                g.drawString("Two Player", 250, 50);
-                g.drawString("Controls:", 250, 70);
-                g.drawString("Green Snake:", 305, 70);
-                g.drawString("\u2190\u2192", 395, 70); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
-                g.drawString(" \u2191 ", 401, 63);
-                g.drawString(" \u2193 ", 401, 78);
-                g.drawString("Orange Snake:  WASD", 305, 90);
-                g.drawString("How to Play:", 250, 110);
-                g.drawString("Each player must try to eat", 250, 130);
-                g.drawString("as many apples as possible.", 250, 145);
-                g.drawString("If you collide with your", 250, 160);
-                g.drawString("tail or the other snake, your", 250, 175);
-                g.drawString("tail will revert back to its", 250, 190);
-                g.drawString("original size. If the heads", 250, 205);
-                g.drawString("collide, both snakes will", 250, 220);
-                g.drawString("revert to their original size.", 250, 235);
-                g.drawString("A new fruit will appear every", 250, 250);
-                g.drawString("thirty seconds if not eaten.", 250, 265);
-                g.drawString("Have the biggest size when", 250, 280);
-                g.drawString("the apples run out to win.", 250, 295);
+                g.drawString("Single Player",85, 50);
+                g.drawString("\u2191 ", 91, 67);
+                g.drawString("Controls: \u2190   \u2192", 20, 75); // Arrows.  See; http://en.wikipedia.org/wiki/Arrow_(symbol)
+		g.drawString("\u2193", 91, 79);
+		g.drawString("How to Play:", 20, 115);
+                g.drawString("Use the arrow keys to control the", 20, 135);
+                g.drawString("snake and eat as many apples as", 20, 150);
+                g.drawString("possible without running into the", 20, 165);
+                g.drawString("tail.", 20, 180);
+
+
+                g.drawString("Two Player", 325, 50);
+                g.drawString("Controls:   Green Snake: \u2190   \u2192", 250, 75);
+                g.drawString(" \u2191 ", 414, 67);
+                g.drawString(" \u2193 ", 414, 79);
+                g.drawString("  Orange Snake: WASD", 302, 93);
+                g.drawString("How to Play:", 250, 115);
+                g.drawString("Each player must try to eat as many", 250, 135);
+                g.drawString("apples as possible. If you collide with", 250, 150);
+                g.drawString("any part of a tail, you will revert back", 250, 165);
+                g.drawString("to your original size. If your heads", 250, 180);
+                g.drawString("collide, you will both revert back to", 250, 195);
+                g.drawString("your original sizes. A new fruit will", 250, 210);
+                g.drawString("appear every 30 seconds if not eaten.", 250, 225);
+		g.drawString("Act quickly! There are only 50 apples!", 250, 240);
+                g.drawString("To win, have the bigger size when the", 250, 255);
+                g.drawString("the apples run out", 250, 270);
+
+
                 g.setColor(Color.WHITE);
-                g.drawString("Puddle Mode:",50,190);
-                g.drawString("In this mode, there will be", 40, 205);
-                g.drawString("several puddles placed around", 40,220);
-                g.drawString("the map which will hide some", 40,235);
-                g.drawString("fruits as they spawn. The", 40,250);
-                g.drawString("objective remains the same", 40,265);
-                g.drawString("but are you up for the challenge?", 40,280);
+                g.drawString("Puddle Mode:",200,310);
+                g.drawString("In this mode, there will be several puddles placed around the map", 40, 330);
+                g.drawString("which will hide some fruits as they spawn. The objective remains", 45,345);
+                g.drawString("the same but are you up for the challenge?", 100,360);
+
+
                 g.setColor(Color.ORANGE);
-                g.drawString("Return to Menu [M]", this.getWidth() - 125, this.getHeight() - 25);
+                g.drawString("Return to Menu [M]", this.getWidth() - 135, this.getHeight() - 15);
 
             }
 	    
@@ -510,7 +539,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 // If the player has not yet lost, paint the next image of snake movement
                 if (loser == 0) {
                     // Set the color to green to paint the background
-                    Color c = new Color(24,107,31);
+                    Color c = new Color(2,115,153);
                     Color b = new Color(61,226,235);
 					g.setColor(c);
 					//Set window size
@@ -564,8 +593,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
                             while (head.intersects(particlex, particley, WIDTH, WIDTH)) {
-                                                particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+         particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                             }
                             // Set growsnake to true to increase size of snake by 1
                             growsnake = true;
@@ -588,8 +617,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                             Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
                                 while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-                                    particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -612,17 +641,21 @@ public class SnakeFrame extends JFrame implements KeyListener {
                             g.fillRect(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
                         }
                     }
-                    // Display the score and time
+		    //bar
                     g.setColor(Color.WHITE);
+		    g.fillRect(0, 0, this.getWidth(), 90);
+                   // Display the score and time
+		    g.setColor(Color.BLACK);
                     g.drawString("Score: " + score, 50, 50);
-                    g.drawString("High Score: " + highScore,50,80);
+                    g.drawString("High Score: " + highScore,50,70);
                     //display variables
                     //g.drawString("getWidth: " + this.getWidth() + ", screenSize: " + screenSize + ", loser: " + loser, 50, 100);
                     g.drawString("Time: " + watch.toString(), this.getWidth() - 50 - fm.stringWidth("Time: " + watch.toString()), 50);
                     //350
                     // Display Pause option if game is in progress
                     if (loser == 0) {
-                        g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), this.getHeight() - 25);
+			// g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), this.getHeight() - 25);
+			g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), 70);
                     }
                 }
                 if (loser > 0) {
@@ -636,7 +669,7 @@ public class SnakeFrame extends JFrame implements KeyListener {
                 }
             } else if (players == 2) {
                 if (loser == 0) {
-					Color c = new Color(24,107,31);
+					Color c = new Color(2,115,153);
                     Color b = new Color(61,226,235);
 					// Set the color to white to paint the background
 					g.setColor(c);
@@ -693,8 +726,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
                             while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-                                                particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                             }
                             // Set growsnake to true to increase size of snake by 1
                             growsnake = true;
@@ -729,8 +762,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                         // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
                         if (head.intersects(fruit)) {
                             while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-								particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-								particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                                 
                             }
                             // Set growsnake to true to increase size of snake by 1
@@ -762,8 +795,8 @@ public class SnakeFrame extends JFrame implements KeyListener {
                             Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
                                 while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-									particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
@@ -774,14 +807,16 @@ public class SnakeFrame extends JFrame implements KeyListener {
                             Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
                             if (r.intersects(fruit)) {
                                 while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
-									particlex = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
-									particley = gen.nextInt(this.getWidth()/WIDTH-3)*WIDTH + 2*WIDTH;
+        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                                     hasIntersected = true;
                                     System.out.println("hasIntersected");
                                 }
                             }
                         }
-                    } while (hasIntersected);
+                    }  while (hasIntersected);
+
+
                     // Check for collisions between snakes if the game has not yet ended
                     if (fruits > 0) {
                         Rectangle p1head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
@@ -840,6 +875,9 @@ public class SnakeFrame extends JFrame implements KeyListener {
                                 break;
                             }
                         }
+
+
+
                         // Check for if the new random location is on top of the other snake
                         // In this case create a new random location
                         while (hasIntersected) {
@@ -1051,18 +1089,23 @@ public class SnakeFrame extends JFrame implements KeyListener {
                     }
                     // Display the score and time
                     g.setColor(Color.WHITE);
+		    g.fillRect(0, 0, this.getWidth(), 90);
+
+		    g.setColor(Color.BLACK);
                     g.drawString("Orange Score: " + score2, 50, 50);
-                    g.drawString("Orange Size: " + size2, 50, 75);
+                    //g.drawString("Orange Size: " + size2, 50, 75);
                     g.drawString("Time: " + watch.toString(), this.getWidth() / 2 - fm.stringWidth("Time: " + watch.toString()) / 2, 50);
-                    g.drawString("New Fruit in: " + (30 - fruittimer.getSeconds()), this.getWidth() / 2 - fm.stringWidth("New Fruit in: " + (30 - fruittimer.getSeconds())) / 2, 100);
-                    g.drawString("Fruit Remaining: " + fruits, this.getWidth() / 2 - fm.stringWidth("Fruit Remaining: " + fruits) / 2, 75);
+		    // g.drawString("New Fruit in: " + (30 - fruittimer.getSeconds()), this.getWidth() / 2 - fm.stringWidth("New Fruit in: " + (30 - fruittimer.getSeconds())) / 2, 100);
+		    g.drawString("New Fruit in: " + (30 - fruittimer.getSeconds()),50, 75);
+                    //g.drawString("Fruit Remaining: " + fruits, this.getWidth() / 2 - fm.stringWidth("Fruit Remaining: " + fruits) / 2, 75);
                     g.drawString("Green Score: " + score1, this.getWidth() - 50 - fm.stringWidth("Green score: " + 1), 50);
-                    g.drawString("Green Size: " + size1, this.getWidth() - 50 - fm.stringWidth("Green score: " + 1), 75);
+                    //g.drawString("Green Size: " + size1, this.getWidth() - 50 - fm.stringWidth("Green score: " + 1), 75);
                     //display varaibles
                     //g.drawString("getWidth: " + this.getWidth() + ", screenSize: " + screenSize + ", loser: " + loser, 50, 120);
                     // Display Pause option if game is in progress
                     if (loser == 0) {
-                        g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), this.getHeight() - 25);
+			// g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), this.getHeight() - 25);
+			g.drawString("[P] to Pause", this.getWidth() - 50 - fm.stringWidth("[P] to Pause"), 75);
                     }
                 }
                 if (loser > 0) {
@@ -1264,9 +1307,58 @@ public class SnakeFrame extends JFrame implements KeyListener {
 				puddles = true;
 			}
 		}
+	else if (key == KeyEvent.VK_8){
+	    if (menu == 0 ){
+		speed=75;
+		atime.stop();
+		atime.setDelay(speed);
+		atime.restart();
+	    }
+	}
+	else if (key == KeyEvent.VK_9){
+	    if (menu == 0 ){
+		speed=50;
+		atime.stop();
+		atime.setDelay(speed);
+		atime.restart();
+	    }
+	}
+	else if (key == KeyEvent.VK_0){
+	    if (menu == 0 ){
+		speed=25;
+		atime.stop();
+		atime.setDelay(speed);
+		atime.restart();
+              
+	    }
+	}
     }
-
+    
+    
+    //mouselistener...........listener
+    public void mouseClicked(MouseEvent e) {
+	if ((menu != 0) && (loser == 0)) {
+	    pause = !(pause);
+	    if (pause == true) {
+		watch.stop();
+                } else if (pause == false) {
+		watch.unpause();
+	    }
+	}
+    }
+	
     @Override
-    public void keyReleased(KeyEvent key) {
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+
+
+	@Override
+	    public void keyReleased(KeyEvent key) {
+	}
     }
-}
