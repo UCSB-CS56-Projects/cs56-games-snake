@@ -1,7 +1,7 @@
 *~
 *.class
 *.ser
-
+snake-game-eclipse
 # Package Files #
 *.jar
 *.war
