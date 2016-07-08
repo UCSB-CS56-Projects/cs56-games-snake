@@ -27,7 +27,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private int particlex, particley, turn, turn2;
 
     HighScore temp = new HighScore(0);
-    HighScore hScore = temp.loadHighScore();
+    HighScore hScore = HighScore.loadHighScore();
 
     // Score of fruit eaten, Head color counter, win/loss variable
     private int score = 0, score1 = 0, highScore = hScore.getScore();
