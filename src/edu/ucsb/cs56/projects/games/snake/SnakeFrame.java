@@ -444,13 +444,14 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 
                 
                 // Paint box displaying whether 1 or 2 players is selected
-		// TODO: explain these magic numbers.
-		
+                // Set the color of the graphics object to white
                 g.setColor(Color.WHITE);
+                // Depending on the number of players, fill in a white rectangle to highlight the number of players desired
+                // The parameters of the fillRect method correspond to the pixel locations of the white highlight.
                 if (players == 1) {
-                    g.fillRect(208, 182, 22, 22);
+                    g.fillRect(211, 182, 22, 22);
                 } else if (players == 2) {
-                    g.fillRect(264, 182, 22, 22);
+                    g.fillRect(257, 182, 22, 22);
 		}
                 
                 // Paint box for window size preference
