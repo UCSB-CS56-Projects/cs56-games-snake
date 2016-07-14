@@ -452,15 +452,17 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                     g.fillRect(211, 182, 22, 22);
                 } else if (players == 2) {
                     g.fillRect(257, 182, 22, 22);
-		}
+                }
                 
                 // Paint box for window size preference
-		// if (screenSize == 0){g.fillOval(11,263,160,40);}
-		// else if (screenSize == 1){g.fillOval(171,263,160,40);}
-		// else if (screenSize == 2){g.fillOval(331,263,160,40);}
+                // if (screenSize == 0){g.fillOval(11,263,160,40);}
+                // else if (screenSize == 1){g.fillOval(171,263,160,40);}
+                // else if (screenSize == 2){g.fillOval(331,263,160,40);}
                 
-                if (puddles == false){g.fillOval(150, 325, 140, 40);}
-                else if(puddles == true){g.fillOval(290,325, 140,40);}
+                // These methods change the size of the oval used to select whether puddles are enabled or disabled in the
+                // main menu.
+                if (puddles == false){g.fillRect(177, 325, 70, 40);}
+                else if(puddles == true){g.fillRect(286,325, 80,40);}
                 
                 
               if (speed == 75) {
