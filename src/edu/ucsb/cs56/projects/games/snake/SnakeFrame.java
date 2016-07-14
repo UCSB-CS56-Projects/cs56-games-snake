@@ -89,7 +89,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
-	// Super is JFrame
+	// Call JFrame constructor and give it the title "Snake"
         super("Snake");
 
         // Initialize components
@@ -104,24 +104,24 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         addKeyListener(this);
         
 
-	//mouse listener...........this is mouse listener
-	addMouseListener(this);
+        //mouse listener...........this is mouse listener
+        addMouseListener(this);
 
 
-	// Set player starting position
+        // Set player starting position
      	playerx=this.getWidth()/5*3;
-	playery=this.getHeight()/5*3;
+     	playery=this.getHeight()/5*3;
 
         // Create random starting X and Y coordinate for fruit
         particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+        particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
         
-	// Create 3 starting blocks for Tail
+        // Create 3 starting blocks for Tail
         for (int i = 0; i < 3; i++) {
             player1.add(new GameObject(playerx, playery));
         }
         
-	// Set starting positions for the tail
+        // Set starting positions for the tail
         player1.get(0).setPos(playerx,playery);
         player1.get(1).setPos(playerx,playery+WIDTH);
         player1.get(2).setPos(playerx,playery+(2*WIDTH));
@@ -321,8 +321,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
             this.setVisible(true);
             frameresized = true;
             offscreen = this.createImage(this.getWidth(), this.getHeight());
-        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+            particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+            particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
             player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i++) {
@@ -343,28 +343,28 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
             this.setVisible(true);
             frameresized = true;
             offscreen = this.createImage(this.getWidth(), this.getHeight());
-        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+            particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+            particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
             player1.clear();
             fruittimer.start();
             for (int i = 0; i < 3; i ++)
-		player1.add(new GameObject(playerx, playery));
+            	player1.add(new GameObject(playerx, playery));
 	    
-	    player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
+            player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
             player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
             player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
 	    
-	}
+        }
         
         // If game is in progress and is not paused,
-	// send one block from the back to the front
+        // send one block from the back to the front
         if ((menu != 0) && (pause == false) && (players == 1)) {
 	    shiftSnake();
             player1.remove(player1.size() - 1);
         } 
 	
-	// Do the same for two player except with both arraylists
-	else if ((menu != 0) && (pause == false) && (players == 2)) {
+        // Do the same for two player except with both arraylists
+        else if ((menu != 0) && (pause == false) && (players == 2)) {
             shiftSnake();
             player1.remove(player1.size() - 1);
             shiftSnake2();
@@ -376,14 +376,14 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
             loser = 1;
         }
         // If in two player, and a fruit has not been eaten for 30 seconds
-	// create new random location for fruit
+        // create new random location for fruit
         if (players == 2 && loser == 0 && fruittimer.getSeconds() >= 30 && menu != 0) {
             Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH); 
             Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
             Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
             do {
-        particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+            	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+            	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
                 System.out.println("fruittime reset");
             } while (head2.intersects(particlex, particley, fWIDTH, fWIDTH) || head.intersects(particlex, particley, fWIDTH, fWIDTH));
             fruittimer.start();
@@ -423,22 +423,23 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     
     public void paint(Graphics graph) {
         // Create font
-	// Begin painting
+    	// Begin painting
         // Get the offscreen graphics for double buffer
         g = offscreen.getGraphics();
         g.setFont(font1);
-	// Create a menu screen for the initial launch, leave menu when spacebar is pressed
+        // Create a menu screen for the initial launch, leave menu when spacebar is pressed
         if (menu == 0) {
             if (controls == false) {
-		//	paint.paintFrame(this);
-                // Paint display for main menu
+                //Set the height and width of the main menu (this line affects resizeability)
                 this.setSize(500,500);
+                //Set the color of the main menu and fill it
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.GREEN);
 		// TODO: Make the centering calculation below a method
+                //print the authors and title of game in green
                 g.drawString("Snake", this.getWidth()/2-fm.stringWidth("Snake")/2, 80);
-		String authorTitle="By: Sam Dowell, with Eric Huang, Sam Min";
+                String authorTitle="By: Sam Dowell, with Eric Huang, Sam Min";
                 g.drawString(authorTitle, this.getWidth()/2-fm.stringWidth(authorTitle)/2, 110);
                 
                 
