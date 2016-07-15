@@ -182,9 +182,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 				    exc.printStackTrace(); 
 				}
 		    }
-		    else {
-			score=score;
-		    }
 		    
 		    // If user chooses yes, restart the program
 		    if (playagainyes == true) {
