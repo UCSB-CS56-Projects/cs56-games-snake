@@ -16,6 +16,7 @@ import javax.swing.*;
 //Note to self: SnakeFrame is similar to Game.java
 
 public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
+	// This variable determines the speed of the snake, and corresponds to the difficulty
     private int speed= 75;
 
     // Establish variables
@@ -464,14 +465,14 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 if (puddles == false){g.fillRect(177, 325, 70, 40);}
                 else if(puddles == true){g.fillRect(286,325, 80,40);}
                 
-                
-              if (speed == 75) {
-                    g.fillRect(100, 415, 50, 30);
+                // The methods below highlight the difficulty of the snake game at the bottom of the main menu.
+                if (speed == 75) {
+                    g.fillRect(115, 410, 50, 30);
                 } else if (speed == 50) {
-                    g.fillRect(225, 415, 50, 30);
-	      } else if (speed ==25) {
-                    g.fillRect(350, 415, 50, 30);
-	      }
+                    g.fillRect(205, 410, 75, 30);
+                } else if (speed ==25) {
+                    g.fillRect(320, 410, 75, 30);
+                }
 
 
                 g.setColor(Color.RED);
