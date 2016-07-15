@@ -8,7 +8,12 @@ import javax.swing.*;
 
 public class GameObject 
 {
+	public static final String BLACK = "black";
+	public static final String RED = "red";
+	public static final String GREEN = "green";
+	
     private int x, y, width, height;
+    private String color = "none";
 
     public GameObject() {};
 
@@ -27,6 +32,16 @@ public class GameObject
     public void setPos(int a, int b){
 	x = a;
 	y = b;
+    }
+    
+    // a function that allows a color to be input into the GameObject
+    public void setColor(String color){
+    	this.color = color;
+    }
+    
+    // a function that returns the color of the GameObject
+    public String getColor(){
+    	return this.color;
     }
 
     public int getX(){ return x; }
