@@ -1,6 +1,8 @@
 *~
 *.class
 *.ser
+
+javadoc/*
 snake-game-eclipse
 # Package Files #
 *.jar
