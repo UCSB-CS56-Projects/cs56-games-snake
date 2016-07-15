@@ -35,14 +35,17 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     // Variable "turn" indicates if a directional change has been displayed
     private int particlex, particley, turn, turn2;
 
-    HighScore temp = new HighScore(0);
     HighScore hScore = HighScore.loadHighScore();
+    HighScore hScore2 = HighScore.loadHighScore2();
+    HighScore hScore3 = HighScore.loadHighScore3();
+    
 
     // Score of fruit eaten, Head color counter, win/loss variable
     private int score = 0, score1 = 0, highScore = hScore.getScore();
     private int score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1;
     private int headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
-
+    private int highScore2 = hScore2.getScore();
+    private int highScore3 = hScore3.getScore();
     // Width of the snake
     private final int WIDTH = 15;
     private final int fWIDTH = 15;
@@ -158,6 +161,29 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 				catch(Exception exc) {
 				    exc.printStackTrace(); 
 				}
+		    }
+		    else if(score>highScore2 && score<highScore){
+			highScore2=score;
+			hScore2.setScore(score);
+			try {
+				    hScore2.saveHighScore2();
+				}
+				catch(Exception exc) {
+				    exc.printStackTrace(); 
+				}
+		    }
+		    else if(score>highScore3 && score<highScore2){
+			highScore3=score;
+			hScore3.setScore(score);
+			try {
+				    hScore3.saveHighScore3();
+				}
+				catch(Exception exc) {
+				    exc.printStackTrace(); 
+				}
+		    }
+		    else {
+			score=score;
 		    }
 		    
 		    // If user chooses yes, restart the program
@@ -363,9 +389,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 // Depending on the number of players, fill in a white rectangle to highlight the number of players desired
                 // The parameters of the fillRect method correspond to the pixel locations of the white highlight.
                 if (players == 1) {
-                    g.fillRect(211, 182, 22, 22);
+                    g.fillRect(211, 272, 22, 22);
                 } else if (players == 2) {
-                    g.fillRect(257, 182, 22, 22);
+                    g.fillRect(257, 272, 22, 22);
                 }
                 
                 // Paint box for window size preference
@@ -395,10 +421,17 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 String modeSelect = new String("Select mode: ");
                 String difficultySelect = new String("Select difficulty: ");
                 String begin_and_tutorial = new String("Press Spacebar to Begin   |   How to Play [H]");
+		String HighScore1 = new String("High Score 1) ");
+		String HighScore2 = new String("High Score 2) ");
+		String HighScore3 = new String("High Score 3) ");
+		
                 g.setColor(Color.RED);
-                g.drawString(numPlayer, this.getWidth() / 2 - fm.stringWidth(numPlayer) / 2, 170);
+		g.drawString(HighScore1 + highScore, this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
+		g.drawString(HighScore2 + highScore2, this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
+		g.drawString(HighScore3 + highScore3, this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
+                g.drawString(numPlayer, this.getWidth() / 2 - fm.stringWidth(numPlayer) / 2, 260);
                 g.setFont(font2);
-                g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 200);
+                g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 290);
                 g.drawString(modeOptions, this.getWidth() /2 - fm.stringWidth(modeOptions)/2 -20, 350);
                 g.drawString(difficultyOptions, this.getWidth() /2 - fm.stringWidth(difficultyOptions)/2-50, 430);
                 g.setFont(font1);
