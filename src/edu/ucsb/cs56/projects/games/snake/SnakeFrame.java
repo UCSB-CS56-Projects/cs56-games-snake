@@ -474,19 +474,24 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                     g.fillRect(320, 410, 75, 30);
                 }
 
-
+                // Draw the menu options that will be highlighted
+                String numPlayer = new String("Number of Players");
+                String numPlayerOptions = new String("1      2");
+                String modeOptions = new String("6)Normal    7)Puddles");
+                String difficultyOptions = new String("8)Easy    9)Medium    0)Difficult");
+                String modeSelect = new String("Select mode: ");
+                String difficultySelect = new String("Select difficulty: ");
+                String begin_and_tutorial = new String("Press Spacebar to Begin   |   How to Play [H]");
                 g.setColor(Color.RED);
-                g.drawString("Number of Players", this.getWidth() / 2 - fm.stringWidth("Number of Players") / 2, 170);
+                g.drawString(numPlayer, this.getWidth() / 2 - fm.stringWidth(numPlayer) / 2, 170);
                 g.setFont(font2);
-                g.drawString("1      2", this.getWidth()/2 - fm.stringWidth("1      2")/2-15, 200);
-		// g.drawString("3)500 X 500    4)600 X 600    5)700 X 700", 20, 290);
-                g.drawString("6)Normal    7)Puddles", this.getWidth() /2 - fm.stringWidth("6)Normal    7)Puddles")/2 -20, 350);
-		g.drawString("8)Easy    9)Medium    0)Difficult", this.getWidth() /2 - fm.stringWidth("8)Easy    9)Medium    0)Difficult")/2-50, 430);
+                g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 200);
+                g.drawString(modeOptions, this.getWidth() /2 - fm.stringWidth(modeOptions)/2 -20, 350);
+                g.drawString(difficultyOptions, this.getWidth() /2 - fm.stringWidth(difficultyOptions)/2-50, 430);
                 g.setFont(font1);
-                //g.drawString("Select window size: ", this.getWidth() /2 - fm.stringWidth("Select window size: ")/2, 250);
-                g.drawString("Select mode: ", this.getWidth() /2 - fm.stringWidth("Select mode: ")/2, 320);
-                g.drawString("Select difficulty:", this.getWidth() / 2 - fm.stringWidth("Select difficulty:") / 2, 400);
-                g.drawString("Press Spacebar to Begin_____ How to Play [H]", this.getWidth() / 2 - fm.stringWidth("Press Spacebar to Begin_____ How to Play [H]") / 2 - 20, 490);
+                g.drawString(modeSelect, this.getWidth() /2 - fm.stringWidth(modeSelect)/2, 320);
+                g.drawString(difficultySelect, this.getWidth() / 2 - fm.stringWidth(difficultySelect) / 2, 400);
+                g.drawString(begin_and_tutorial, this.getWidth() / 2 - fm.stringWidth(begin_and_tutorial) / 2 - 20, 490);
 				g.setFont(font1);
 		
 		
