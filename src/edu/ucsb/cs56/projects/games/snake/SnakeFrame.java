@@ -38,7 +38,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     HighScore hScore = HighScore.loadHighScore();
     HighScore hScore2 = HighScore.loadHighScore2();
     HighScore hScore3 = HighScore.loadHighScore3();
-    
+    ArrayList<Integer> scores = new ArrayList<>();
 
     // Score of fruit eaten, Head color counter, win/loss variable
     private int score = 0, score1 = 0, highScore = hScore.getScore();
@@ -150,39 +150,41 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         atime.start();
     }
     
-    public void doaction() {
-        if (loser > 0) {   
-		    if(score>highScore){
-				highScore=score;
-				hScore.setScore(highScore);	
-				try {
-				    hScore.saveHighScore();
-				}
-				catch(Exception exc) {
-				    exc.printStackTrace(); 
-				}
-		    }
-		    else if(score>highScore2 && score<highScore){
-			highScore2=score;
-			hScore2.setScore(score);
-			try {
-				    hScore2.saveHighScore2();
-				}
-				catch(Exception exc) {
-				    exc.printStackTrace(); 
-				}
-		    }
-		    else if(score>highScore3 && score<highScore2){
-			highScore3=score;
-			hScore3.setScore(score);
-			try {
-				    hScore3.saveHighScore3();
-				}
-				catch(Exception exc) {
-				    exc.printStackTrace(); 
-				}
-		    }
+    public void save() {
+
+		    scores.add(0);
+		    scores.add(0);
+		    scores.add(0);
+
+	    
+	if (loser > 0) {
+	    for(int i=0;i<scores.size();i++){
+		if(score!=scores.get(i)){
 		    
+		    scores.add(score);
+		}
+		    Collections.sort(scores);
+		    Collections.reverse(scores);
+
+		    hScore.setScore(scores.get(0));
+		    hScore2.setScore(scores.get(1));
+		    hScore3.setScore(scores.get(2));
+	      try {
+		   hScore.saveHighScore();
+		   hScore2.saveHighScore2();
+		   hScore3.saveHighScore3();
+				}
+	      catch(Exception exc) {
+				    exc.printStackTrace(); 
+	      }
+	    }
+	}
+    }
+
+    
+    public void doaction() {
+        
+	save();
 		    // If user chooses yes, restart the program
 		    if (playagainyes == true) {
 				//Set window size
@@ -245,7 +247,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    if (playagainno == true) {
 		    	System.exit(0);
 		    }	     
-        }
+    
         if ((menu != 0) && (players == 2) && (frameresized == false)) {
             // If the game starts as 2 player, initialize two player settings
 	    
@@ -326,7 +328,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
             fruittimer.start();
         }
         repaint();
-    }
+}
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -426,6 +428,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 g.drawString(HighScore1 + highScore, this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
                 g.drawString(HighScore2 + highScore2, this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
                 g.drawString(HighScore3 + highScore3, this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
+		g.drawString(HighScore1 + hScore.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
+		g.drawString(HighScore2 + hScore2.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
+		g.drawString(HighScore3 + hScore3.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
                 g.drawString(numPlayer, this.getWidth() / 2 - fm.stringWidth(numPlayer) / 2, 260);
                 g.setFont(font2);
                 g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 290);
