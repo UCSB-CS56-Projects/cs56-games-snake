@@ -206,5 +206,45 @@ public class Snake {
         this.snake_length++;
     }
 	
+	public void shiftSnake2() {
+        // Create a new Tail in front of the Snake based on the direction
+    	// moving and set it to the 0th element
+        if (ismovingLEFT2) {
+            // If the tail movement is within the boundaries, move it forward one space
+            if (this.snake.get(0).getX() >= WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX() - WIDTH, this.snake.get(0).getY()));
+            }
+	    
+	    // Otherwise loop it to the opposite end of the window
+	    else {
+		this.snake.add(0, new GameObject(this.snake.get(0).getX() + SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
+            }
+        } 
+	
+        else if (ismovingRIGHT2) {
+            // Same method repeated for if it is moving RIGHT, etc...
+            if (this.snake.get(0).getX() <= (SnakeFrame.getFrameWidth() - WIDTH)) { this.snake.add(0, new GameObject(this.snake.get(0).getX() + WIDTH, this.snake.get(0).getY()));
+            } 
+	    else {
+                this.snake.add(0, new GameObject(this.snake.get(0).getX() - SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
+            }
+        }
+
+        else if (ismovingUP2) {
+            if (this.snake.get(0).getY() >= WIDTH + WIDTH + WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - WIDTH));
+            }
+	    else { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + SnakeFrame.getFrameHeight() - WIDTH));}
+        }
+
+        else if (ismovingDOWN2) {
+            if (this.snake.get(0).getY() <= SnakeFrame.getFrameHeight() - WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + WIDTH));
+            }
+	    else {
+                this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - SnakeFrame.getFrameHeight() + WIDTH));
+            }
+        }
+        //increment the snake length
+        this.snake_length++;
+    }
+	
 	
 }

@@ -304,7 +304,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         else if ((menu != 0) && (pause == false) && (players == 2)) {
             player_1.shiftSnake();
             player_1.removeGameObject(player_1.size() - 1);
-            player_2.shiftSnake();
+            player_2.shiftSnake2();
             player_2.removeGameObject(player_2.size() - 1);
         }
 	
@@ -418,14 +418,14 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 String modeSelect = new String("Select mode: ");
                 String difficultySelect = new String("Select difficulty: ");
                 String begin_and_tutorial = new String("Press Spacebar to Begin   |   How to Play [H]");
-		String HighScore1 = new String("High Score 1) ");
-		String HighScore2 = new String("High Score 2) ");
-		String HighScore3 = new String("High Score 3) ");
+                String HighScore1 = new String("High Score 1) ");
+                String HighScore2 = new String("High Score 2) ");
+                String HighScore3 = new String("High Score 3) ");
 		
                 g.setColor(Color.RED);
-		g.drawString(HighScore1 + highScore, this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
-		g.drawString(HighScore2 + highScore2, this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
-		g.drawString(HighScore3 + highScore3, this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
+                g.drawString(HighScore1 + highScore, this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
+                g.drawString(HighScore2 + highScore2, this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
+                g.drawString(HighScore3 + highScore3, this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
                 g.drawString(numPlayer, this.getWidth() / 2 - fm.stringWidth(numPlayer) / 2, 260);
                 g.setFont(font2);
                 g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 290);
@@ -521,85 +521,20 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 						g.fillOval(80,this.getHeight()-100,110,60);
 						g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
                     }
-                    // Set the growsnake value to false
-                    growsnake = false;
-                    // Set the headcolor value to 0
-                    //headcolor = 0;
                     
-                    //set the colors of the snake head and tail for player 1
-                    player_1.setSnakeHeadColor("black");
-                    player_1.setSnakeTailColor("green");
-                    
-                    //begin drawing the snake
-                    for (int i = 0; i < player_1.size() - 1; i++) {
-                        // Make color of first block (head) black
-                        if (player_1.getSnakeColorAtIndex(i) == "black") {
-                            g.setColor(Color.BLACK);
-                            // Make the rest of the snake green
-                        } else {
-                            g.setColor(Color.GREEN);
-                        }
-                        // Set turn back to 0 to indicate that the turn has been displayed
-                        turn = 0;
-                        // Add to headcolor counter so that only the first block is black
-                        //headcolor++;
-                        // Create rectangles for the snake head and the fruit in order to check for intersection
-                        Rectangle r = new Rectangle(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
-                        Rectangle head = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);
-                        // Paint the snake
-                        g.fillRect(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
-                        // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
-                        if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, WIDTH, WIDTH)) {
-                            	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-                            	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
-                            }
-                            // Set growsnake to true to increase size of snake by 1
-                            growsnake = true;
-                            // Add to score
-                            score++;
-                        }
-			
-			
-                    }
+                    //draw the snake and fruit for single player
+                    drawSnakesAndFruit(1);
 		    
                     // If the Snake ate a fruit, make the snake grow one block 
                     if (growsnake) {
                         player_1.shiftSnake();
                     }
                     // Check for if fruit relocated on top of tail
-                    do {
-                        hasIntersected = false;
-                        for (int i = 0; i < player_1.size(); i++) {
-                            Rectangle r = new Rectangle(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
-                            if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-                                	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-                                	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
-                                    hasIntersected = true;
-                                    System.out.println("hasIntersected");
-                                }
-                            }
-                        }
-                    } while (hasIntersected);
+                    fruitRespawnCollisionDetect(1);
+                    
                     // Create loop to check if the head has intersected the tail (Game Over)
-                    for (int i = player_1.size() - 1; i > 1; i--) {
-                        // Create rectangle for head and for a Tail in the ArrayList
-                        Rectangle p = new Rectangle(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
-                        Rectangle head = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);
-                        // If the head intersects with the Tail, add one to loss counter
-                        if (head.intersects(p)) {
-                            loser++;
-                            // This is to prevent the head from being overlapped by the green tail in the final image
-                            g.setColor(Color.BLACK);
-                            g.fillRect(player_1.getGameObjectXPos(1), player_1.getGameObjectYPos(1), WIDTH, WIDTH);
-                            // Set color to red and fill the tail block which the head intersected with
-                            g.setColor(Color.RED);
-                            g.fillRect(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
-                        }
-                    }
+                    headToTailCollisionSinglePlayer();
+                    
                     //bar
                     g.setColor(Color.WHITE);
                     g.fillRect(0, 0, this.getWidth(), 90);
@@ -659,85 +594,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 						g.fillOval(80,this.getHeight()-100,110,60);
 						g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
                     }
-                    // Set the growsnake value to false
-                    growsnake = false;
-                    growsnake2 = false;
-                    // Set the headcolor value to 0
-                    headcolor = 0;
-                    for (GameObject t : player1) {
-                        // Make color of first block (head) black
-                        if (headcolor == 0) {
-                            g.setColor(Color.BLACK);
-                            // Make the rest of the snake green
-                        } else {
-                            g.setColor(Color.GREEN);
-                        }
-                        // Set turn back to 0 to indicate that the turn has been displayed
-                        turn = 0;
-                        // Add to headcolor counter so that only the first block is black
-                        headcolor++;
-                        // Create rectangles for the snake head and the fruit in order to check for intersection
-                        Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
-                        Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
-                        Rectangle head2 = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-                        // Paint the snake
-                        g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
-                        // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
-                        if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-                            	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-                            	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
-                            }
-                            // Set growsnake to true to increase size of snake by 1
-                            growsnake = true;
-			    
-                            // Add to score
-                            score1++;
-                            size1++;
-                            fruits--;
-                            fruittimer.start();
-                        }
-                    }
-                    headcolor2 = 0;
-                    for (GameObject t : player2) {
-                        // Make color of first block (head) black
-                        if (headcolor2 == 0) {
-                            g.setColor(Color.BLACK);
-                            // Make the rest of the snake green
-                        } else {
-                            g.setColor(Color.ORANGE);
-                        }
-                        // Set turn back to 0 to indicate that the turn has been displayed
-                        turn2 = 0;
-                        // Add to headcolor counter so that only the first block is black
-                        headcolor2++;
-                        // Create rectangles for the snake head and the fruit in order to check for intersection
-                        Rectangle r = new Rectangle(t.getX(), t.getY(), WIDTH, WIDTH);
-                        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
-                        Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-                        Rectangle head2 = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
-                        // Paint the snake
-                        g.fillRect(t.getX(), t.getY(), WIDTH, WIDTH);
-                        // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
-                        if (head.intersects(fruit)) {
-                            while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-                            	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-                            	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
-                                
-                            }
-                            // Set growsnake to true to increase size of snake by 1
-                            growsnake2 = true;
-
-                            // Add to score
-                            score2++;
-                            size2++;
-                            fruits--;
-                            fruittimer.start();
-                        }
-
-			
-                    }
+                    
+                    //draw the fruit and the snakes in two player
+                    drawSnakesAndFruit(2);
 		    
 		    
                     // If the Snake ate a fruit, make the snake grow one block 
@@ -745,307 +604,64 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                         player_1.shiftSnake();
                     }
                     if (growsnake2) {
-                        player_2.shiftSnake();
+                        player_2.shiftSnake2();
                     }
-                    // Check for if fruit relocated on top of either snake, if so create new location and check again
-                    do {
-                        hasIntersected = false;
-                        for (int i = 0; i < player1.size(); i++) {
-                            Rectangle r = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
-                            if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
-                                	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-                                	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
-                                    hasIntersected = true;
-                                    System.out.println("hasIntersected");
-                                }
-                            }
-                        }
-                        for (int i = 0; i < player2.size(); i++) {
-                            Rectangle r = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
-                            if (r.intersects(fruit)) {
-                                while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
-                                	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
-                                	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
-                                    hasIntersected = true;
-                                    System.out.println("hasIntersected");
-                                }
-                            }
-                        }
-                    }  while (hasIntersected);
-
+                    
+                    //check if fruit spawns on top of either snake. if so, relocate it
+                    fruitRespawnCollisionDetect(2);
 
                     // Check for collisions between snakes if the game has not yet ended
                     if (fruits > 0) {
-                        Rectangle p1head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
-                        Rectangle p2head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
+                    	
+                    	//check to see if the snakes underwent a head to head collision
+                        Rectangle p1head = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);
+                        Rectangle p2head = new Rectangle(player_2.getGameObjectXPos(0), player_2.getGameObjectYPos(0), WIDTH, WIDTH);
                         if (p1head.intersects(p2head)) {
-                            ismovingRIGHT = false;
-                            ismovingLEFT = false;
-                            ismovingUP = true;
-                            ismovingDOWN = false;
-                            player1.clear();
-                            for (int j = 0; j < 3; j++) {
-                                player1.add(new GameObject(playerx, playery));
-                            }
-                            // Set starting positions for the tail
-                            player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
-                            player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
-                            player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
-                            ismovingRIGHT2 = false;
-                            ismovingLEFT2 = false;
-                            ismovingUP2 = true;
-                            ismovingDOWN2 = false;
-                            player2.clear();
-                            for (int j = 0; j < 3; j++) {
-                                player2.add(new GameObject(400, 400));
-                            }
-                            player2.get(0).setPos(150, this.getHeight() - 150);
-                            player2.get(1).setPos(150, this.getHeight() - 135);
-                            player2.get(2).setPos(150, this.getHeight() - 120);
-                            size1 = 3;
-                            size2 = 3;
+                            respawnPlayer_1();
+                            respawnPlayer_2();
                         }
-                        // Create loop to check if the head has intersected the tail (Game Over)
-                        hasIntersected = false;
-                        for (int i = player1.size() - 1; i > 1; i--) {
-                            // Create rectangle for head and for a Tail in the ArrayList
-                            Rectangle p = new Rectangle(player1.get(i).getX(), player1.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
-                            // If the head intersects with the Tail, add one to loss counter
-                            if (head.intersects(p)) {
-                                ismovingRIGHT = false;
-                                ismovingLEFT = false;
-                                ismovingUP = true;
-                                ismovingDOWN = false;
-                                player1.clear();
-                                for (int j = 0; j < 3; j++) {
-                                    player1.add(new GameObject(playerx, playery));
-                                }
-                                int x = (gen.nextInt(31) + 10) * WIDTH;
-                                int y = (gen.nextInt(31) + 10) * WIDTH;
-                                // Set starting positions for the tail
-                                player1.get(0).setPos(x, y);
-                                player1.get(1).setPos(x, y + WIDTH);
-                                player1.get(2).setPos(x, y + (2*WIDTH));
-                                size1 = 3;
-                                hasIntersected = true;
-                                break;
-                            }
-                        }
-
-
+                        
+                        // Create loop to check if the head has intersected the tail (Game Over)                       
+                        hasIntersected = headToTailCollision(player_1, 1);
 
                         // Check for if the new random location is on top of the other snake
                         // In this case create a new random location
-                        while (hasIntersected) {
-                            hasIntersected = false;
-                            for (int j = 0; j < player1.size(); j++) {
-                                for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
-                                    Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                                    if (box1.intersects(box2)) {
-                                        hasIntersected = true;
-                                        player1.clear();
-                                        for (int p = 0; p < 3; p++) {
-                                            player1.add(new GameObject(playerx, playery));
-                                        }
-                                        int x = (gen.nextInt(31) + 10) * WIDTH;
-                                        int y = (gen.nextInt(31) + 10) * WIDTH;
-                                        // Set starting positions for the tail
-                                        player1.get(0).setPos(x, y);
-                                        player1.get(1).setPos(x, y + WIDTH);
-                                        player1.get(2).setPos(x, y + WIDTH);
-                                        System.out.println("tail reset");
-                                    }
-                                }
+                        respawnCollisionPlayer_1();
+                        
+                        // Check for collision between head of one snake to tail of the other
+                        for (int q = player_2.size() - 1; q > 0; q--) {
+                            Rectangle p2tail = new Rectangle(player_2.getGameObjectXPos(q), player_2.getGameObjectYPos(q), WIDTH, WIDTH);
+                            p1head = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);                         
+                            //if the head of player one intersects player two's tail, we must now check to see if player two's
+                            //head intersects player one's tail. if not, only player one is reset
+                            if (p1head.intersects(p2tail)) {
+                            	hasIntersected = true;
+                                respawnPlayer_1("randomly");
                             }
                         }
-                        // Check for head on collision, if so reset both snakes
-                        boolean headon = false;
-                        for (int q = player2.size() - 1; q > 0; q--) {
-                            Rectangle p2tail = new Rectangle(player2.get(q).getX(), player2.get(q).getY(), WIDTH, WIDTH);
-                            Rectangle head = new Rectangle(player1.get(0).getX(), player1.get(0).getY(), WIDTH, WIDTH);
-                            if (head.intersects(p2tail)) {
-                                for (int w = player1.size() - 1; w > 0; w--) {
-                                    Rectangle p1tail = new Rectangle(player1.get(w).getX(), player1.get(w).getY(), WIDTH, WIDTH);
-                                    Rectangle head1 = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-                                    // If both heads intersect the tail of the other respective tail, a head on collision has occured
-                                    // In this case reset both tails
-                                    if (head1.intersects(p1tail)) {
-                                        ismovingRIGHT = false;
-                                        ismovingLEFT = false;
-                                        ismovingUP = true;
-                                        ismovingDOWN = false;
-                                        player1.clear();
-                                        for (int j = 0; j < 3; j++) {
-                                            player1.add(new GameObject(playerx, playery));
-                                        }
-                                        // Set starting positions for the tail
-                                        player1.get(0).setPos(this.getWidth() - 150, this.getHeight() - 150);
-                                        player1.get(1).setPos(this.getWidth() - 150, this.getHeight() - 135);
-                                        player1.get(2).setPos(this.getWidth() - 150, this.getHeight() - 120);
-                                        ismovingRIGHT2 = false;
-                                        ismovingLEFT2 = false;
-                                        ismovingUP2 = true;
-                                        ismovingDOWN2 = false;
-                                        player2.clear();
-                                        for (int j = 0; j < 3; j++) {
-                                            player2.add(new GameObject(400, 400));
-                                        }
-                                        player2.get(0).setPos(150, this.getHeight() - 150);
-                                        player2.get(1).setPos(150, this.getHeight() - 135);
-                                        player2.get(2).setPos(150, this.getHeight() - 120);
-                                        size1 = 3;
-                                        size2 = 3;
-                                        headon = true;
-                                        break;
-                                    }
-				    
-                                }
-                                // Otherwise, just reset player 1's tail
-                                if (!headon) {
-                                    hasIntersected = true;
-                                    ismovingRIGHT = false;
-                                    ismovingLEFT = false;
-                                    ismovingUP = true;
-                                    ismovingDOWN = false;
-                                    player1.clear();
-                                    for (int j = 0; j < 3; j++) {
-                                        player1.add(new GameObject(playerx, playery));
-                                    }
-                                    int x = (gen.nextInt(31) + 10) * WIDTH;
-                                    int y = (gen.nextInt(31) + 10) * WIDTH;
-                                    // Set starting positions for the tail
-                                    player1.get(0).setPos(x, y);
-                                    player1.get(1).setPos(x, y + WIDTH);
-                                    player1.get(2).setPos(x, y + (2*WIDTH));
-                                    size1 = 3;
-                                }
-                            }
-                        }
+                        
                         // If the new random location for one snake if on top of the others tail, create new random location
-                        while (hasIntersected) {
-                            hasIntersected = false;
-                            for (int j = 0; j < player1.size(); j++) {
-                                for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
-                                    Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                                    if (box1.intersects(box2)) {
-                                        hasIntersected = true;
-                                        player1.clear();
-                                        for (int p = 0; p < 3; p++) {
-                                            player1.add(new GameObject(playerx, playery));
-                                        }
-                                        int x = (gen.nextInt(31) + 10) * WIDTH;
-                                        int y = (gen.nextInt(31) + 10) * (2*WIDTH);
-                                        // Set starting positions for the tail
-                                        player1.get(0).setPos(x, y);
-                                        player1.get(1).setPos(x, y + WIDTH);
-                                        player1.get(2).setPos(x, y + (2*WIDTH));
-                                        System.out.println("tail reset");
-                                    }
-                                }
-                            }
-                        }
+                        respawnCollisionPlayer_1();
+                        
                         // Check for collision between the second player and his own tail
-                        for (int i = player2.size() - 1; i > 1; i--) {
-                            // Create rectangle for head and for a Tail in the ArrayList
-                            Rectangle p = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                            Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-                            if (head.intersects(p)) {
-                                hasIntersected = true;
-                                ismovingRIGHT2 = false;
-                                ismovingLEFT2 = false;
-                                ismovingUP2 = true;
-                                ismovingDOWN2 = false;
-                                player2.clear();
-                                for (int j = 0; j < 3; j++) {
-                                    player2.add(new GameObject(400, 400));
-                                }
-                                int x = (gen.nextInt(31) + 10) * WIDTH;
-                                int y = (gen.nextInt(31) + 10) * WIDTH;
-                                player2.get(0).setPos(x, y);
-                                player2.get(1).setPos(x, y + WIDTH);
-                                player2.get(2).setPos(x, y + (2*WIDTH));
-                                size2 = 3;
-                                break;
-                            }
-                        }
+                        hasIntersected = headToTailCollision(player_2, 2);
+                        
                         // If the new location for player 2 is on player 1's tail, create new random location for player 2's tail
-                        while (hasIntersected) {
-                            hasIntersected = false;
-                            for (int j = 0; j < player1.size(); j++) {
-                                for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
-                                    Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                                    if (box1.intersects(box2)) {
-                                        hasIntersected = true;
-                                        player2.clear();
-                                        for (int p = 0; p < 3; p++) {
-                                            player2.add(new GameObject(playerx, playery));
-                                        }
-                                        int x = (gen.nextInt(31) + 10) * WIDTH;
-                                        int y = (gen.nextInt(31) + 10) * WIDTH;
-                                        // Set starting positions for the tail
-                                        player2.get(0).setPos(x, y);
-                                        player2.get(1).setPos(x, y + WIDTH);
-                                        player2.get(2).setPos(x, y + (2*WIDTH));
-                                        System.out.println("tail reset");
-                                    }
-                                }
-                            }
-                        }
+                        respawnCollisionPlayer_2();
+                        
                         // Check for intersection from player 2's head to player 1's tail
                         for (int w = player1.size() - 1; w > 0; w--) {
-                            Rectangle p1tail = new Rectangle(player1.get(w).getX(), player1.get(w).getY(), WIDTH, WIDTH);
-                            Rectangle head = new Rectangle(player2.get(0).getX(), player2.get(0).getY(), WIDTH, WIDTH);
-                            if (head.intersects(p1tail)) {
+                            Rectangle p1tail = new Rectangle(player_1.getGameObjectXPos(w), player_1.getGameObjectYPos(w), WIDTH, WIDTH);
+                            p2head = new Rectangle(player_2.getGameObjectXPos(0), player_2.getGameObjectYPos(0), WIDTH, WIDTH);
+                            if (p2head.intersects(p1tail)) {
                                 hasIntersected = true;
-                                ismovingRIGHT2 = false;
-                                ismovingLEFT2 = false;
-                                ismovingUP2 = true;
-                                ismovingDOWN2 = false;
-                                player2.clear();
-                                for (int j = 0; j < 3; j++) {
-                                    player2.add(new GameObject(400, 400));
-                                }
-                                int x = (gen.nextInt(31) + 10) * WIDTH;
-                                int y = (gen.nextInt(31) + 10) * WIDTH;
-                                player2.get(0).setPos(x, y);
-                                player2.get(1).setPos(x, y + WIDTH);
-                                player2.get(2).setPos(x, y + (2*WIDTH));
-                                size2 = 3;
+                                respawnPlayer_2("randomly");
                             }
 
                         }
-                        // If the new random location for player 2 is atop player 1's tail
-                        // Create new random location until a good location is found
-                        while (hasIntersected) {
-                            hasIntersected = false;
-                            for (int j = 0; j < player1.size(); j++) {
-                                for (int i = 0; i < player2.size(); i++) {
-                                    Rectangle box1 = new Rectangle(player1.get(j).getX(), player1.get(j).getY(), WIDTH, WIDTH);
-                                    Rectangle box2 = new Rectangle(player2.get(i).getX(), player2.get(i).getY(), WIDTH, WIDTH);
-                                    if (box1.intersects(box2)) {
-                                        hasIntersected = true;
-                                        player2.clear();
-                                        for (int p = 0; p < 3; p++) {
-                                            player2.add(new GameObject(playerx, playery));
-                                        }
-                                        int x = (gen.nextInt(31) + 10) * WIDTH;
-                                        int y = (gen.nextInt(31) + 10) * WIDTH;
-                                        // Set starting positions for the tail
-                                        player2.get(0).setPos(x, y);
-                                        player2.get(1).setPos(x, y + WIDTH);
-                                        player2.get(2).setPos(x, y + (2*WIDTH));
-                                        System.out.println("tail reset");
-                                    }
-                                }
-                            }
-                        }
+                        
+                        //make sure the player 2 respawn location is valid
+                        respawnCollisionPlayer_2();
                     }
                     // Display the score and time
                     g.setColor(Color.WHITE);
@@ -1103,6 +719,272 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
         graph.drawImage(offscreen, 0, 0, this);
     }
+    
+    //this method ensures that player two does not spawn on top of player one
+	private void respawnCollisionPlayer_2() {
+		while (hasIntersected) {
+		    hasIntersected = false;
+		    for (int j = 0; j < player_1.size(); j++) {
+		        for (int i = 0; i < player_2.size(); i++) {
+		            Rectangle box1 = new Rectangle(player_1.getGameObjectXPos(j), player_1.getGameObjectYPos(j), WIDTH, WIDTH);
+		            Rectangle box2 = new Rectangle(player_2.getGameObjectXPos(i), player_2.getGameObjectYPos(i), WIDTH, WIDTH);
+		            if (box1.intersects(box2)) {
+		                hasIntersected = true;
+		                respawnPlayer_2("randomly");
+		            }
+		        }
+		    }
+		}
+	}
+
+    //this method ensures that player one does not spawn on top of player two
+	private void respawnCollisionPlayer_1() {
+		while (hasIntersected) {
+		    hasIntersected = false;
+		    for (int j = 0; j < player_1.size(); j++) {
+		        for (int i = 0; i < player_2.size(); i++) {
+		            Rectangle box1 = new Rectangle(player_1.getGameObjectXPos(j), player_1.getGameObjectYPos(j), WIDTH, WIDTH);
+		            Rectangle box2 = new Rectangle(player_2.getGameObjectXPos(i), player_2.getGameObjectYPos(i), WIDTH, WIDTH);
+		            if (box1.intersects(box2)) {
+		                hasIntersected = true;
+		                respawnPlayer_1("randomly");
+		            }
+		        }
+		    }
+		}
+	}
+	
+	private void respawnPlayer_2() {
+		Snake.ismovingRIGHT2 = false;
+		Snake.ismovingLEFT2 = false;
+		Snake.ismovingUP2 = true;
+		Snake.ismovingDOWN2 = false;
+		player_2 = null;
+		player_2 = new Snake(400,400);
+		player_2.setGameObjectPos(150, this.getHeight() - 150, 0);
+		player_2.setGameObjectPos(150, this.getHeight() - 135, 1);
+		player_2.setGameObjectPos(150, this.getHeight() - 120, 2);
+		size2 = 3;
+	}
+	//this method respawns player 2 in a random location
+	private void respawnPlayer_2(String random){
+		Snake.ismovingRIGHT2 = false;
+		Snake.ismovingLEFT2 = false;
+		Snake.ismovingUP2 = true;
+		Snake.ismovingDOWN2 = false;
+		player_2 = null;
+		player_2 = new Snake(playerx, playery);
+    	int x = (gen.nextInt(31) + 10) * WIDTH;
+        int y = (gen.nextInt(31) + 10) * WIDTH;
+        // Set starting positions for the tail
+        player_2.setGameObjectPos(x, y, 0);
+        player_2.setGameObjectPos(x, y + WIDTH, 1);
+        player_2.setGameObjectPos(x, y + (2*WIDTH), 2);
+        size2 = 3;
+	}
+	
+	private void respawnPlayer_1() {
+		Snake.ismovingRIGHT = false;
+		Snake.ismovingLEFT = false;
+		Snake.ismovingUP = true;
+		Snake.ismovingDOWN = false;
+		player_1 = null;
+		player_1 = new Snake(playerx, playery);
+		
+		// Set starting positions for the tail
+		player_1.setGameObjectPos(this.getWidth() - 150, this.getHeight() - 150, 0);
+		player_1.setGameObjectPos(this.getWidth() - 150, this.getHeight() - 135, 1);
+		player_1.setGameObjectPos(this.getWidth() - 150, this.getHeight() - 120, 2);
+		size1 = 3;
+	}
+	//this method respawns player 1 in a random location
+    private void respawnPlayer_1(String random){
+    	Snake.ismovingRIGHT = false;
+		Snake.ismovingLEFT = false;
+		Snake.ismovingUP = true;
+		Snake.ismovingDOWN = false;
+		player_1 = null;
+		player_1 = new Snake(playerx, playery);
+    	int x = (gen.nextInt(31) + 10) * WIDTH;
+        int y = (gen.nextInt(31) + 10) * WIDTH;
+        // Set starting positions for the tail
+        player_1.setGameObjectPos(x, y, 0);
+        player_1.setGameObjectPos(x, y + WIDTH, 1);
+        player_1.setGameObjectPos(x, y + (2*WIDTH), 2);
+        size1 = 3;
+    }
+    
+    //this method returns true if the snake's head intersected its tail
+    //the playerNumber parameter represents player one or player two, 1 = player_1, 2 = player_2
+    private boolean headToTailCollision(Snake player, int playerNumber) {
+		for (int i = player.size() - 1; i > 1; i--) {
+		    // Create rectangle for head and for a Tail in the ArrayList
+		    Rectangle p = new Rectangle(player.getGameObjectXPos(i), player.getGameObjectYPos(i), WIDTH, WIDTH);
+		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), WIDTH, WIDTH);
+		    // If the head intersects with the Tail, add one to loss counter
+		    if (head.intersects(p)) {
+		    	if (playerNumber == 1)
+		    		respawnPlayer_1("randomly");
+		    	else{
+		    		respawnPlayer_2("randomly"); 
+		    	}
+		        return true;
+		    }
+		}
+		return false;
+	}
+    
+    //this method causes the user to lose when colliding with their own tail in single player through the loser variable.
+	private void headToTailCollisionSinglePlayer() {
+		for (int i = player_1.size() - 1; i > 1; i--) {
+		    // Create rectangle for head and for a Tail in the ArrayList
+		    Rectangle p = new Rectangle(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
+		    Rectangle head = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);
+		    // If the head intersects with the Tail, add one to loss counter
+		    if (head.intersects(p)) {
+		        loser++;
+		        // This is to prevent the head from being overlapped by the green tail in the final image
+		        g.setColor(Color.BLACK);
+		        g.fillRect(player_1.getGameObjectXPos(1), player_1.getGameObjectYPos(1), WIDTH, WIDTH);
+		        // Set color to red and fill the tail block which the head intersected with
+		        g.setColor(Color.RED);
+		        g.fillRect(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
+		    }
+		}
+	}
+	
+	private void fruitRespawnCollisionDetect(int numPlayers) {
+		do {
+		    hasIntersected = false;
+		    for (int i = 0; i < player_1.size(); i++) {
+		        Rectangle r = new Rectangle(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
+		        Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+		        if (r.intersects(fruit)) {
+		            while (r.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+		            	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+		            	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+		                hasIntersected = true;
+		                System.out.println("hasIntersected");
+		            }
+		        }
+		    }
+		    if (numPlayers == 2){
+		    	for (int i = 0; i < player_2.size(); i++) {
+                    Rectangle r = new Rectangle(player_2.getGameObjectXPos(i), player_2.getGameObjectYPos(i), WIDTH, WIDTH);
+                    Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+                    if (r.intersects(fruit)) {
+                        while (r.intersects(particlex, particley, WIDTH, WIDTH)) {
+                        	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+                        	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+                            hasIntersected = true;
+                            System.out.println("hasIntersected");
+                        }
+                    }
+                }
+		    }
+		} while (hasIntersected);
+	}
+	private void drawSnakesAndFruit(int numPlayers) {
+		// Set the growsnake value to false
+		growsnake = false;
+		growsnake2 = false;
+		// Set the headcolor value to 0
+		//headcolor = 0;
+		
+		//set the colors of the snake head and tail for player 1
+		player_1.setSnakeHeadColor("black");
+		player_1.setSnakeTailColor("green");
+		
+		//if multiplayer, make sure player 2 has the correct color
+		if (numPlayers == 2){
+			player_2.setSnakeHeadColor("black");
+			player_2.setSnakeTailColor("orange");
+		}
+		
+		//begin drawing the snake
+		for (int i = 0; i < player_1.size() - 1; i++) {
+		    // Make color of first block (head) black
+		    if (player_1.getSnakeColorAtIndex(i) == "black") {
+		        g.setColor(Color.BLACK);
+		        // Make the rest of the snake green
+		    } else if (player_1.getSnakeColorAtIndex(i) == "green"){
+		        g.setColor(Color.GREEN);
+		    } else {
+		    	g.setColor(Color.ORANGE);
+		    }
+		    // Set turn back to 0 to indicate that the turn has been displayed
+		    turn = 0;
+		    // Add to headcolor counter so that only the first block is black
+		    //headcolor++;
+		    // Create rectangles for the snake head and the fruit in order to check for intersection
+		    Rectangle r = new Rectangle(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
+		    Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+		    Rectangle head = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);
+		    // Paint the snake
+		    g.fillRect(player_1.getGameObjectXPos(i), player_1.getGameObjectYPos(i), WIDTH, WIDTH);
+		    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
+		    if (head.intersects(fruit)) {
+		        while (head.intersects(particlex, particley, WIDTH, WIDTH)) {
+		        	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+		        	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+		        }
+		        // Set growsnake to true to increase size of snake by 1
+		        growsnake = true;
+		        // Add to score
+		        if (numPlayers == 1){
+		        	score++;
+		        }
+		        if (numPlayers == 2){
+		        	score1++;
+		        	size1++;
+		        }
+		        fruits--;
+		        fruittimer.start();
+		    }
+		}
+		
+		if (numPlayers == 2){
+			for (int i = 0; i < player_2.size() - 1; i++) {
+			    // Make color of first block (head) black
+				if (player_2.getSnakeColorAtIndex(i) == "black") {
+			        g.setColor(Color.BLACK);
+			        // Make the rest of the snake green
+			    } else if (player_2.getSnakeColorAtIndex(i) == "green"){
+			        g.setColor(Color.GREEN);
+			    } else {
+			    	g.setColor(Color.ORANGE);
+			    }
+			    // Set turn back to 0 to indicate that the turn has been displayed
+			    turn2 = 0;
+			    
+			    // Create rectangles for the snake head and the fruit in order to check for intersection
+			    Rectangle r = new Rectangle(player_2.getGameObjectXPos(i), player_2.getGameObjectYPos(i), WIDTH, WIDTH);
+			    Rectangle fruit = new Rectangle(particlex, particley, fWIDTH, fWIDTH);
+			    Rectangle head = new Rectangle(player_2.getGameObjectXPos(0), player_2.getGameObjectYPos(0), WIDTH, WIDTH);
+			    Rectangle head2 = new Rectangle(player_1.getGameObjectXPos(0), player_1.getGameObjectYPos(0), WIDTH, WIDTH);
+			    // Paint the snake
+			    g.fillRect(player_2.getGameObjectXPos(i), player_2.getGameObjectYPos(i), WIDTH, WIDTH);
+			    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
+			    if (head.intersects(fruit)) {
+			        while (head.intersects(particlex, particley, fWIDTH, fWIDTH) || head2.intersects(particlex, particley, fWIDTH, fWIDTH)) {
+			        	particley = gen.nextInt(this.getWidth()-50-115+1) + 115;
+			        	particlex = gen.nextInt(this.getWidth()-50-25+1) + 25;
+			            
+			        }
+			        // Set growsnake to true to increase size of snake by 1
+			        growsnake2 = true;
+
+			        // Add to score
+			        score2++;
+			        size2++;
+			        fruits--;
+			        fruittimer.start();
+			    }
+
+
+			}
+		}
+	}
      
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -1152,36 +1034,36 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         }
         // Create key listeners for player movement for second player WASD
         if (key == KeyEvent.VK_A) {
-            if ((!ismovingRIGHT2) && (player2.get(0).getY() > WIDTH) && (player2.get(0).getY() < (this.getHeight() - WIDTH)) && (turn2 == 0)) {
-                ismovingRIGHT2 = false;
-                ismovingLEFT2 = true;
-                ismovingUP2 = false;
-                ismovingDOWN2 = false;
+            if ((!Snake.ismovingRIGHT2) && (player_2.getGameObjectYPos(0) > WIDTH) && (player_2.getGameObjectYPos(0) < (this.getHeight() - WIDTH)) && (turn2 == 0)) {
+                Snake.ismovingRIGHT2 = false;
+                Snake.ismovingLEFT2 = true;
+                Snake.ismovingUP2 = false;
+                Snake.ismovingDOWN2 = false;
                 turn2++;
             }
         } else if (key == KeyEvent.VK_D) {
-            if ((!ismovingLEFT2) && (player2.get(0).getY() > WIDTH) && (player2.get(0).getY() < (this.getHeight() - WIDTH)) && (turn2 == 0)) {
-                ismovingRIGHT2 = true;
-                ismovingLEFT2 = false;
-                ismovingUP2 = false;
-                ismovingDOWN2 = false;
+            if ((!Snake.ismovingLEFT2) && (player_2.getGameObjectYPos(0) > WIDTH) && (player_2.getGameObjectYPos(0) < (this.getHeight() - WIDTH)) && (turn2 == 0)) {
+                Snake.ismovingRIGHT2 = true;
+                Snake.ismovingLEFT2 = false;
+                Snake.ismovingUP2 = false;
+                Snake.ismovingDOWN2 = false;
                 turn2++;
             }
         } else if (key == KeyEvent.VK_W) {
-            if ((!ismovingDOWN2) && (player2.get(0).getX() < (this.getWidth() - WIDTH)) && (player2.get(0).getX() > WIDTH) && (turn2 == 0)) {
-                ismovingRIGHT2 = false;
-                ismovingLEFT2 = false;
-                ismovingUP2 = true;
-                ismovingDOWN2 = false;
+            if ((!Snake.ismovingDOWN2) && (player_2.getGameObjectXPos(0) < (this.getWidth() - WIDTH)) && (player_2.getGameObjectXPos(0) > WIDTH) && (turn2 == 0)) {
+                Snake.ismovingRIGHT2 = false;
+                Snake.ismovingLEFT2 = false;
+                Snake.ismovingUP2 = true;
+                Snake.ismovingDOWN2 = false;
                 turn2++;
             }
         } else if (key == KeyEvent.VK_S) {
 
-            if ((!ismovingUP2) && (player2.get(0).getX() < (this.getWidth() - WIDTH)) && (player2.get(0).getX() > WIDTH) && (turn2 == 0)) {
-                ismovingRIGHT2 = false;
-                ismovingLEFT2 = false;
-                ismovingUP2 = false;
-                ismovingDOWN2 = true;
+            if ((!Snake.ismovingUP2) && (player_2.getGameObjectXPos(0) < (this.getWidth() - WIDTH)) && (player_2.getGameObjectXPos(0) > WIDTH) && (turn2 == 0)) {
+                Snake.ismovingRIGHT2 = false;
+                Snake.ismovingLEFT2 = false;
+                Snake.ismovingUP2 = false;
+                Snake.ismovingDOWN2 = true;
                 turn2++;
             }
             // Listen for the "y" and "n" key for when the game has ended (replay)
