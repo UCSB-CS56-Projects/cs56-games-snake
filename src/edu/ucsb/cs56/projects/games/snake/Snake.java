@@ -3,6 +3,7 @@
  */
 package edu.ucsb.cs56.projects.games.snake;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -147,6 +148,11 @@ public class Snake {
     	if (color == "green"){
     		for(int i = 1; i < this.snake_length - 1; i++){
     			this.snake.get(i).setColor(GameObject.GREEN);
+    		}
+    	}
+    	if (color == "orange"){
+    		for(int i = 1; i < this.snake_length - 1; i++){
+    			this.snake.get(i).setColor(GameObject.ORANGE);
     		}
     	}
     }

@@ -655,7 +655,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                         respawnCollisionPlayer_2();
                         
                         // Check for intersection from player 2's head to player 1's tail
-                        for (int w = player1.size() - 1; w > 0; w--) {
+                        for (int w = player_1.size() - 1; w > 0; w--) {
                             Rectangle p1tail = new Rectangle(player_1.getGameObjectXPos(w), player_1.getGameObjectYPos(w), WIDTH, WIDTH);
                             p2head = new Rectangle(player_2.getGameObjectXPos(0), player_2.getGameObjectYPos(0), WIDTH, WIDTH);
                             if (p2head.intersects(p1tail)) {
