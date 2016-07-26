@@ -20,8 +20,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private int speed= 75;
     
     //create private variables for the snakeFrame size
-    private static int frameWidth = 500;
-    private static int frameHeight = 500;
+    private static int frameWidth;
+    private static int frameHeight;
     
     //create the snake object references for players one and two
     private Snake player_1;
@@ -79,11 +79,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     public static int getFrameWidth(){ return frameWidth; }
     public static int getFrameHeight(){ return frameHeight; }
 
-
-
-
-
-
 	class task implements ActionListener{		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -104,8 +99,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         // Initialize components
         initComponents();
 
-        // Set boundaries for playing field
-        this.setSize(500,500);
+        setScreenBoundaries();
+        //this.setSize(500,500);
         setLocationRelativeTo(null);
         this.setResizable(false);
 	
@@ -183,9 +178,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    if (playagainyes == true) {
 				//Set window size
 		                
-				if (screenSize == 0){ this.setSize(500,500);}
-				else if (screenSize == 1){ this.setSize(600,600);}
-				else if (screenSize == 2){ this.setSize(700,700);}
+				setScreenBoundaries();
 				
 				if(score>highScore){
 				    highScore=score;
@@ -246,9 +239,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
             // If the game starts as 2 player, initialize two player settings
 	    
             //Set window size
-            if (screenSize == 0){this.setSize(500,500);}
-            else if (screenSize == 1){this.setSize(600,600);}
-            else if (screenSize == 2){this.setSize(700,700);}
+            setScreenBoundaries();
+            
             setLocationRelativeTo(null);
             this.setVisible(true);
             frameresized = true;
@@ -269,9 +261,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         }
         
         if ((menu != 0) && (players == 1) && (frameresized == false)) {
-        	if (screenSize == 0){this.setSize(500,500);}
-            else if (screenSize == 1){this.setSize(600,600);}
-            else if (screenSize == 2){this.setSize(700,700);}
+        	
+        	setScreenBoundaries();
+        	
             setLocationRelativeTo(null);
             this.setVisible(true);
             frameresized = true;
@@ -363,7 +355,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         // Create a menu screen for the initial launch, leave menu when spacebar is pressed
         if (menu == 0) {
             if (controls == false) {
-                //Set the height and width of the main menu (this line affects resizeability)
+                //Set the height and width of the main menu
                 this.setSize(500,500);
                 //Set the color of the main menu and fill it
                 g.setColor(Color.BLACK);
@@ -382,15 +374,15 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 // Depending on the number of players, fill in a white rectangle to highlight the number of players desired
                 // The parameters of the fillRect method correspond to the pixel locations of the white highlight.
                 if (players == 1) {
-                    g.fillRect(211, 272, 22, 22);
+                    g.fillRect(211, 217, 22, 22);
                 } else if (players == 2) {
-                    g.fillRect(257, 272, 22, 22);
+                    g.fillRect(257, 217, 22, 22);
                 }
                 
                 // Paint box for window size preference
-                // if (screenSize == 0){g.fillOval(11,263,160,40);}
-                // else if (screenSize == 1){g.fillOval(171,263,160,40);}
-                // else if (screenSize == 2){g.fillOval(331,263,160,40);}
+                if (screenSize == 0){g.fillRect(131,263,60,30);}
+                else if (screenSize == 1){g.fillRect(225,263,77,30);}
+                else if (screenSize == 2){g.fillRect(341,263,60,30);}
                 
                 // These methods change the size of the oval used to select whether puddles are enabled or disabled in the
                 // main menu.
@@ -407,7 +399,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 }
 
                 // Draw the menu options that will be highlighted
-                String numPlayer = new String("Number of Players");
+                String numPlayer = new String("Number of Players ");
+                String keyPress = new String("(Press keys 1 or 2)");
                 String numPlayerOptions = new String("1      2");
                 String modeOptions = new String("6)Normal    7)Puddles");
                 String difficultyOptions = new String("8)Easy    9)Medium    0)Difficult");
@@ -417,17 +410,21 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                 String HighScore1 = new String("High Score 1) ");
                 String HighScore2 = new String("High Score 2) ");
                 String HighScore3 = new String("High Score 3) ");
+                String gameAreaSize = new String("Game Area Size:");
+                String areaSizes = new String("3) Small   4) Medium   5) Large");
 		
                 g.setColor(Color.RED);
-                g.drawString(HighScore1 + highScore, this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
-                g.drawString(HighScore2 + highScore2, this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
-                g.drawString(HighScore3 + highScore3, this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
-		g.drawString(HighScore1 + hScore.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 150);
-		g.drawString(HighScore2 + hScore2.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 180);
-		g.drawString(HighScore3 + hScore3.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 210);
-                g.drawString(numPlayer, this.getWidth() / 2 - fm.stringWidth(numPlayer) / 2, 260);
+                g.setFont(font1);
+                g.drawString(HighScore1 + hScore.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore1) /2, 135);
+                g.drawString(HighScore2 + hScore2.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore2) /2, 155);
+                g.drawString(HighScore3 + hScore3.getScore(), this.getWidth() / 2 -fm.stringWidth(HighScore3) /2, 175);
+                g.drawString(gameAreaSize, this.getWidth() / 2 - fm.stringWidth(gameAreaSize)/2, 260);
                 g.setFont(font2);
-                g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 290);
+                g.drawString(areaSizes, this.getWidth() / 2 - fm.stringWidth(areaSizes)/2 - 40, 285);
+                g.setFont(font1);
+                g.drawString(numPlayer + keyPress, this.getWidth() / 2 - fm.stringWidth(numPlayer+keyPress) / 2, 205);
+                g.setFont(font2);
+                g.drawString(numPlayerOptions, this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15, 235);
                 g.drawString(modeOptions, this.getWidth() /2 - fm.stringWidth(modeOptions)/2 -20, 350);
                 g.drawString(difficultyOptions, this.getWidth() /2 - fm.stringWidth(difficultyOptions)/2-50, 430);
                 g.setFont(font1);
@@ -495,19 +492,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
                     Color b = new Color(61,226,235);
 					g.setColor(c);
 					//Set window size
-                    if (screenSize == 0)
-                    {
-						this.setSize(500,500);
-					}
-                    else if (screenSize == 1)
-                    {
-						this.setSize(600,600);
-					}
-                    else if (screenSize == 2)
-                    {
-						this.setSize(700,700);
-					}
-                    g.fillRect(0,0,700,700);
+                    setScreenBoundaries();
+                    g.fillRect(0,0,SnakeFrame.frameWidth,SnakeFrame.frameHeight);
                     
                     // Set color to red and paint the fruit
                     g.setColor(Color.RED);
@@ -568,19 +554,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 					// Set the color to white to paint the background
 					g.setColor(c);
 					//Set window size
-                    if (screenSize == 0)
-                    {
-						this.setSize(500,500);
-					}
-                    else if (screenSize == 1)
-                    {
-						this.setSize(600,600);
-					}
-                    else if (screenSize == 2)
-                    {
-						this.setSize(700,700);
-					}
-                    g.fillRect(0,0,700,700);
+                    setScreenBoundaries();
+                    g.fillRect(0,0,SnakeFrame.frameWidth,SnakeFrame.frameHeight);
                     
                     // Set color to Orange and paint the fruit                    
                     g.setColor(Color.RED);
@@ -718,6 +693,26 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
         graph.drawImage(offscreen, 0, 0, this);
     }
+    
+    //this method is used to set the boundaries of the SnakeFrame
+    private void setScreenBoundaries() {
+		// Set boundaries for playing field
+        if (screenSize == 0){
+        	this.setSize(500,500);
+        	SnakeFrame.frameWidth = 500;
+        	SnakeFrame.frameHeight = 500;
+        }
+        else if (screenSize == 1){
+        	this.setSize(600, 600);
+        	SnakeFrame.frameWidth = 600;
+        	SnakeFrame.frameHeight = 600;
+        }
+        else{
+        	this.setSize(700, 700);
+        	SnakeFrame.frameWidth = 700;
+        	SnakeFrame.frameHeight = 700;
+        }
+	}
     
     //this method ensures that player two does not spawn on top of player one
 	private void respawnCollisionPlayer_2() {

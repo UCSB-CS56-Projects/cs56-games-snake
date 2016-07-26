@@ -11,7 +11,7 @@ import java.util.Random;
 
 /**
  * @author Marcellis Carr-Barfield
- * This class serves to refactor the SnakeFrame.java class into its constituent classes.
+ * This is a class for snake objects.
  */
 public class Snake {
 	
@@ -27,7 +27,6 @@ public class Snake {
 
     // Width of the snake
     private final int WIDTH = 15;
-    private final int fWIDTH = 15;
 
     // Create an ArrayList for the Tail
     private ArrayList<GameObject> snake = new ArrayList<GameObject>();
@@ -136,6 +135,11 @@ public class Snake {
     public void removeGameObject(int index){
     	this.snake.remove(index);
     	this.snake_length--;
+    }
+    
+    //sets the size of the snake
+    public void setSize(int size){
+    	this.snake_length = size;
     }
     
     //returns the size of the snake
