@@ -25,24 +25,9 @@ public class Snake {
     //variable storing the length of the snake
     private int snake_length = 0;
 
-    // X and Y coordinates for the fruit
-    // Variable "turn" indicates if a directional change has been displayed
-    private int particlex, particley, turn, turn2;
-
-    HighScore temp = new HighScore(0);
-    HighScore hScore = HighScore.loadHighScore();
-
-    // Score of fruit eaten, Head color counter, win/loss variable
-    private int score = 0, score1 = 0, highScore = hScore.getScore();
-    private int score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1;
-    private int headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
-
     // Width of the snake
     private final int WIDTH = 15;
     private final int fWIDTH = 15;
-
-    // Create random generator
-    private Random gen = new Random();
 
     // Create an ArrayList for the Tail
     private ArrayList<GameObject> snake = new ArrayList<GameObject>();
@@ -53,21 +38,8 @@ public class Snake {
     public static boolean ismovingLEFT2 = false, ismovingRIGHT2 = false;
     public static boolean ismovingUP2 = true, ismovingDOWN2 = false, growsnake2 = false;
 
-    // Create boolean values for when to play again
-    private boolean playagainyes = false, playagainno = false, pause = false;
-    private boolean frameresized = false, controls = false, hasIntersected;
-
-    // Create offscreen image for double buffering
-    private Image offscreen;
-
     // Create graphics
     Graphics g;
-
-    // Create stopwatch
-    private Stopwatch watch = new Stopwatch();
-    private Stopwatch fruittimer = new Stopwatch();
-    private boolean puddles = false;
-	
     
     // 
     public Snake(){

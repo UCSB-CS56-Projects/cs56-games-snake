@@ -34,6 +34,10 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     // X and Y coordinates for the fruit
     // Variable "turn" indicates if a directional change has been displayed
     private int particlex, particley, turn, turn2;
+    
+    //variables for determining whether or not to grow the snake
+    boolean growsnake = false;
+    boolean growsnake2 = false;
 
     HighScore hScore = HighScore.loadHighScore();
     HighScore hScore2 = HighScore.loadHighScore2();
@@ -42,8 +46,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
     // Score of fruit eaten, Head color counter, win/loss variable
     private int score = 0, score1 = 0, highScore = hScore.getScore();
-    private int score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1;
-    private int headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
+    private int score2 = 0, loser = 0, menu = 0, players = 1;
+    private int size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
     private int highScore2 = hScore2.getScore();
     private int highScore3 = hScore3.getScore();
     // Width of the snake
@@ -52,16 +56,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
     // Create random generator
     private Random gen = new Random();
-
-    // Create an ArrayList for the Tail
-    private ArrayList<GameObject> player1 = new ArrayList<GameObject>(3);
-    private ArrayList<GameObject> player2 = new ArrayList<GameObject>(3);
-
-    private boolean ismovingLEFT = false, ismovingRIGHT = false;
-    private boolean ismovingUP = true, ismovingDOWN = false, growsnake = false;
-
-    private boolean ismovingLEFT2 = false, ismovingRIGHT2 = false;
-    private boolean ismovingUP2 = true, ismovingDOWN2 = false, growsnake2 = false;
 
     // Create boolean values for when to play again
     private boolean playagainyes = false, playagainno = false, pause = false;
@@ -227,14 +221,14 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 				watch.start();
 				
 				// Reinitialize direction variables
-				ismovingLEFT = false;
-				ismovingRIGHT = false;
-				ismovingUP = true;
-				ismovingDOWN = false;
-				ismovingLEFT2 = false;
-				ismovingRIGHT2 = false;
-				ismovingUP2 = true;
-				ismovingDOWN2 = false;
+				Snake.ismovingLEFT= false;
+				Snake.ismovingRIGHT = false;
+				Snake.ismovingUP = true;
+				Snake.ismovingDOWN = false;
+				Snake.ismovingLEFT2 = false;
+				Snake.ismovingRIGHT2 = false;
+				Snake.ismovingUP2 = true;
+				Snake.ismovingDOWN2 = false;
 				
 				// Reset playagain variable
 				playagainyes = false;
