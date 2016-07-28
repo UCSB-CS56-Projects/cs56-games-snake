@@ -3,6 +3,7 @@
  */
 package edu.ucsb.cs56.projects.games.snake;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 /**
  * @author Marcellis Carr-Barfield
- * This class serves to refactor the SnakeFrame.java class into its constituent classes.
+ * This is a class for snake objects.
  */
 public class Snake {
 	
@@ -24,24 +25,8 @@ public class Snake {
     //variable storing the length of the snake
     private int snake_length = 0;
 
-    // X and Y coordinates for the fruit
-    // Variable "turn" indicates if a directional change has been displayed
-    private int particlex, particley, turn, turn2;
-
-    HighScore temp = new HighScore(0);
-    HighScore hScore = HighScore.loadHighScore();
-
-    // Score of fruit eaten, Head color counter, win/loss variable
-    private int score = 0, score1 = 0, highScore = hScore.getScore();
-    private int score2 = 0, headcolor = 0, loser = 0, menu = 0, players = 1;
-    private int headcolor2 = 0, size1 = 3, size2 = 3, fruits = 50, screenSize = 0;
-
     // Width of the snake
     private final int WIDTH = 15;
-    private final int fWIDTH = 15;
-
-    // Create random generator
-    private Random gen = new Random();
 
     // Create an ArrayList for the Tail
     private ArrayList<GameObject> snake = new ArrayList<GameObject>();
@@ -52,21 +37,8 @@ public class Snake {
     public static boolean ismovingLEFT2 = false, ismovingRIGHT2 = false;
     public static boolean ismovingUP2 = true, ismovingDOWN2 = false, growsnake2 = false;
 
-    // Create boolean values for when to play again
-    private boolean playagainyes = false, playagainno = false, pause = false;
-    private boolean frameresized = false, controls = false, hasIntersected;
-
-    // Create offscreen image for double buffering
-    private Image offscreen;
-
     // Create graphics
     Graphics g;
-
-    // Create stopwatch
-    private Stopwatch watch = new Stopwatch();
-    private Stopwatch fruittimer = new Stopwatch();
-    private boolean puddles = false;
-	
     
     // 
     public Snake(){
@@ -149,6 +121,11 @@ public class Snake {
     			this.snake.get(i).setColor(GameObject.GREEN);
     		}
     	}
+    	if (color == "orange"){
+    		for(int i = 1; i < this.snake_length - 1; i++){
+    			this.snake.get(i).setColor(GameObject.ORANGE);
+    		}
+    	}
     }
     
     public String getSnakeColorAtIndex(int index){
@@ -158,6 +135,11 @@ public class Snake {
     public void removeGameObject(int index){
     	this.snake.remove(index);
     	this.snake_length--;
+    }
+    
+    //sets the size of the snake
+    public void setSize(int size){
+    	this.snake_length = size;
     }
     
     //returns the size of the snake

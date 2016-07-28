@@ -11,6 +11,7 @@ public class GameObject
 	public static final String BLACK = "black";
 	public static final String RED = "red";
 	public static final String GREEN = "green";
+	public static final String ORANGE = "orange";
 	
     private int x, y, width, height;
     private String color = "none";
