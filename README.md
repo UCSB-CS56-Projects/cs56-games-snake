@@ -68,9 +68,9 @@ The ingame bar may cover some game space.You can change it to fit the windows.
 You can use MVC design pattern to creat other two files to place game object and the input helper(controller). For now, all the methods and classes are in just one snake frame.
 
   
-M16 final remarks
+##**M16 final remarks**
 =================
-1. Further code refactoring:
+Further code refactoring:
 We created additional classes to handle the creation objects ingame. You should see a BasicFruit class, a Snake class, and a GameObjectHandler class.
 * BasicFruit
 * * Handles the creation of all basic fruit objects, calling the GameObject superconstructor.
