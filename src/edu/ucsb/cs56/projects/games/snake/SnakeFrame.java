@@ -64,7 +64,11 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     
     /*
      * THIS IMPLEMENTATION WILL HAVE TO BE REFACTORED ELSEWHERE
+     * AT A FUTURE TIME.
      * 
+     * Created an inner listener class that passes keyevents to the corresponding event listener classes.
+     * This allows for us to remove key-press implementation from the SnakeFrame object, and narrow its
+     * purpose to be more in line with a GUI component.
      */
     public GameObjectHandler GOH;
     class GameObjectHandlerListener extends Container implements KeyListener{

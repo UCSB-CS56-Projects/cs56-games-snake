@@ -55,12 +55,9 @@ public class Snake {
     	this.snake_x_pos = snake_x_pos;
     	this.snake_y_pos = snake_y_pos;
     	for (int i = 0; i < 3; i++) {
-		    this.snake.add(new GameObject(snake_x_pos, snake_y_pos));
+		    this.snake.add(new GameObject(snake_x_pos, snake_y_pos+i*WIDTH));
 		}
     	// Set starting positions for the tail
-        this.snake.get(0).setPos(snake_x_pos,snake_y_pos);
-        this.snake.get(1).setPos(snake_x_pos,snake_y_pos+WIDTH);
-        this.snake.get(2).setPos(snake_x_pos,snake_y_pos+(2*WIDTH));
         this.snake_length = 3;
     }
 	

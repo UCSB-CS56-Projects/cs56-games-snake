@@ -12,7 +12,7 @@ import java.awt.event.*;
 public class GameObjectHandler implements KeyListener {
 	//create private default position variables
 	private int defaultX = SnakeFrame.getFrameWidth()/5*3;
-	private int defaultY = SnakeFrame.getFrameWidth()/5*3;
+	private int defaultY = SnakeFrame.getFrameHeight()/5*3;
 	
 	//create private snake objects since the GameObjectHandler is the only one changing their state.
 	public Snake player_1; 
@@ -68,17 +68,10 @@ public class GameObjectHandler implements KeyListener {
 	 */
 	public void restartPlayer(int playerNum){
 		if (playerNum == 1){
-			player_1 = new Snake(defaultX-150, defaultY-150);
-			player_1.setGameObjectPos(SnakeFrame.getFrameWidth()-150,SnakeFrame.getFrameHeight()-150,0);
-            player_1.setGameObjectPos(SnakeFrame.getFrameWidth()-150,SnakeFrame.getFrameHeight()-135,1);
-            player_1.setGameObjectPos(SnakeFrame.getFrameWidth()-150,SnakeFrame.getFrameHeight()-120,2);      
+			player_1 = new Snake(defaultX-150, defaultY-150); 
 		}
 		else
 			player_2 = new Snake(defaultX, defaultY);
-			player_2.setGameObjectPos(SnakeFrame.getFrameWidth()-150,SnakeFrame.getFrameHeight()-150,0);
-	        player_2.setGameObjectPos(SnakeFrame.getFrameWidth()-150,SnakeFrame.getFrameHeight()-135,1);
-	        player_2.setGameObjectPos(SnakeFrame.getFrameWidth()-150,SnakeFrame.getFrameHeight()-120,2);
-			
 	}
 	
 	/**Respawns the given player to a random location
