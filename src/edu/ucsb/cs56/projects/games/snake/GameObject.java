@@ -25,7 +25,7 @@ public class GameObject
 
     public GameObject(int a, int b, int w, int h){
 	x = a;
-	y = b; // was originally a. typo?
+	y = b;
 	width = w;
 	height = h;
     }

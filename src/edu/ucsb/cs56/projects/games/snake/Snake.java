@@ -14,10 +14,16 @@ import java.util.Random;
  * This is a class for snake objects.
  */
 public class Snake {
-	
-	// This variable determines the speed of the snake, and corresponds to the difficulty
-    private int speed= 75;
 
+	//Define constants for snake object direction setters
+	public static final String UP = "UP";
+	public static final String DOWN = "DOWN";
+	public static final String LEFT = "LEFT";
+	public static final String RIGHT = "RIGHT";
+	
+	// Width of all snakes created
+    public static final int WIDTH = 15;
+	
     // Establish variables
     // Starting X and Y coordinates for the snake head
     private int snake_x_pos, snake_y_pos;
@@ -25,20 +31,18 @@ public class Snake {
     //variable storing the length of the snake
     private int snake_length = 0;
 
-    // Width of the snake
-    private final int WIDTH = 15;
-
-    // Create an ArrayList for the Tail
+    // Create an ArrayList of GameObjects to represent the Snake object.
     private ArrayList<GameObject> snake = new ArrayList<GameObject>();
 
-    public static boolean ismovingLEFT = false, ismovingRIGHT = false;
-    public static boolean ismovingUP = true, ismovingDOWN = false, growsnake = false;
-
-    public static boolean ismovingLEFT2 = false, ismovingRIGHT2 = false;
-    public static boolean ismovingUP2 = true, ismovingDOWN2 = false, growsnake2 = false;
+    private boolean ismovingLEFT = false, ismovingRIGHT = false;
+    private boolean ismovingUP = true, ismovingDOWN = false, growsnake = false;
+    
+    //tells us whether the snake's direction has been changed on the screen when it turns
+    private int turn;
+    
 
     // Create graphics
-    Graphics g;
+    //Graphics g;
     
     // 
     public Snake(){
@@ -60,6 +64,61 @@ public class Snake {
         this.snake_length = 3;
     }
 	
+    //function for changing direction of the snake
+    public void setDirection(String direction){
+    	switch(direction){
+    	case "UP":		
+    		this.ismovingDOWN = false;
+    		this.ismovingLEFT = false;
+    		this.ismovingRIGHT = false;
+    		this.ismovingUP = true;
+    		break;
+    	case "DOWN":
+    		this.ismovingLEFT = false;
+    		this.ismovingRIGHT = false;
+    		this.ismovingUP = false;
+    		this.ismovingDOWN = true;
+    		break;
+    	case "LEFT":
+    		this.ismovingRIGHT = false;
+    		this.ismovingUP = false;
+    		this.ismovingDOWN = false;
+    		this.ismovingLEFT = true;
+    		break;
+    	case "RIGHT":
+    		this.ismovingUP = false;
+    		this.ismovingDOWN = false;
+    		this.ismovingLEFT = false;
+    		this.ismovingRIGHT = true;
+    		break;
+    	}
+    }
+    
+    //get the direction of the snake
+    public String getDirection(){
+    	if(this.ismovingDOWN)
+    		return Snake.DOWN;
+    	if(this.ismovingUP)
+    		return Snake.UP;
+    	if(this.ismovingLEFT)
+    		return Snake.LEFT;
+    	if(this.ismovingRIGHT)
+    		return Snake.RIGHT;
+    	return "NONE";
+    }
+    
+    //function to indicate the snake has been turned a turn value > 0 means it has been turned but not drawn
+    public void turn(){
+    	this.turn++;
+    }
+    
+    //function to get the turn value
+    public boolean hasTurned(){
+    	if (turn == 0)
+    		return false;
+    	else
+    		return true;
+    }
     
     //create the setters for the snake positions
     public void set_x_pos(int x_pos){
@@ -151,82 +210,46 @@ public class Snake {
 	public void shiftSnake() {
         // Create a new Tail in front of the Snake based on the direction
     	// moving and set it to the 0th element
-        if (ismovingLEFT) {
+        if (this.ismovingLEFT) {
             // If the tail movement is within the boundaries, move it forward one space
-            if (this.snake.get(0).getX() >= WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX() - WIDTH, this.snake.get(0).getY()));
+            if (this.snake.get(0).getX() >= WIDTH) { 
+            	this.snake.add(0, new GameObject(this.snake.get(0).getX() - WIDTH, this.snake.get(0).getY()));
             }
 	    
 	    // Otherwise loop it to the opposite end of the window
-	    else {
-		this.snake.add(0, new GameObject(this.snake.get(0).getX() + SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
+            else {
+            	this.snake.add(0, new GameObject(this.snake.get(0).getX() + SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
             }
         } 
 	
-        else if (ismovingRIGHT) {
+        else if (this.ismovingRIGHT) {
             // Same method repeated for if it is moving RIGHT, etc...
-            if (this.snake.get(0).getX() <= (SnakeFrame.getFrameWidth() - WIDTH)) { this.snake.add(0, new GameObject(this.snake.get(0).getX() + WIDTH, this.snake.get(0).getY()));
+            if (this.snake.get(0).getX() <= (SnakeFrame.getFrameWidth() - WIDTH)) { 
+            	this.snake.add(0, new GameObject(this.snake.get(0).getX() + WIDTH, this.snake.get(0).getY()));
             } 
-	    else {
-                this.snake.add(0, new GameObject(this.snake.get(0).getX() - SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
+            else {
+            	this.snake.add(0, new GameObject(this.snake.get(0).getX() - SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
             }
         }
 
-        else if (ismovingUP) {
-            if (this.snake.get(0).getY() >= WIDTH + WIDTH + WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - WIDTH));
+        else if (this.ismovingUP) {
+            if (this.snake.get(0).getY() >= 95) { 
+            	this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - WIDTH));
             }
-	    else { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + SnakeFrame.getFrameHeight() - WIDTH));}
+            else { 
+            	this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + SnakeFrame.getFrameHeight() - 90 - WIDTH));
+        	}
         }
 
-        else if (ismovingDOWN) {
+        else if (this.ismovingDOWN) {
             if (this.snake.get(0).getY() <= SnakeFrame.getFrameHeight() - WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + WIDTH));
             }
 	    else {
-                this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - SnakeFrame.getFrameHeight() + WIDTH));
+                this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - SnakeFrame.getFrameHeight() + 90 + WIDTH));
             }
         }
         //increment the snake length
         this.snake_length++;
     }
-	
-	public void shiftSnake2() {
-        // Create a new Tail in front of the Snake based on the direction
-    	// moving and set it to the 0th element
-        if (ismovingLEFT2) {
-            // If the tail movement is within the boundaries, move it forward one space
-            if (this.snake.get(0).getX() >= WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX() - WIDTH, this.snake.get(0).getY()));
-            }
-	    
-	    // Otherwise loop it to the opposite end of the window
-	    else {
-		this.snake.add(0, new GameObject(this.snake.get(0).getX() + SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
-            }
-        } 
-	
-        else if (ismovingRIGHT2) {
-            // Same method repeated for if it is moving RIGHT, etc...
-            if (this.snake.get(0).getX() <= (SnakeFrame.getFrameWidth() - WIDTH)) { this.snake.add(0, new GameObject(this.snake.get(0).getX() + WIDTH, this.snake.get(0).getY()));
-            } 
-	    else {
-                this.snake.add(0, new GameObject(this.snake.get(0).getX() - SnakeFrame.getFrameWidth() - WIDTH, this.snake.get(0).getY()));
-            }
-        }
-
-        else if (ismovingUP2) {
-            if (this.snake.get(0).getY() >= WIDTH + WIDTH + WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - WIDTH));
-            }
-	    else { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + SnakeFrame.getFrameHeight() - WIDTH));}
-        }
-
-        else if (ismovingDOWN2) {
-            if (this.snake.get(0).getY() <= SnakeFrame.getFrameHeight() - WIDTH) { this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() + WIDTH));
-            }
-	    else {
-                this.snake.add(0, new GameObject(this.snake.get(0).getX(), this.snake.get(0).getY() - SnakeFrame.getFrameHeight() + WIDTH));
-            }
-        }
-        //increment the snake length
-        this.snake_length++;
-    }
-	
 	
 }
