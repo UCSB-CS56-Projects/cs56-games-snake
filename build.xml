@@ -34,9 +34,7 @@
   <property name="public_javadoc_absolute_path" location="../cs56-games-snake_javadoc/javadoc"/>
 
  <target name="javadoc" depends="compile" description="generate javadoc">
-    <delete>
-      <fileset dir="javadoc" />
-    </delete>
+ 
     <javadoc destdir="javadoc">
       <fileset dir="src/edu/ucsb/cs56/projects/games/snake" >
 	<include name="*.java"/>
