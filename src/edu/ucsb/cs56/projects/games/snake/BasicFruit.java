@@ -20,14 +20,16 @@ public class BasicFruit extends GameObject {
 	 * <p>
 	 * Creates a BasicFruit with random coordinates
 	 */
-	private static Color c = Color.RED;
-	
+    private static Color c;
+    private final Color r = Color.RED;
+    
 	public BasicFruit(){
 		super();
 		int xPos = (int) (rng.nextDouble()*(SnakeFrame.getFrameWidth() - 74) + 25);
 		int yPos = (int) (rng.nextDouble()*(SnakeFrame.getFrameHeight() - 164) + 115);
 		this.setPos(xPos,  yPos);
 		this.setColor("red");
+		this.setColorObject(r);
 	}
 	
 	/**
@@ -39,6 +41,7 @@ public class BasicFruit extends GameObject {
 	public BasicFruit(int xPos, int yPos){
 		super(xPos, yPos, BasicFruit.WIDTH, BasicFruit.HEIGHT);
 		this.setColor("red");
+		this.setColorObject(r);
 	}
 	
 	/**
@@ -59,4 +62,13 @@ public class BasicFruit extends GameObject {
 	public static Color getColorObject(){
 		return c;
 	}
+    public void setColorObject(Color c) {
+	this.c = c;
+	
+    }
+
+    public String getPowerUp() {
+	return "NONE";
+
+    }
 }

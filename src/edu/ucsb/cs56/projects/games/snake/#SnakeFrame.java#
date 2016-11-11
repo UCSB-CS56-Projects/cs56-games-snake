@@ -30,11 +30,17 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private String p1PowerUp = "NONE";
     private String p2PowerUp = "NONE";
 
-    // PowerUp timer count
-    private int speedPowerUpStart = 0;
-    private int widthPowerUpStart = 0;
-    private int ghostPowerUpStart = 0;
-    private boolean ghostFlag = false;
+    // PowerUp timer count for p1
+    private int p1SpeedPowerUpStart = 0;
+    private int p1WidthPowerUpStart = 0;
+    private int p1GhostPowerUpStart = 0;
+    private boolean p1GhostFlag = false;
+
+    // PowerUp timer count for p2
+    private int p2SpeedPowerUpStart = 0;
+    private int p2SwidthPowerUpStart = 0;
+    private int p2GhostPowerUpStart = 0;
+    private boolean p2GhostFlag = false;
     
     
     //variables for determining whether or not to grow the snake
@@ -262,17 +268,10 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	score1 = 0;
 	score2 = 0;
 
-	// Reset powerup variables
-	Snake.WIDTH = 15;
-	p1PowerUp = "NONE";
-	p2PowerUp = "NONE";
-	speedPowerUpStart = 0;
-	widthPowerUpStart = 0;
-	ghostPowerUpStart = 0;
-	ghostFlag = false;
-	
 	// Create random starting X and Y coordinate for fruit
-	generateNewFruit();
+	BasicFruit fruit_0 = new BasicFruit();
+	GOH.deleteAllFruits();
+	GOH.addBasicFruit(fruit_0);
 
 	// Restart the state of the new players.
 	GOH.newPlayers();
@@ -285,7 +284,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 	// Reset loser variable
 	loser = 0;
-	
     }
     
     
@@ -893,46 +891,41 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 
     // Function to handle powerups
-    public void checkPowerUp() {
+    public void checkPowerUp(int players) {
 	int currentSeconds = watch.getMinutes() * 60 + watch.getSeconds();
-
-
+	
 	//speed power up
-	if (speedPowerUpStart != 0 && (currentSeconds - speedPowerUpStart) > 5) {
-	    speedPowerUpStart = 0;
+	if (p1SpeedPowerUpStart != 0 && (currentSeconds - p1SpeedPowerUpStart) > 5) {
+	    p1SpeedPowerUpStart = 0;
 	    atime.setDelay(speed);
 	}
-	if(p1PowerUp.equals("SPEED") || p2PowerUp.equals("SPEED")) {
+	if(p1PowerUp.equals("SPEED")) {
 	    int tempSpeed = speed;
-
-	    if (speedPowerUpStart != 0) {
-		speedPowerUpStart = currentSeconds;
+	    
+	    if (p1SpeedPowerUpStart != 0) {
+		p1SpeedPowerUpStart = currentSeconds;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    } else {
-		speedPowerUpStart = currentSeconds;
+		p1SpeedPowerUpStart = currentSeconds;
 		tempSpeed /= 5;
 		atime.setDelay(tempSpeed);
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    }
 	}
 
 	//width power up
-	if (widthPowerUpStart != 0 && (currentSeconds - widthPowerUpStart) > 5) {
-	    widthPowerUpStart = 0;
+	if (p1WidthPowerUpStart != 0 && (currentSeconds - p1WidthPowerUpStart) > 5) {
+	    p1WidthPowerUpStart = 0;
 	    Snake.WIDTH = 15;
 	}
-	if(p1PowerUp.equals("WIDTH") || p2PowerUp.equals("WIDTH")) {
+	if(p1PowerUp.equals("WIDTH")) {
 	    if (widthPowerUpStart != 0) {
 		widthPowerUpStart = currentSeconds;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    } else {
 		widthPowerUpStart = currentSeconds;
 		Snake.WIDTH = 30;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    }
 	}
 	//ghost power up
@@ -940,19 +933,69 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    ghostPowerUpStart = 0;
 	    ghostFlag = false;
 	}
-	if(p1PowerUp.equals("GHOST") || p2PowerUp.equals("GHOST")) {
+	if(p1PowerUp.equals("GHOST")) {
 	    if (ghostPowerUpStart != 0) {
 		ghostPowerUpStart = currentSeconds;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    } else {
 		ghostPowerUpStart = currentSeconds;
 		ghostFlag = true;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    }
 	}
 
+	//for second player if necessary
+	if (players == 2) {
+	    //speed power up
+	    if (speedPowerUpStart != 0 && (currentSeconds - speedPowerUpStart) > 5) {
+		speedPowerUpStart = 0;
+		atime.setDelay(speed);
+	    }
+	    if(p2PowerUp.equals("SPEED")) {
+		int tempSpeed = speed;
+		
+		if (speedPowerUpStart != 0) {
+		    speedPowerUpStart = currentSeconds;
+		    p2PowerUp = "NONE";
+		} else {
+		    speedPowerUpStart = currentSeconds;
+		    tempSpeed /= 5;
+		    atime.setDelay(tempSpeed);
+		    p2PowerUp = "NONE";
+		}
+	    }
+
+	    //width power up
+	    if (widthPowerUpStart != 0 && (currentSeconds - widthPowerUpStart) > 5) {
+		widthPowerUpStart = 0;
+		Snake.WIDTH = 15;
+	    }
+	    if(p1PowerUp.equals("WIDTH")) {
+		if (widthPowerUpStart != 0) {
+		    widthPowerUpStart = currentSeconds;
+		    p2PowerUp = "NONE";
+		} else {
+		    widthPowerUpStart = currentSeconds;
+		    Snake.WIDTH = 30;
+		    p2PowerUp = "NONE";
+		}
+	    }
+	    //ghost power up
+	    if (ghostPowerUpStart != 0 && (currentSeconds - ghostPowerUpStart) > 5) {
+		ghostPowerUpStart = 0;
+		ghostFlag = false;
+	    }
+	    if(p1PowerUp.equals("GHOST")) {
+		if (ghostPowerUpStart != 0) {
+		    ghostPowerUpStart = currentSeconds;
+		    p2PowerUp = "NONE";
+		} else {
+		    ghostPowerUpStart = currentSeconds;
+		    ghostFlag = true;
+		    p2PowerUp = "NONE";
+		}
+	    }	    
+	}
     }
 
     
