@@ -30,11 +30,19 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private String p1PowerUp = "NONE";
     private String p2PowerUp = "NONE";
 
-    // PowerUp timer count
-    private int speedPowerUpStart = 0;
-    private int widthPowerUpStart = 0;
-    private int ghostPowerUpStart = 0;
-    private boolean ghostFlag = false;
+    // PowerUp timer count for each player
+    private int p1SpeedPowerUpStart = 0;
+    private int p1WidthPowerUpStart = 0;
+    private int p1GhostPowerUpStart = 0;
+    private boolean p1GhostFlag = false;
+    private boolean p1WidthFlag = false;
+
+    
+    private int p2SpeedPowerUpStart = 0;
+    private int p2WidthPowerUpStart = 0;
+    private int p2GhostPowerUpStart = 0;
+    private boolean p2GhostFlag = false;
+    private boolean p2WidthFlag = false;
     
     
     //variables for determining whether or not to grow the snake
@@ -266,10 +274,16 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	Snake.WIDTH = 15;
 	p1PowerUp = "NONE";
 	p2PowerUp = "NONE";
-	speedPowerUpStart = 0;
-	widthPowerUpStart = 0;
-	ghostPowerUpStart = 0;
-	ghostFlag = false;
+	p1SpeedPowerUpStart = 0;
+	p1WidthPowerUpStart = 0;
+	p1GhostPowerUpStart = 0;
+	p1GhostFlag = false;
+	p1WidthFlag = false;
+	p2SpeedPowerUpStart = 0;
+	p2WidthPowerUpStart = 0;
+	p2GhostPowerUpStart = 0;
+	p2GhostFlag = false;
+	p2WidthFlag = false;
 	
 	// Create random starting X and Y coordinate for fruit
 	generateNewFruit();
@@ -385,7 +399,10 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
 	    }
 
+	    
+	    
 	    //draw the snake and fruit
+	    
 	    drawSnakesAndFruit(players);
 
 	    // If a Snake ate a fruit, make the snake grow one block
@@ -405,7 +422,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 	    
 	    if (players == 1) {
-		if (!ghostFlag){
+		if (!p1GhostFlag){
 		    headToTailCollisionSinglePlayer();
 		}
 	    } else {
@@ -472,12 +489,14 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    Rectangle p1head = new Rectangle(GOH.player_1.getGameObjectXPos(0), GOH.player_1.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 	    Rectangle p2head = new Rectangle(GOH.player_2.getGameObjectXPos(0), GOH.player_2.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 	    if (p1head.intersects(p2head)) {
-		GOH.restartPlayer(1);
-		GOH.restartPlayer(2);
+		if(!p1GhostFlag)
+		    GOH.restartPlayer(1);
+		if(!p2GhostFlag)
+		    GOH.restartPlayer(2);
 	    }
 
 	    // Create loop to check if the head has intersected the tail (Game Over)
-	    if (!ghostFlag)
+	    if (!p2GhostFlag)
 		hasIntersected = headToTailCollision(GOH.player_1, 1);
 
 	    // Check for if the new random location is on top of the other snake
@@ -490,7 +509,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		p1head = new Rectangle(GOH.player_1.getGameObjectXPos(0), GOH.player_1.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 		//if the head of player one intersects player two's tail, we must now check to see if player two's
 		//head intersects player one's tail. if not, only player one is reset
-		if (p1head.intersects(p2tail)) {
+		if (p1head.intersects(p2tail) && !p1GhostFlag) {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_1);
 		}
@@ -500,7 +519,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    respawnCollisionPlayer_1();
 
 	    // Check for collision between the second player and his own tail
-	    if (!ghostFlag)
+	    if (!p2GhostFlag)
 		hasIntersected = headToTailCollision(GOH.player_2, 2);
 
 	    // If the new location for player 2 is on player 1's tail, create new random location for player 2's tail
@@ -510,7 +529,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    for (int w = GOH.player_1.size() - 1; w > 0; w--) {
 		Rectangle p1tail = new Rectangle(GOH.player_1.getGameObjectXPos(w), GOH.player_1.getGameObjectYPos(w), Snake.WIDTH, Snake.WIDTH);
 		p2head = new Rectangle(GOH.player_2.getGameObjectXPos(0), GOH.player_2.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-		if (p2head.intersects(p1tail)) {
+		if (p2head.intersects(p1tail) && !p2GhostFlag) {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_2);
 		}
@@ -784,13 +803,21 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	//set the colors of the snake head and tail for player 1
 	GOH.player_1.setSnakeHeadColor("black");
 	GOH.player_1.setSnakeTailColor("green");
-	generateNewSnake(GOH.player_1, 1);
 
+	if(p1WidthFlag)
+	    Snake.WIDTH = 30;
+	generateNewSnake(GOH.player_1, 1);
+	Snake.WIDTH = 15;
+	
 	//if multiplayer, make sure player 2 has the correct color
 	if (numPlayers == 2){
 	    GOH.player_2.setSnakeHeadColor("black");
 	    GOH.player_2.setSnakeTailColor("orange");
+
+	    if(p2WidthFlag)
+		Snake.WIDTH = 30;
 	    generateNewSnake(GOH.player_2, 2);
+	    Snake.WIDTH = 15;
 	}
 
 
@@ -898,61 +925,106 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 
 	//speed power up
-	if (speedPowerUpStart != 0 && (currentSeconds - speedPowerUpStart) > 5) {
-	    speedPowerUpStart = 0;
+	if (p1SpeedPowerUpStart != 0 && (currentSeconds - p1SpeedPowerUpStart) > 5) {
+	    p1SpeedPowerUpStart = 0;
 	    atime.setDelay(speed);
 	}
-	if(p1PowerUp.equals("SPEED") || p2PowerUp.equals("SPEED")) {
+	if(p1PowerUp.equals("SPEED")) {
 	    int tempSpeed = speed;
 
-	    if (speedPowerUpStart != 0) {
-		speedPowerUpStart = currentSeconds;
+	    if (p1SpeedPowerUpStart != 0) {
+		p1SpeedPowerUpStart = currentSeconds;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    } else {
-		speedPowerUpStart = currentSeconds;
+		p1SpeedPowerUpStart = currentSeconds;
 		tempSpeed /= 5;
 		atime.setDelay(tempSpeed);
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    }
 	}
 
 	//width power up
-	if (widthPowerUpStart != 0 && (currentSeconds - widthPowerUpStart) > 5) {
-	    widthPowerUpStart = 0;
-	    Snake.WIDTH = 15;
+	if (p1WidthPowerUpStart != 0 && (currentSeconds - p1WidthPowerUpStart) > 5) {
+	    p1WidthPowerUpStart = 0;
+	    p1WidthFlag = false;
 	}
-	if(p1PowerUp.equals("WIDTH") || p2PowerUp.equals("WIDTH")) {
-	    if (widthPowerUpStart != 0) {
-		widthPowerUpStart = currentSeconds;
+	if(p1PowerUp.equals("WIDTH")) {
+	    if (p1WidthPowerUpStart != 0) {
+		p1WidthPowerUpStart = currentSeconds;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    } else {
-		widthPowerUpStart = currentSeconds;
-		Snake.WIDTH = 30;
+		p1WidthPowerUpStart = currentSeconds;
+		p1WidthFlag = true;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    }
 	}
 	//ghost power up
-	if (ghostPowerUpStart != 0 && (currentSeconds - ghostPowerUpStart) > 5) {
-	    ghostPowerUpStart = 0;
-	    ghostFlag = false;
+	if (p1GhostPowerUpStart != 0 && (currentSeconds - p1GhostPowerUpStart) > 5) {
+	    p1GhostPowerUpStart = 0;
+	    p1GhostFlag = false;
 	}
-	if(p1PowerUp.equals("GHOST") || p2PowerUp.equals("GHOST")) {
-	    if (ghostPowerUpStart != 0) {
-		ghostPowerUpStart = currentSeconds;
+	if(p1PowerUp.equals("GHOST")) {
+	    if (p1GhostPowerUpStart != 0) {
+		p1GhostPowerUpStart = currentSeconds;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    } else {
-		ghostPowerUpStart = currentSeconds;
-		ghostFlag = true;
+		p1GhostPowerUpStart = currentSeconds;
+		p1GhostFlag = true;
 		p1PowerUp = "NONE";
-		p2PowerUp = "NONE";
 	    }
 	}
 
+	if(players == 2) {
+	    //speed power up
+	    if (p2SpeedPowerUpStart != 0 && (currentSeconds - p2SpeedPowerUpStart) > 5) {
+		p2SpeedPowerUpStart = 0;
+		atime.setDelay(speed);
+	    }
+	    if(p2PowerUp.equals("SPEED")) {
+		int tempSpeed = speed;
+		
+		if (p2SpeedPowerUpStart != 0) {
+		    p2SpeedPowerUpStart = currentSeconds;
+		    p2PowerUp = "NONE";
+		} else {
+		    p2SpeedPowerUpStart = currentSeconds;
+		    tempSpeed /= 5;
+		    atime.setDelay(tempSpeed);
+		    p2PowerUp = "NONE";
+		}
+	    }
+
+	    //width power up
+	    if (p2WidthPowerUpStart != 0 && (currentSeconds - p2WidthPowerUpStart) > 5) {
+		p2WidthPowerUpStart = 0;
+		p2WidthFlag = false;
+	    }
+	    if(p2PowerUp.equals("WIDTH")) {
+		if (p2WidthPowerUpStart != 0) {
+		    p2WidthPowerUpStart = currentSeconds;
+		    p2PowerUp = "NONE";
+		} else {
+		    p2WidthPowerUpStart = currentSeconds;
+		    p2WidthFlag = true;
+		    p2PowerUp = "NONE";
+		}
+	    }
+	    //ghost power up
+	    if (p2GhostPowerUpStart != 0 && (currentSeconds - p2GhostPowerUpStart) > 5) {
+		p2GhostPowerUpStart = 0;
+		p2GhostFlag = false;
+	    }
+	    if(p2PowerUp.equals("GHOST")) {
+		if (p2GhostPowerUpStart != 0) {
+		    p2GhostPowerUpStart = currentSeconds;
+		    p2PowerUp = "NONE";
+		} else {
+		    p2GhostPowerUpStart = currentSeconds;
+		    p2GhostFlag = true;
+		    p2PowerUp = "NONE";
+		}
+	    }   
+	}
     }
 
     
