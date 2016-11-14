@@ -22,7 +22,7 @@ public class Snake {
 	public static final String RIGHT = "RIGHT";
 	
 	// Width of all snakes created
-    public static final int WIDTH = 15;
+    public static int WIDTH = 15;
 	
     // Establish variables
     // Starting X and Y coordinates for the snake head
