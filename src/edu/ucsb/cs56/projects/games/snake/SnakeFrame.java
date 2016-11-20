@@ -208,7 +208,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		offscreen = this.createImage(this.getWidth(), this.getHeight());
 
 		// Create random starting X and Y coordinate for fruit
-		generateNewFruit();
+		FruitGenerator.generateNewFruit(GOH); 
 		GOH.restartPlayer(1);
 
 		// If game is in progress and is not paused,
@@ -238,15 +238,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	// If in two player, and a fruit has not been eaten for 30 seconds
 	// create new random location for fruit
 	if (players == 2 && loser == 0 && fruittimer.getSeconds() >= 30 && menu != 0) {
-	    BasicFruit fruit_0 = GOH.getBasicFruit(0);
-	    Rectangle fruit = new Rectangle(fruit_0.getX(), fruit_0.getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
-	    Rectangle head = new Rectangle(GOH.player_2.getGameObjectXPos(0), GOH.player_2.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-	    Rectangle head2 = new Rectangle(GOH.player_1.getGameObjectXPos(0), GOH.player_1.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-	    do {
-		fruit_0.setXYRandom();
-		System.out.println("fruittime reset");
-	    } while (head2.intersects(fruit_0.getX(), fruit_0.getY(), BasicFruit.WIDTH, BasicFruit.WIDTH) ||
-		     head.intersects(fruit_0.getX(), fruit_0.getY(), BasicFruit.WIDTH, BasicFruit.WIDTH));
+	    FruitGenerator.MoveFruitRandomly(GOH); 
 	    fruittimer.start();
 	}
 
@@ -286,7 +278,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	p2WidthFlag = false;
 	
 	// Create random starting X and Y coordinate for fruit
-	generateNewFruit();
+	FruitGenerator.generateNewFruit(GOH); 
 
 	// Restart the state of the new players.
 	GOH.newPlayers();
@@ -691,106 +683,28 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     
     //this method ensures that player two does not spawn on top of player one
     private void respawnCollisionPlayer_2() {
-		while (hasIntersected) {
-		    hasIntersected = false;
-		    for (int j = 0; j < GOH.player_1.size(); j++) {
-		        for (int i = 0; i < GOH.player_2.size(); i++) {
-		            Rectangle box1 = new Rectangle(GOH.player_1.getGameObjectXPos(j), GOH.player_1.getGameObjectYPos(j), Snake.WIDTH, Snake.WIDTH);
-		            Rectangle box2 = new Rectangle(GOH.player_2.getGameObjectXPos(i), GOH.player_2.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-		            if (box1.intersects(box2)) {
-		                hasIntersected = true;
-		                GOH.respawnPlayer(GOH.player_2);
-		            }
-		        }
-		    }
-		}
+		CollisionDetector.respawnCollisionPlayer(hasIntersected, GOH, 2); 
 	}
 
     //this method ensures that player one does not spawn on top of player two
 	private void respawnCollisionPlayer_1() {
-		while (hasIntersected) {
-		    hasIntersected = false;
-		    for (int j = 0; j < GOH.player_1.size(); j++) {
-		        for (int i = 0; i < GOH.player_2.size(); i++) {
-		            Rectangle box1 = new Rectangle(GOH.player_1.getGameObjectXPos(j), GOH.player_1.getGameObjectYPos(j), Snake.WIDTH, Snake.WIDTH);
-		            Rectangle box2 = new Rectangle(GOH.player_2.getGameObjectXPos(i), GOH.player_2.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-		            if (box1.intersects(box2)) {
-		                hasIntersected = true;
-		                GOH.respawnPlayer(GOH.player_1);
-		            }
-		        }
-		    }
-		}
+		CollisionDetector.respawnCollisionPlayer(hasIntersected, GOH, 1); 
 	}
 	
     
     //this method returns true if the snake's head intersected its tail
     //the playerNumber parameter represents player one or player two, 1 = player_1, 2 = player_2
     private boolean headToTailCollision(Snake player, int playerNumber) {
-		for (int i = player.size() - 1; i > 1; i--) {
-		    // Create rectangle for head and for a Tail in the ArrayList
-		    Rectangle p = new Rectangle(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-		    // If the head intersects with the Tail, add one to loss counter
-		    if (head.intersects(p)) {
-		    	if (playerNumber == 1)
-		    		GOH.respawnPlayer(GOH.player_1);
-		    	else{
-		    		GOH.respawnPlayer(GOH.player_2);
-		    	}
-		        return true;
-		    }
-		}
-		return false;
+    	return CollisionDetector.headToTailCollision(player, playerNumber, Snake.WIDTH, GOH); 
 	}
     
     //this method causes the user to lose when colliding with their own tail in single player through the loser variable.
     private void headToTailCollisionSinglePlayer() {
-	for (int i = GOH.player_1.size() - 1; i > 1; i--) {
-	    // Create rectangle for head and for a Tail in the ArrayList
-	    Rectangle p = new Rectangle(GOH.player_1.getGameObjectXPos(i), GOH.player_1.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-	    Rectangle head = new Rectangle(GOH.player_1.getGameObjectXPos(0), GOH.player_1.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-	    // If the head intersects with the Tail, add one to loss counter
-	    if (head.intersects(p)) {
-		loser++;
-		// This is to prevent the head from being overlapped by the green tail in the final image
-		g.setColor(Color.BLACK);
-		g.fillRect(GOH.player_1.getGameObjectXPos(1), GOH.player_1.getGameObjectYPos(1), Snake.WIDTH, Snake.WIDTH);
-		// Set color to red and fill the tail block which the head intersected with
-		g.setColor(Color.RED);
-		g.fillRect(GOH.player_1.getGameObjectXPos(i), GOH.player_1.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-	    }
-	}
+    	loser += CollisionDetector.headToTailCollisionSinglePlayer(GOH, Snake.WIDTH, g); 
     }
     
     private void fruitRespawnCollisionDetect(int numPlayers) {
-	do {
-	    hasIntersected = false;
-	    for (int i = 0; i < GOH.player_1.size(); i++) {
-		Rectangle r = new Rectangle(GOH.player_1.getGameObjectXPos(i), GOH.player_1.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-		Rectangle fruit = new Rectangle(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
-		if (r.intersects(fruit)) {
-		    while (r.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
-			generateNewFruit();
-			hasIntersected = true;
-			System.out.println("hasIntersected");
-		    }
-		}
-	    }
-	    if (numPlayers == 2){
-		for (int i = 0; i < GOH.player_2.size(); i++) {
-                    Rectangle r = new Rectangle(GOH.player_2.getGameObjectXPos(i), GOH.player_2.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-                    Rectangle fruit = new Rectangle(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
-                    if (r.intersects(fruit)) {
-                        while (r.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
-			    generateNewFruit();
-                            hasIntersected = true;
-                            System.out.println("hasIntersected");
-                        }
-                    }
-                }
-	    }
-	} while (hasIntersected);
+		CollisionDetector.fruitRespawnCollisionDetect(numPlayers, GOH, Snake.WIDTH, BasicFruit.WIDTH); 
     }
 
     private void drawSnakesAndFruit(int numPlayers) {
@@ -859,7 +773,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 			//find out what powerup was in the fruit
 			p1PowerUp = GOH.getBasicFruit(0).getPowerUp();
 			// then generate a new one
-			generateNewFruit();
+			FruitGenerator.generateNewFruit(GOH); 
 		    }
 
 		    // Set growsnake to true to increase size of snake by 1
@@ -877,7 +791,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 			//find out what powerup was in the fruit
 			p2PowerUp = GOH.getBasicFruit(0).getPowerUp();
 			// then generate a new one
-			generateNewFruit();
+			FruitGenerator.generateNewFruit(GOH); 
 		    }
 
 		    // Set growsnake to true to increase size of snake by 1
@@ -892,32 +806,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 
     }
-
-    public void generateNewFruit() {
-	BasicFruit fruit_0 = chooseFruit();
-	GOH.deleteAllFruits();
-	GOH.addBasicFruit(fruit_0);
-    }
-
-
-    // RNG based function that randomly chooses a fruit
-    private BasicFruit chooseFruit() {
-	int rand1 = rng.nextInt(4);
-	int rand2 = rng.nextInt(3);
-
-	if(rand1 != 0) {
-	    return new BasicFruit();
-	} else {
-	    if (rand2 == 0) {
-		return new SpeedFruit();
-	    } else if (rand2 == 1) {
-		return new WidthFruit();
-	    } else {
-		return new GhostFruit();
-	    }
-	}
-    }
-
 
     // Function to handle powerups
     public void checkPowerUp() {
