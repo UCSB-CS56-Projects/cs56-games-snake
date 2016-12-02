@@ -67,7 +67,24 @@ The ingame bar may cover some game space.You can change it to fit the windows.
 4,What refactoring opportunities: 
 You can use MVC design pattern to creat other two files to place game object and the input helper(controller). For now, all the methods and classes are in just one snake frame.
 
-  
+##**M16 final remarks**
+=================
+###Further code refactoring:
+We created additional classes to handle the creation objects ingame. You should see a BasicFruit class, a Snake class, and a GameObjectHandler class. This should help in adding additional functionality going forward
+* BasicFruit
+ * Handles the creation of all basic fruit objects, calling the GameObject superconstructor.
+ * Created with the intent that it will be extended to allow for creation of more specific special fruit.
+* Snake
+ * Creates all snake objects, adds and removes from their tails, etc.
+* GameObjectHandler
+ * Is responsible for the change of the internal data members and states for all GameObjects.
+ * This class was created to separate SnakeFrame from directly accessing GameObject data members.
+ * **All public members of GameObjectHandler should be made private, and should only be accessed through getters and setters**
+ * Could be used as a superclass for more specific object handler classes. 
+  * ie: SnakeObjectHandler, FruitObjectHandler
 
-
-
+###Bugs:
+There are several bugs that currently exist in the game. The most pertinent are:
+1. If directional input is spammed, the snake can turn in the opposite direction it is traveling.
+2. Collision detection is somewhat glitchy between snakes. This should be refactored and removed from SnakeFrame to an ObjectCollision class before this is handled.
+3. Snakes sometimes disappear when running into each other. This is an issue with respawning or respawnCollision detection. 
