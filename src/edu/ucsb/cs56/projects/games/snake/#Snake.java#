@@ -15,16 +15,13 @@ import java.util.Random;
  */
 public class Snake {
 
-    //Define constants for snake object direction setters
-    public static final String UP = "UP";
-    public static final String DOWN = "DOWN";
-    public static final String LEFT = "LEFT";
-    public static final String RIGHT = "RIGHT";
-
-    
-
-    
-    // Width of all snakes created
+	//Define constants for snake object direction setters
+	public static final String UP = "UP";
+	public static final String DOWN = "DOWN";
+	public static final String LEFT = "LEFT";
+	public static final String RIGHT = "RIGHT";
+	
+	// Width of all snakes created
     public static int WIDTH = 15;
 	
     // Establish variables
