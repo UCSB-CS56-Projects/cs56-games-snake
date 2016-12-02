@@ -6,6 +6,7 @@ project history
 ```
  W14 | bronhuston 4pm | vinlara | Snake game
  W16 | omeedrabani 6pm| rkuang, robingorge (zehaoli)| Snake game
+ F16 | hanklewis, vinha 6pm | Snake game
 ```
 
 A Snake game, originally by Sam Dowell, and edited by Samuel Min Eric Huang.
@@ -33,6 +34,7 @@ The game features two different modes.
 One player mode and two player mode. As well as two different levels. 
 Normal mode: No obstacles or walls
 Puddle mode: Puddles that sometimes hide the fruit
+Walls mode: If you hit the wall you respawn
 
 Single Player mode:
 In single player mode, your goal is to see how long of a snake you can make
@@ -49,6 +51,11 @@ The goal of two player mode is to see which player is biggest before the
 If the heads of the two snakes collide both snakes revert to the original size.
 If one snake collides with the other. The collider is reverted back to 
 original size. Whoever is the biggest in the end is the winner.
+
+The game also has, by default, fruits that give you different powerups.
+Green Fruit (Speed Fruit): doubles the speed of your snake
+Purple Fruit (Width Fruit): doubles the width of you snake
+Black Fruit (Ghost Fruit): allows you to pass through your snake and othe snakes (and the wall in Walls Mode)
 
 
 W16 final remarks
@@ -68,6 +75,19 @@ The ingame bar may cover some game space.You can change it to fit the windows.
 You can use MVC design pattern to creat other two files to place game object and the input helper(controller). For now, all the methods and classes are in just one snake frame.
 
   
+F16 final remarks
+=================
 
+1: What the code does:
+In this legacy code, the Jframe, game object, and the controller are in different classes. The snake is and arraylist of game objects, and when you intersect with a fruit, an object is added to that arraylist. On a key press of an arrow (WASD for player 2), the snake object is updated in that direction by moving the last object in the arraylist to the front in the direction you pressed (fixed bug where you can turn on itself).  Different colored fruit spawns that give you different powerups (defined above).
+
+2: What features could you add:
+Instead of just having a continuous game board, maybe having a discrete (i.e. a grid) board would make it akin to the original snake game.  Perhaps, add more game modes and powerups.
+
+3: What bugs exist:
+In the walls gamemode, the wall collision is not consistent on all sides (especially the top). In two player mode, when either snake eats a Speed Fruit or a Width Fruit, it makes both snakes faster or bigger, respectively. There's no easy way of individually updating the snakes speed or size.
+
+4: What opportunites exist for refactoring:
+Refactoring the menu into multiple action listeners for mouse clicks instead of relying on different keystrokes is a huge opportunity. Refactoring the game board into a discrete grid would make the game seem more legitimate. Also, refactor the snake object so that you can update speed and size individually.
 
 
