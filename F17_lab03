@@ -1,0 +1,20 @@
+(a) A replicate of the Snake game. Player ,ameuvers a line which grows in length, with the line itself being a primary obstacle.
+
+(b)..*As an user, I can go to the menu and change the color of my snake, so that I can make my snake lovely.
+   ..*As an user, I can go to the menu and change the color of the panel, so that I don't get bored of the game.
+   ..*As an user, I can go to the menu and restart the game, so that I can stop the current game and start another one.
+
+(c)The program runs successfully. First, the game asks how many players are playing, size of the map, and the difficulty. Then user can hit the space bar to start the game. Users nevigate the snakes using arrow keys. Game restarts when snakes hit each other.
+
+(d)..*As an user, I can change the background of my panel, so that it looks more aesthetic.
+   ..*As an user, I can choose what kind of snake I want to play with, so that it is more fun.
+   ..*As an user, I can choose the length of the snake at the beginning of the game, so that I don't have to build up my snake.
+   ..*As an user, I can choose what kind of fruits is given
+
+(e)We can add headers to README.md such as: "How to run the game?", "Tech stack", "Game modes"... to make it more formatted and easy to read.
+
+(f)There are no targets that need descriptions. (come back later)
+
+(g)Yes, there are enough issues. Yes, the issues are clear in terms of what the expectations are.
+
+(h)
