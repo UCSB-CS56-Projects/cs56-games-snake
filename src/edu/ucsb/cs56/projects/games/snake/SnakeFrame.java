@@ -12,7 +12,10 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.Timer;
 import javax.swing.*;
-
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.*;
 //Note to self: SnakeFrame is similar to Game.java
 
 public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
@@ -341,6 +344,12 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	// Create font
 	// Begin painting
 	// Get the offscreen graphics for double buffer
+    BufferedImage img = null;
+	try {
+    	img = ImageIO.read(new File("rainforest.jpg"));
+	} catch (IOException e) {
+ 	   e.printStackTrace();
+	}
 	g = offscreen.getGraphics();
 	g.setFont(font1);
 	
@@ -517,6 +526,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		if (p1head.intersects(p2tail) && !p1GhostFlag) {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_1);
+		    score1 = 0;
 		}
 	    }
 
@@ -537,6 +547,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		if (p2head.intersects(p1tail) && !p2GhostFlag) {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_2);
+		    score2 = 0;
 		}
 
 	    }
