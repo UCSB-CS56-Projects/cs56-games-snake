@@ -526,9 +526,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		if (p1head.intersects(p2tail) && !p1GhostFlag) {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_1);
-
 		    score1 = 0;
-
 		}
 	    }
 
@@ -549,9 +547,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		if (p2head.intersects(p1tail) && !p2GhostFlag) {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_2);
-
-		    score2=0;
-
+		    score2 = 0;
 		}
 
 	    }
@@ -640,6 +636,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	g.drawString(difficultySelect, this.getWidth() / 2 - fm.stringWidth(difficultySelect) / 2, 400);
 	g.drawString(begin_and_tutorial, this.getWidth() / 2 - fm.stringWidth(begin_and_tutorial) / 2 - 20, 490);
 	g.setFont(font1);
+
     }
 
 
@@ -794,69 +791,68 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     public void generateNewSnake(Snake player, int playerNumber){
 	//begin drawing the snake
 
-	for (int i = 0; i < player.size(); i++) {
-	    // Make color of first block (head) black
-	    if (player.getSnakeColorAtIndex(i) == "black") {
-		g.setColor(Color.BLACK);
-		// Make the rest of the snake green
-	    } else if (player.getSnakeColorAtIndex(i) == "green"){
-		g.setColor(Color.GREEN);
-	    } else {
-		g.setColor(Color.ORANGE);
-	    }
-
-
-	    // Set turn back to 0 to indicate that the turn has been displayed
-	    player.turn();
-
-
-	    // Create rectangles for the snake head and the fruit in order to check for intersection
-	    Rectangle r = new Rectangle(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-	    Rectangle fruit = new Rectangle(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
-	    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-
-	    // Paint the snake
-	    g.fillRect(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
-
-
-	    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
-	    if (head.intersects(fruit)) {
-		if (playerNumber == 1){
-		    while (head.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
-
-			//find out what powerup was in the fruit
-			p1PowerUp = GOH.getBasicFruit(0).getPowerUp();
-			// then generate a new one
-			FruitGenerator.generateNewFruit(GOH); 
+		for (int i = 0; i < player.size(); i++) {
+		    // Make color of first block (head) black
+		    if (player.getSnakeColorAtIndex(i) == "black") {
+			g.setColor(Color.BLACK);
+			// Make the rest of the snake green
+		    } else if (player.getSnakeColorAtIndex(i) == "green"){
+			g.setColor(Color.GREEN);
+		    } else {
+			g.setColor(Color.ORANGE);
 		    }
 
-		    // Set growsnake to true to increase size of snake by 1
-		    growsnake = true;
-		    // Add to score
-		    if (players == 1){
-			score++;
-		    }
-		    fruits--;
-		    fruittimer.start();
-		} else {
-		    Rectangle head2 = new Rectangle(GOH.player_1.getGameObjectXPos(0), GOH.player_1.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
-		    while (head.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH) || head2.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
+
+		    // Set turn back to 0 to indicate that the turn has been displayed
+		    player.turn();
+
+
+		    // Create rectangles for the snake head and the fruit in order to check for intersection
+		    Rectangle r = new Rectangle(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
+		    Rectangle fruit = new Rectangle(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
+		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);\
+		    
+			Rectangle head2 = new Rectangle(GOH.player_2.getGameObjectXPos(0), GOH.player_2.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
+		    // Paint the snake
+		    g.fillRect(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
+
+
+		    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
+		    if (head.intersects(fruit)) {
+			    while (head.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
+
+				//find out what powerup was in the fruit
+				p1PowerUp = GOH.getBasicFruit(0).getPowerUp();
+				// then generate a new one
+				FruitGenerator.generateNewFruit(GOH); 
+			    }
+
+			    // Set growsnake to true to increase size of snake by 1
+			    growsnake = true;
+			    score1++;
+
+			    // Add to score
+			    if (players == 1){
+				score++;
+			    }
+			    fruits--;
+			    fruittimer.start();
+			} else if(head2.intersects(fruit)){
+				
+			    while (head2.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
+			    	//find out what powerup was in the fruit
+			    	p2PowerUp = GOH.getBasicFruit(0).getPowerUp();
+			    	// then generate a new one
+			    	FruitGenerator.generateNewFruit(GOH); 
+
+			    	// Set growsnake to true to increase size of snake by 1
+			   		growsnake2 = true;
+			    	// Add to score
+			    	score2++;
+			    }
 			
-			//find out what powerup was in the fruit
-			p2PowerUp = GOH.getBasicFruit(0).getPowerUp();
-			// then generate a new one
-			FruitGenerator.generateNewFruit(GOH); 
-		    }
-
-		    // Set growsnake to true to increase size of snake by 1
-		    growsnake2 = true;
-
-		    // Add to score
-		    score2++;
+			}
 		}
-
-	    }
-	}
 
 
     }
@@ -1105,9 +1101,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     
     //mouselistener...........listener
     public void mouseClicked(MouseEvent e) {
-	int x=e.getX();
-	int y=e.getY();
-	
 	if ((menu != 0) && (loser == 0)) {
 	    pause = !(pause);
 	    if (pause == true) {
@@ -1116,29 +1109,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		watch.unpause();
 	    }
 	}
-
-		//set mouse listener for click player
-          else if (menu==0 &&controls==false) {
-	     {
-	 
-	  int Ilength = fm.stringWidth(numPlayerOptions)/2;
-int Iheight = fm.getHeight(numPlayerOptions);
-
-if ((this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15)<x && x<(this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15+Ilength))   //if x is between numberPlayerOption 1
-
-    {if (205<y && y <(205+Iheight))
-	 {players = 1; }
-    }
-
-if ((this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15+Ilength)<x && x<(this.getWidth()/2 - fm.stringWidth(numPlayerOptions)/2-15+2*Ilength))   //if x is between numberPlayerOption 2                                                                        
-
-    {if (205<y && y <(205+Iheight))
-         {players = 2; }
-    }
-	     }
-
-	  }
-		
     }
     
     @Override
