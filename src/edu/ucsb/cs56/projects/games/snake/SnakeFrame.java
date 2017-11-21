@@ -411,7 +411,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		g.fillOval(80,this.getHeight()-100,110,60);
 		g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
 	    }
-	    if(walls)
+	  
 		headToWallCollision();
 	    
 	    //draw the snake and fruit
@@ -732,11 +732,25 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     //checks to make sure you haven't run into a wall, and if it has,
     //respawn the player with it's direction facing up
     public void headToWallCollision() {
-	if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	if (players==1) {if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
 	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
 	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
 	    GOH.respawnPlayer(GOH.player_1);
+		score = 0;
+		score1 = 0;
+		loser++;
+	    GOH.player_1.setDirection("UP");
+	}
+}
+
+	if (players==2){if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
+	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
+	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
+	    GOH.respawnPlayer(GOH.player_1);
+		score = 0;
+		score1 = 0;
 	    GOH.player_1.setDirection("UP");
 	}
 	if(GOH.player_2.getGameObjectXPos(1) - Snake.WIDTH/2 <= 0 ||
@@ -744,8 +758,10 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	   GOH.player_2.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_2.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
 	    GOH.respawnPlayer(GOH.player_2);
+		score2 = 0;
 	    GOH.player_2.setDirection("UP");
 	}
+}
     }
     
     
@@ -810,7 +826,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    // Create rectangles for the snake head and the fruit in order to check for intersection
 		    Rectangle r = new Rectangle(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
 		    Rectangle fruit = new Rectangle(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
-		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);\
+		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 		    
 			Rectangle head2 = new Rectangle(GOH.player_2.getGameObjectXPos(0), GOH.player_2.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 		    // Paint the snake
