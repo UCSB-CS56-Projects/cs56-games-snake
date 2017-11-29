@@ -95,6 +95,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private Stopwatch fruittimer = new Stopwatch();
     private boolean puddles = false;
     private boolean walls = false;
+    public static boolean reversed = false;
     
     //define getters
     public int getPlayers(){ return players;}
@@ -705,9 +706,10 @@ public void DrawGrid(Graphics g){
 
 	// These methods change the size of the oval used to select whether puddles are enabled or disabled in the
 	// main menu.
-	if (puddles == false && walls == false){g.fillRect(117, 325, 70, 40);}
-	else if(puddles == true){g.fillRect(246,325, 80,40);}
-	else if(walls == true){g.fillRect(355, 325, 90, 40);}
+	if (puddles == false && walls == false&reversed==false){g.fillRect(77, 325, 70, 40);}
+	else if(puddles == true){g.fillRect(206,325, 80,40);}
+	else if(walls == true){g.fillRect(300, 325, 70, 40);}
+        else if (reversed==true) {g.fillRect(410,325,90,40);}
 	// The methods below highlight the difficulty of the snake game at the bottom of the main menu.
 	if (speed == 75) {
 	    g.fillRect(115, 410, 50, 30);
@@ -721,7 +723,7 @@ public void DrawGrid(Graphics g){
 	String numPlayer = new String("Number of Players ");
 	String keyPress = new String("(Press keys 1 or 2)");
 	String numPlayerOptions = new String("1      2");
-	String modeOptions = new String("6)Normal   7)Puddles   Z)Walls");
+	String modeOptions = new String("6)Normal  7)Puddles  Z)Walls  X)Reversed");
 	String difficultyOptions = new String("8)Easy    9)Medium    0)Difficult");
 	String modeSelect = new String("Select mode: ");
 	String difficultySelect = new String("Select difficulty: ");
@@ -1220,6 +1222,14 @@ public void DrawGrid(Graphics g){
 	    if (menu == 0 && controls == false){
 		puddles = false;
 		walls = true;
+	    }
+	    
+	}
+		else if (key == KeyEvent.VK_X){
+	    if (menu == 0 && controls == false){
+		puddles = false;
+		walls = false;
+		reversed = true;
 	    }
 	    
 	}

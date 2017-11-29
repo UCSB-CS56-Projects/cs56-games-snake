@@ -117,27 +117,34 @@ public class GameObjectHandler implements KeyListener {
 	int key = e.getKeyCode();
 	// If the user presses an arrow key, change the direction values
 	// Don't allow the direction to directly reverse; and dont allow direction to change near the edges
-
-	
 	if (key == KeyEvent.VK_LEFT) {
 	    if ((player_1.getDirection() != Snake.RIGHT) && 
 		(player_1.getGameObjectYPos(0) > Snake.WIDTH) && 
 		(player_1.getGameObjectYPos(0)) < (SnakeFrame.getFrameHeight() - Snake.WIDTH) &&
 		(player_1.hasTurned())) 
-            	{
+            	{ if(SnakeFrame.reversed==false){
 		    player_1.setDirection(Snake.LEFT);
 		    player_1.turn();
-		    SnakeFrame.waitFlag = false;
+		    SnakeFrame.waitFlag = false;}
+		    else if (SnakeFrame.reversed==true)
+		    	{ player_1.setDirection(Snake.RIGHT);
+		    player_1.turn();
+		    SnakeFrame.waitFlag = false;}
 		}
 	} else if (key == KeyEvent.VK_RIGHT) {
 	    if ((player_1.getDirection() != Snake.LEFT) && 
 		(player_1.getGameObjectYPos(0) > Snake.WIDTH) && 
 		(player_1.getGameObjectYPos(0) < (SnakeFrame.getFrameHeight() - Snake.WIDTH)) &&
 		(player_1.hasTurned())) 
-		{
+		{ if (SnakeFrame.reversed==false){
 		    player_1.setDirection(Snake.RIGHT);
 		    player_1.turn();
+		    SnakeFrame.waitFlag = false;}
+		    else if (SnakeFrame.reversed==true){
+		    	player_1.setDirection(Snake.LEFT);
+		    player_1.turn();
 		    SnakeFrame.waitFlag = false;
+		    }
 		}
 	} else if (key == KeyEvent.VK_UP) {
 	    if ((player_1.getDirection() != Snake.DOWN) &&
@@ -145,9 +152,15 @@ public class GameObjectHandler implements KeyListener {
 		(player_1.getGameObjectXPos(0) > Snake.WIDTH) &&
 		(player_1.hasTurned())) 
 		{
+		    if (SnakeFrame.reversed==false){
 		    player_1.setDirection(Snake.UP);
 		    player_1.turn();
+		    SnakeFrame.waitFlag = false;}
+		   else if (SnakeFrame.reversed==true){
+		    	player_1.setDirection(Snake.DOWN);
+		    player_1.turn();
 		    SnakeFrame.waitFlag = false;
+		    }
 		}
 	} else if (key == KeyEvent.VK_DOWN) {
 	    
@@ -156,9 +169,15 @@ public class GameObjectHandler implements KeyListener {
 		(player_1.getGameObjectXPos(0) > Snake.WIDTH) &&
 		(player_1.hasTurned())) 
 		{
+		    if (SnakeFrame.reversed==false){
 		    player_1.setDirection(Snake.DOWN);
 		    player_1.turn();
+		    SnakeFrame.waitFlag = false;}
+		    else if (SnakeFrame.reversed==true){
+		    	player_1.setDirection(Snake.UP);
+		    player_1.turn();
 		    SnakeFrame.waitFlag = false;
+		    }
 		}
 	}
 	// Create key listeners for player movement for second player WASD
@@ -166,41 +185,71 @@ public class GameObjectHandler implements KeyListener {
 	    if ((player_2.getDirection() != Snake.RIGHT) &&
 		(player_2.getGameObjectYPos(0) > Snake.WIDTH) &&
 		(player_2.getGameObjectYPos(0) < (SnakeFrame.getFrameHeight() - Snake.WIDTH)) &&
-		(player_2.hasTurned())) {
-		player_2.setDirection(Snake.LEFT);
-		player_2.turn();
-		SnakeFrame.waitFlag = false;
+		(player_2.hasTurned())) 
+		{
+			if(SnakeFrame.reversed==false){
+		  	    player_2.setDirection(Snake.LEFT);
+		 	  	player_2.turn();
+			    SnakeFrame.waitFlag = false;
+			} else if (SnakeFrame.reversed==true) {
+		 		player_2.setDirection(Snake.RIGHT);
+		 	   	player_2.turn();
+		 	    SnakeFrame.waitFlag = false;
+			}
 	    }
 	} else if (key == KeyEvent.VK_D) {
 	    if ((player_2.getDirection() != Snake.LEFT) &&
 		(player_2.getGameObjectYPos(0) > Snake.WIDTH) &&
 		(player_2.getGameObjectYPos(0) < (SnakeFrame.getFrameHeight() - Snake.WIDTH)) &&
-		(player_2.hasTurned())) {
-		player_2.setDirection(Snake.RIGHT);
-		player_2.turn();
-		SnakeFrame.waitFlag = false;
+		(player_2.hasTurned())) 
+		{
+			if(SnakeFrame.reversed==false){
+		  	  player_2.setDirection(Snake.RIGHT);
+		 	   player_2.turn();
+			    SnakeFrame.waitFlag = false;
+			} else if (SnakeFrame.reversed==true) {
+		 		player_2.setDirection(Snake.LEFT);
+		 	   player_2.turn();
+		 	   SnakeFrame.waitFlag = false;
+			}
 	    }
 	} else if (key == KeyEvent.VK_W) {
 	    if ((player_2.getDirection() != Snake.DOWN) &&
 		(player_2.getGameObjectXPos(0) < (SnakeFrame.getFrameWidth() - Snake.WIDTH)) &&
 		(player_2.getGameObjectXPos(0) > Snake.WIDTH) &&
-		(player_2.hasTurned())) {
-		player_2.setDirection(Snake.UP);
-		player_2.turn();
-		SnakeFrame.waitFlag = false;
+		(player_2.hasTurned())) 
+		{
+			if(SnakeFrame.reversed==false){
+		  	  	player_2.setDirection(Snake.UP);
+		 	    player_2.turn();
+			   SnakeFrame.waitFlag = false;
+			} else if (SnakeFrame.reversed==true) {
+		 		player_2.setDirection(Snake.DOWN);
+		 	    player_2.turn();
+		 	    SnakeFrame.waitFlag = false;
+			}
 	    }
 	} else if (key == KeyEvent.VK_S) {
 	    
 	    if ((player_2.getDirection() != Snake.UP) &&
 		(player_2.getGameObjectXPos(0) < (SnakeFrame.getFrameWidth() - Snake.WIDTH)) &&
 		(player_2.getGameObjectXPos(0) > Snake.WIDTH) &&
-		(player_2.hasTurned())) {
-		player_2.setDirection(Snake.DOWN);
-		player_2.turn();
-		SnakeFrame.waitFlag = false;
+		(player_2.hasTurned())) 
+		{
+			if(SnakeFrame.reversed==false){
+		  	    player_2.setDirection(Snake.DOWN);
+		 	  	player_2.turn();
+			    SnakeFrame.waitFlag = false;
+			} else if (SnakeFrame.reversed==true) {
+		 		player_2.setDirection(Snake.UP);
+		 	   	player_2.turn();
+		 	   SnakeFrame.waitFlag = false;
+			}
 	    }
 	}
     }
+	
+
     /*
     @Override    
     public void keyPressed(KeyEvent e){
