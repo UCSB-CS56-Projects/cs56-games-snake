@@ -462,7 +462,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	  
 
 	    
-	    if(walls)
+	 
 		headToWallCollision();
 	    
 	    //draw the snake and fruit
@@ -847,22 +847,38 @@ public void DrawGrid(Graphics g){
     //checks to make sure you haven't run into a wall, and if it has,
     //respawn the player with it's direction facing up
     public void headToWallCollision() {
-	if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	if (players==1){
+	    if (GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
 	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
 	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
 	    GOH.respawnPlayer(GOH.player_1);
 		score = 0;
 		score1 = 0;
+	      	loser++;
 	    GOH.player_1.setDirection("UP");
 	}
-	if(GOH.player_2.getGameObjectXPos(1) - Snake.WIDTH/2 <= 0 ||
+	}
+
+	else if (players==2){
+           if (GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
+	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
+	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
+	    GOH.respawnPlayer(GOH.player_1);
+		score = 0;
+		score1 = 0;
+	       
+	    GOH.player_1.setDirection("UP");
+	}	    
+	   else if(GOH.player_2.getGameObjectXPos(1) - Snake.WIDTH/2 <= 0 ||
 	   GOH.player_2.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
 	   GOH.player_2.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_2.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
 	    GOH.respawnPlayer(GOH.player_2);
 		score2 = 0;
 	    GOH.player_2.setDirection("UP");
+	}
 	}
     }
     
