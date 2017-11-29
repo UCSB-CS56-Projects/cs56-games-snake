@@ -16,6 +16,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 //Note to self: SnakeFrame is similar to Game.java
 
 public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
@@ -95,6 +99,11 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     public static int getFrameWidth(){ return frameWidth; }
     public static int getFrameHeight(){ return frameHeight; }
     
+    private JPanel panel2;
+    private JLabel backgroundImage = new JLabel();
+    private JButton onePlayerButton = new JButton("1 player");
+
+
     /*
      * THIS IMPLEMENTATION WILL HAVE TO BE REFACTORED ELSEWHERE
      * AT A FUTURE TIME.
@@ -135,10 +144,15 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     //JLabel label, m;
     //JButton button;
     
+    File f;
+    AudioInputStream ais;
+    Clip clip;
+
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
 	// Call JFrame constructor and give it the title "Snake"
         super("Snake");
+        //this.setBackground(Color.BLUE);
 
         // Initialize components
         initComponents();
@@ -146,7 +160,20 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         setScreenBoundaries();
         setLocationRelativeTo(null);
         this.setResizable(false);
-	
+
+
+		try{	    		
+			f = new File("snake/sound/eat.wav");	    		
+			ais = AudioSystem.getAudioInputStream(f);
+		    clip = AudioSystem.getClip();
+		 	clip.open(ais);
+		}
+		catch(Exception e)
+		{
+		  	e.printStackTrace();
+		}
+
+
         // Add a KeyListener
         addKeyListener(this);
         GameObjectHandlerListener GOHL = new GameObjectHandlerListener();
@@ -340,16 +367,12 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     public Font getFont2(){ return font2; }
     public FontMetrics getFm(){ return fm;}
 
+
     public void paint(Graphics graph) {
 	// Create font
 	// Begin painting
 	// Get the offscreen graphics for double buffer
-    BufferedImage img = null;
-	try {
-    	img = ImageIO.read(new File("rainforest.jpg"));
-	} catch (IOException e) {
- 	   e.printStackTrace();
-	}
+   
 	g = offscreen.getGraphics();
 	g.setFont(font1);
 	
@@ -411,7 +434,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		g.fillOval(80,this.getHeight()-100,110,60);
 		g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
 	    }
-	  
+	    if(walls)
 		headToWallCollision();
 	    
 	    //draw the snake and fruit
@@ -558,7 +581,42 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     }
 
 
-    public void showMainMenu(){
+    public void showMainMenu(){ 
+
+    	panel2 = new JPanel();
+    	panel2.setOpaque(false);
+    	panel2.setLayout(new FlowLayout());
+
+    	backgroundImage.setLayout(new FlowLayout());
+
+    	backgroundImage.setIcon(new ImageIcon(""));
+    	backgroundImage.setLayout(new BorderLayout());
+
+    	panel2.add(onePlayerButton);
+
+    	backgroundImage.add(panel2);
+
+    	this.add(backgroundImage);
+
+/*
+    	JPanel panel = new JPanel();
+    	
+    	JButton onePlayerButton = new JButton("1 Player");
+		onePlayerButton.addActionListener(e -> players = 1);
+		//this.getContentPane().add(onePlayerButton);
+	
+	    panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	    panel.setSize(300,300);
+	    panel.setBackground(Color.RED);
+	    panel.add(onePlayerButton);
+
+	   
+		this.setSize(600,600);
+		this.setBackground(Color.BLACK);
+		this.add(panel);
+		this.setVisible(true);
+
+
 	//Set the height and width of the main menu
 	this.setSize(500,500);
 	//Set the color of the main menu and fill it
@@ -570,6 +628,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	g.drawString("Snake", this.getWidth()/2-fm.stringWidth("Snake")/2, 80);
 	String authorTitle="By: Sam Dowell, with Eric Huang, Sam Min";
 	g.drawString(authorTitle, this.getWidth()/2-fm.stringWidth(authorTitle)/2, 110);
+
+			
 
 
 	// Paint box displaying whether 1 or 2 players is selected
@@ -636,7 +696,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	g.drawString(difficultySelect, this.getWidth() / 2 - fm.stringWidth(difficultySelect) / 2, 400);
 	g.drawString(begin_and_tutorial, this.getWidth() / 2 - fm.stringWidth(begin_and_tutorial) / 2 - 20, 490);
 	g.setFont(font1);
-
+*/
     }
 
 
@@ -732,19 +792,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     //checks to make sure you haven't run into a wall, and if it has,
     //respawn the player with it's direction facing up
     public void headToWallCollision() {
-	if (players==1) {if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
-	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
-	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
-	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
-	    GOH.respawnPlayer(GOH.player_1);
-		score = 0;
-		score1 = 0;
-		loser++;
-	    GOH.player_1.setDirection("UP");
-	}
-}
-
-	if (players==2){if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
 	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
 	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
@@ -761,7 +809,6 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		score2 = 0;
 	    GOH.player_2.setDirection("UP");
 	}
-}
     }
     
     
@@ -835,6 +882,16 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 		    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
 		    if (head.intersects(fruit)) {
+
+		   		try{
+		    		clip.start();
+		    		clip.setFramePosition(0);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		e.printStackTrace();
+		    	}
+		    	
 			    while (head.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
 
 				//find out what powerup was in the fruit
@@ -855,6 +912,15 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 			    fruittimer.start();
 			} else if(head2.intersects(fruit)){
 				
+				try{
+		    		clip.start();
+		    		clip.setFramePosition(0);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		e.printStackTrace();
+		    	}
+
 			    while (head2.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
 			    	//find out what powerup was in the fruit
 			    	p2PowerUp = GOH.getBasicFruit(0).getPowerUp();
