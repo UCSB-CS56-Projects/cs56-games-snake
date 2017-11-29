@@ -7,8 +7,8 @@ import java.util.*;
 public class WidthFruit extends BasicFruit {
 
 
-    public static final int HEIGHT = 15;
-    public static final int WIDTH = 15;
+    public static final int HEIGHT = 20;
+    public static final int WIDTH = 20;
     private final String powerUp = "WIDTH";
 
     private Color c;

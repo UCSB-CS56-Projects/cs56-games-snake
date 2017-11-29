@@ -16,6 +16,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 //Note to self: SnakeFrame is similar to Game.java
 
 public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
@@ -39,7 +43,12 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private int p1GhostPowerUpStart = 0;
     private boolean p1GhostFlag = false;
     private boolean p1WidthFlag = false;
-
+    
+    private final int BOX_HEIGHT = 20;
+    private final int BOX_WIDTH = 20;
+    private  int GRID_WIDTH ;
+    private  int GRID_HEIGHT;
+ 
     
     private int p2SpeedPowerUpStart = 0;
     private int p2WidthPowerUpStart = 0;
@@ -86,6 +95,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private Stopwatch fruittimer = new Stopwatch();
     private boolean puddles = false;
     private boolean walls = false;
+    public static boolean reversed = false;
     
     //define getters
     public int getPlayers(){ return players;}
@@ -95,6 +105,11 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     public static int getFrameWidth(){ return frameWidth; }
     public static int getFrameHeight(){ return frameHeight; }
     
+    private JPanel panel2;
+    private JLabel backgroundImage = new JLabel();
+    private JButton onePlayerButton = new JButton("1 player");
+
+
     /*
      * THIS IMPLEMENTATION WILL HAVE TO BE REFACTORED ELSEWHERE
      * AT A FUTURE TIME.
@@ -135,10 +150,15 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     //JLabel label, m;
     //JButton button;
     
+    File f;
+    AudioInputStream ais;
+    Clip clip;
+
     /** Creates new form SnakeFrame */
     public SnakeFrame() {
 	// Call JFrame constructor and give it the title "Snake"
         super("Snake");
+        //this.setBackground(Color.BLUE);
 
         // Initialize components
         initComponents();
@@ -146,7 +166,20 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         setScreenBoundaries();
         setLocationRelativeTo(null);
         this.setResizable(false);
-	
+
+
+		try{	    		
+			f = new File("snake/sound/eat.wav");	    		
+			ais = AudioSystem.getAudioInputStream(f);
+		    clip = AudioSystem.getClip();
+		 	clip.open(ais);
+		}
+		catch(Exception e)
+		{
+		  	e.printStackTrace();
+		}
+
+
         // Add a KeyListener
         addKeyListener(this);
         GameObjectHandlerListener GOHL = new GameObjectHandlerListener();
@@ -175,6 +208,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         // Create Timer
         atime.start();
     }
+
+  
     
     public void save() {
     	
@@ -340,16 +375,12 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     public Font getFont2(){ return font2; }
     public FontMetrics getFm(){ return fm;}
 
+
     public void paint(Graphics graph) {
 	// Create font
 	// Begin painting
 	// Get the offscreen graphics for double buffer
-    BufferedImage img = null;
-	try {
-    	img = ImageIO.read(new File("rainforest.jpg"));
-	} catch (IOException e) {
- 	   e.printStackTrace();
-	}
+   
 	g = offscreen.getGraphics();
 	g.setFont(font1);
 	
@@ -399,7 +430,24 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    //Set window size
 	    setScreenBoundaries();
 	    g.fillRect(0,0,SnakeFrame.frameWidth,SnakeFrame.frameHeight);
+	    if (screenSize==0){
+		GRID_WIDTH=500;
+		GRID_HEIGHT=500;
+	    }
+	    else if (screenSize==1){
+		GRID_WIDTH=600;
+		GRID_HEIGHT=600;
+	    }
+	    else {
+		GRID_WIDTH=700;
+		GRID_HEIGHT=700;
+	    }
 
+
+	    
+            g.clearRect(0, 0, BOX_WIDTH * GRID_WIDTH, BOX_HEIGHT * GRID_HEIGHT);
+	    
+	    DrawGrid(g);
 	    // Set color to red and paint the fruit
 	    g.setColor(BasicFruit.getColorObject());
 	    g.fillRect(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
@@ -411,7 +459,11 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		g.fillOval(80,this.getHeight()-100,110,60);
 		g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
 	    }
-	    if(walls)
+
+	  
+
+	    
+	 
 		headToWallCollision();
 	    
 	    //draw the snake and fruit
@@ -443,7 +495,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    }
 
 	    g.setColor(Color.WHITE);
-	    g.fillRect(0, 0, this.getWidth(), 90);
+	    g.fillRect(0, 0, this.getWidth(), 100);
 	    // Display the score and time
 	    g.setColor(Color.BLACK);
 	    if (players == 1){
@@ -557,8 +609,70 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	} //end if fruits > 0
     }
 
+    
+public void DrawGrid(Graphics g){
+        //drawing in outside rect
+    /* if (screenSize==0){
+	GRID_WIDTH=500;
+	GRID_HEIGHT=500;
+    }
+    else if (screenSize==1){
+	GRID_WIDTH=600;
+	GRID_HEIGHT=600;
+    }
+    else {
+	GRID_WIDTH=700;
+	GRID_HEIGHT=700;
+	}*/
+        g.drawRect(0, 0, GRID_WIDTH * BOX_WIDTH, GRID_HEIGHT * BOX_HEIGHT);
+        //drawing the vertical lines
+        for(int x = BOX_WIDTH; x< GRID_WIDTH * BOX_WIDTH; x+=BOX_WIDTH){
+            g.drawLine(x, 0, x, BOX_HEIGHT * GRID_HEIGHT);
+        }
+        //drawing the horizontal lines
+        for (int y = BOX_HEIGHT; y < GRID_HEIGHT * BOX_HEIGHT; y+=BOX_HEIGHT){
+            g.drawLine(0, y, GRID_WIDTH* BOX_WIDTH, y);
+        }
+    }
+    
 
-    public void showMainMenu(){
+
+    public void showMainMenu(){ 
+
+	/*	panel2 = new JPanel();
+    	panel2.setOpaque(false);
+    	panel2.setLayout(new FlowLayout());
+
+    	backgroundImage.setLayout(new FlowLayout());
+
+    	backgroundImage.setIcon(new ImageIcon(""));
+    	backgroundImage.setLayout(new BorderLayout());
+
+    	panel2.add(onePlayerButton);
+
+    	backgroundImage.add(panel2);
+
+    	this.add(backgroundImage);
+
+
+    	JPanel panel = new JPanel();
+    	
+    	JButton onePlayerButton = new JButton("1 Player");
+		onePlayerButton.addActionListener(e -> players = 1);
+		//this.getContentPane().add(onePlayerButton);
+	
+	    panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	    panel.setSize(300,300);
+	    panel.setBackground(Color.RED);
+	    panel.add(onePlayerButton);
+
+	   
+		this.setSize(600,600);
+		this.setBackground(Color.BLACK);
+		this.add(panel);
+		this.setVisible(true); */
+
+
 	//Set the height and width of the main menu
 	this.setSize(500,500);
 	//Set the color of the main menu and fill it
@@ -570,6 +684,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	g.drawString("Snake", this.getWidth()/2-fm.stringWidth("Snake")/2, 80);
 	String authorTitle="By: Sam Dowell, with Eric Huang, Sam Min";
 	g.drawString(authorTitle, this.getWidth()/2-fm.stringWidth(authorTitle)/2, 110);
+
+			
 
 
 	// Paint box displaying whether 1 or 2 players is selected
@@ -590,9 +706,10 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 	// These methods change the size of the oval used to select whether puddles are enabled or disabled in the
 	// main menu.
-	if (puddles == false && walls == false){g.fillRect(117, 325, 70, 40);}
-	else if(puddles == true){g.fillRect(246,325, 80,40);}
-	else if(walls == true){g.fillRect(355, 325, 90, 40);}
+	if (puddles == false && walls == false&reversed==false){g.fillRect(77, 325, 70, 40);}
+	else if(puddles == true){g.fillRect(206,325, 80,40);}
+	else if(walls == true){g.fillRect(300, 325, 70, 40);}
+        else if (reversed==true) {g.fillRect(410,325,90,40);}
 	// The methods below highlight the difficulty of the snake game at the bottom of the main menu.
 	if (speed == 75) {
 	    g.fillRect(115, 410, 50, 30);
@@ -606,7 +723,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	String numPlayer = new String("Number of Players ");
 	String keyPress = new String("(Press keys 1 or 2)");
 	String numPlayerOptions = new String("1      2");
-	String modeOptions = new String("6)Normal   7)Puddles   Z)Walls");
+	String modeOptions = new String("6)Normal  7)Puddles  Z)Walls  X)Reversed");
 	String difficultyOptions = new String("8)Easy    9)Medium    0)Difficult");
 	String modeSelect = new String("Select mode: ");
 	String difficultySelect = new String("Select difficulty: ");
@@ -732,19 +849,38 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     //checks to make sure you haven't run into a wall, and if it has,
     //respawn the player with it's direction facing up
     public void headToWallCollision() {
-	if(GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	if (players==1){
+	    if (GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
 	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
 	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
 	    GOH.respawnPlayer(GOH.player_1);
+		score = 0;
+		score1 = 0;
+	      	loser++;
 	    GOH.player_1.setDirection("UP");
 	}
-	if(GOH.player_2.getGameObjectXPos(1) - Snake.WIDTH/2 <= 0 ||
+	}
+
+	else if (players==2){
+           if (GOH.player_1.getGameObjectXPos(1) - Snake.WIDTH/2<= 0 ||
+	   GOH.player_1.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
+	   GOH.player_1.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
+	   GOH.player_1.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
+	    GOH.respawnPlayer(GOH.player_1);
+		score = 0;
+		score1 = 0;
+	       
+	    GOH.player_1.setDirection("UP");
+	}	    
+	   else if(GOH.player_2.getGameObjectXPos(1) - Snake.WIDTH/2 <= 0 ||
 	   GOH.player_2.getGameObjectYPos(0) - Snake.WIDTH <= 0 ||
 	   GOH.player_2.getGameObjectXPos(0) + Snake.WIDTH/2 >= SnakeFrame.frameWidth ||
 	   GOH.player_2.getGameObjectYPos(0) + Snake.WIDTH >= SnakeFrame.frameHeight) {
 	    GOH.respawnPlayer(GOH.player_2);
+		score2 = 0;
 	    GOH.player_2.setDirection("UP");
+	}
 	}
     }
     
@@ -770,9 +906,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	GOH.player_1.setSnakeTailColor("green");
 
 	if(p1WidthFlag)
-	    Snake.WIDTH = 30;
+	    Snake.WIDTH = 40;
 	generateNewSnake(GOH.player_1, 1);
-	Snake.WIDTH = 15;
+	Snake.WIDTH = 20;
 	
 	//if multiplayer, make sure player 2 has the correct color
 	if (numPlayers == 2){
@@ -780,9 +916,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    GOH.player_2.setSnakeTailColor("orange");
 
 	    if(p2WidthFlag)
-		Snake.WIDTH = 30;
+		Snake.WIDTH = 40;
 	    generateNewSnake(GOH.player_2, 2);
-	    Snake.WIDTH = 15;
+	    Snake.WIDTH = 20;
 	}
 
 
@@ -810,7 +946,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    // Create rectangles for the snake head and the fruit in order to check for intersection
 		    Rectangle r = new Rectangle(player.getGameObjectXPos(i), player.getGameObjectYPos(i), Snake.WIDTH, Snake.WIDTH);
 		    Rectangle fruit = new Rectangle(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
-		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);\
+		    Rectangle head = new Rectangle(player.getGameObjectXPos(0), player.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 		    
 			Rectangle head2 = new Rectangle(GOH.player_2.getGameObjectXPos(0), GOH.player_2.getGameObjectYPos(0), Snake.WIDTH, Snake.WIDTH);
 		    // Paint the snake
@@ -819,6 +955,16 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
 		    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
 		    if (head.intersects(fruit)) {
+
+		   		try{
+		    		clip.start();
+		    		clip.setFramePosition(0);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		e.printStackTrace();
+		    	}
+		    	
 			    while (head.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
 
 				//find out what powerup was in the fruit
@@ -839,6 +985,15 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 			    fruittimer.start();
 			} else if(head2.intersects(fruit)){
 				
+				try{
+		    		clip.start();
+		    		clip.setFramePosition(0);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		e.printStackTrace();
+		    	}
+
 			    while (head2.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
 			    	//find out what powerup was in the fruit
 			    	p2PowerUp = GOH.getBasicFruit(0).getPowerUp();
@@ -1055,18 +1210,29 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    if (menu == 0 && controls == false){
 		puddles = false;
 		walls = false;
+		reversed = false;
 	    }
 	}
 	else if (key == KeyEvent.VK_7){
 	    if (menu == 0 && controls == false){
 		puddles = true;
 		walls = false;
+		reversed = false;
 	    }
 	}
 	else if (key == KeyEvent.VK_Z){
 	    if (menu == 0 && controls == false){
 		puddles = false;
 		walls = true;
+		reversed = false;
+	    }
+	    
+	}
+		else if (key == KeyEvent.VK_X){
+	    if (menu == 0 && controls == false){
+		puddles = false;
+		walls = false;
+		reversed = true;
 	    }
 	    
 	}
