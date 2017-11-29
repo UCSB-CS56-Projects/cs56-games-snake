@@ -1210,18 +1210,21 @@ public void DrawGrid(Graphics g){
 	    if (menu == 0 && controls == false){
 		puddles = false;
 		walls = false;
+		reversed = false;
 	    }
 	}
 	else if (key == KeyEvent.VK_7){
 	    if (menu == 0 && controls == false){
 		puddles = true;
 		walls = false;
+		reversed = false;
 	    }
 	}
 	else if (key == KeyEvent.VK_Z){
 	    if (menu == 0 && controls == false){
 		puddles = false;
 		walls = true;
+		reversed = false;
 	    }
 	    
 	}
