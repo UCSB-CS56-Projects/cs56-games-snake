@@ -6,8 +6,8 @@ import java.util.*;
 
 public class GhostFruit extends BasicFruit {
 
-    public static final int HEIGHT = 15;
-    public static final int Width = 15;
+    public static final int HEIGHT = 20;
+    public static final int Width = 20;
     private static Random rng = new Random();
     private final String powerUp = "GHOST";
     private Color c;

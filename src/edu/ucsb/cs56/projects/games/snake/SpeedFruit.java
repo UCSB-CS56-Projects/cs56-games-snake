@@ -6,8 +6,8 @@ import java.util.*;
 
 public class SpeedFruit extends BasicFruit {
 
-    public static final int HEIGHT = 15;
-    public static final int Width = 15;
+    public static final int HEIGHT = 20;
+    public static final int Width = 20;
     private static Random rng = new Random();
     private final String powerUp = "SPEED";
     private Color c;

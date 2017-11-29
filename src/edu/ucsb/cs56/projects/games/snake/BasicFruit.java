@@ -12,8 +12,8 @@ import java.util.*;
  */
 public class BasicFruit extends GameObject {
 	
-	public static final int HEIGHT = 15;
-	public static final int WIDTH = 15;
+	public static final int HEIGHT = 20;
+	public static final int WIDTH = 20;
 	private static Random rng = new Random();
 
 	/**Default Constructor
@@ -25,8 +25,10 @@ public class BasicFruit extends GameObject {
     
 	public BasicFruit(){
 		super();
-		int xPos = (int) (rng.nextDouble()*(SnakeFrame.getFrameWidth() - 74) + 25);
-		int yPos = (int) (rng.nextDouble()*(SnakeFrame.getFrameHeight() - 164) + 115);
+		int xPos_first = (int) (rng.nextDouble()*((SnakeFrame.getFrameWidth()-20)/20 +1) + 0);
+		int yPos_first = (int) (rng.nextDouble()*((SnakeFrame.getFrameHeight()-20)/20-9) + 10);
+		int xPos=xPos_first*20;
+		int yPos=yPos_first*20;
 		this.setPos(xPos,  yPos);
 		this.setColor("red");
 		this.setColorObject(r);
@@ -54,8 +56,10 @@ public class BasicFruit extends GameObject {
 	public void setXYRandom(){
 		//the random number generating code was derived from the original legacy project. There is not much 
 		//in the way of explanation.
-		int xPos = (int) (rng.nextDouble()*(SnakeFrame.getFrameWidth() - 74) + 25);
-		int yPos = (int) (rng.nextDouble()*(SnakeFrame.getFrameHeight() - 164) + 115);
+	       int xPos_first = (int) (rng.nextDouble()*((SnakeFrame.getFrameWidth()-20)/20 +1) + 0);
+		int yPos_first = (int) (rng.nextDouble()*((SnakeFrame.getFrameHeight()-20)/20-9) + 10);
+		int xPos=xPos_first*20;
+		int yPos=yPos_first*20;
 		this.setPos(xPos, yPos);
 	}
 

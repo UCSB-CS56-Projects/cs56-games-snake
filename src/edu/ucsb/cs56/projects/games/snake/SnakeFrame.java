@@ -494,7 +494,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    }
 
 	    g.setColor(Color.WHITE);
-	    g.fillRect(0, 0, this.getWidth(), 90);
+	    g.fillRect(0, 0, this.getWidth(), 100);
 	    // Display the score and time
 	    g.setColor(Color.BLACK);
 	    if (players == 1){
