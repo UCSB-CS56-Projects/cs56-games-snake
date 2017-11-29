@@ -25,7 +25,7 @@ public class Snake {
 
     
     // Width of all snakes created
-    public static int WIDTH = 15;
+    public static int WIDTH = 20;
 	
     // Establish variables
     // Starting X and Y coordinates for the snake head

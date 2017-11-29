@@ -43,7 +43,12 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     private int p1GhostPowerUpStart = 0;
     private boolean p1GhostFlag = false;
     private boolean p1WidthFlag = false;
-
+    
+    private final int BOX_HEIGHT = 20;
+    private final int BOX_WIDTH = 20;
+    private  int GRID_WIDTH ;
+    private  int GRID_HEIGHT;
+ 
     
     private int p2SpeedPowerUpStart = 0;
     private int p2WidthPowerUpStart = 0;
@@ -202,6 +207,8 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
         // Create Timer
         atime.start();
     }
+
+  
     
     public void save() {
     	
@@ -422,7 +429,24 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    //Set window size
 	    setScreenBoundaries();
 	    g.fillRect(0,0,SnakeFrame.frameWidth,SnakeFrame.frameHeight);
+	    if (screenSize==0){
+		GRID_WIDTH=500;
+		GRID_HEIGHT=500;
+	    }
+	    else if (screenSize==1){
+		GRID_WIDTH=600;
+		GRID_HEIGHT=600;
+	    }
+	    else {
+		GRID_WIDTH=700;
+		GRID_HEIGHT=700;
+	    }
 
+
+	    
+            g.clearRect(0, 0, BOX_WIDTH * GRID_WIDTH, BOX_HEIGHT * GRID_HEIGHT);
+	    
+	    DrawGrid(g);
 	    // Set color to red and paint the fruit
 	    g.setColor(BasicFruit.getColorObject());
 	    g.fillRect(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH);
@@ -434,6 +458,10 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		g.fillOval(80,this.getHeight()-100,110,60);
 		g.fillOval(this.getWidth()-200,this.getHeight()-100,70,70);
 	    }
+
+	  
+
+	    
 	    if(walls)
 		headToWallCollision();
 	    
@@ -580,10 +608,37 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	} //end if fruits > 0
     }
 
+    
+public void DrawGrid(Graphics g){
+        //drawing in outside rect
+    /* if (screenSize==0){
+	GRID_WIDTH=500;
+	GRID_HEIGHT=500;
+    }
+    else if (screenSize==1){
+	GRID_WIDTH=600;
+	GRID_HEIGHT=600;
+    }
+    else {
+	GRID_WIDTH=700;
+	GRID_HEIGHT=700;
+	}*/
+        g.drawRect(0, 0, GRID_WIDTH * BOX_WIDTH, GRID_HEIGHT * BOX_HEIGHT);
+        //drawing the vertical lines
+        for(int x = BOX_WIDTH; x< GRID_WIDTH * BOX_WIDTH; x+=BOX_WIDTH){
+            g.drawLine(x, 0, x, BOX_HEIGHT * GRID_HEIGHT);
+        }
+        //drawing the horizontal lines
+        for (int y = BOX_HEIGHT; y < GRID_HEIGHT * BOX_HEIGHT; y+=BOX_HEIGHT){
+            g.drawLine(0, y, GRID_WIDTH* BOX_WIDTH, y);
+        }
+    }
+    
+
 
     public void showMainMenu(){ 
 
-    	panel2 = new JPanel();
+	/*	panel2 = new JPanel();
     	panel2.setOpaque(false);
     	panel2.setLayout(new FlowLayout());
 
@@ -598,7 +653,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 
     	this.add(backgroundImage);
 
-/*
+
     	JPanel panel = new JPanel();
     	
     	JButton onePlayerButton = new JButton("1 Player");
@@ -614,7 +669,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		this.setSize(600,600);
 		this.setBackground(Color.BLACK);
 		this.add(panel);
-		this.setVisible(true);
+		this.setVisible(true); */
 
 
 	//Set the height and width of the main menu
@@ -696,7 +751,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	g.drawString(difficultySelect, this.getWidth() / 2 - fm.stringWidth(difficultySelect) / 2, 400);
 	g.drawString(begin_and_tutorial, this.getWidth() / 2 - fm.stringWidth(begin_and_tutorial) / 2 - 20, 490);
 	g.setFont(font1);
-*/
+
     }
 
 
@@ -833,9 +888,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	GOH.player_1.setSnakeTailColor("green");
 
 	if(p1WidthFlag)
-	    Snake.WIDTH = 30;
+	    Snake.WIDTH = 40;
 	generateNewSnake(GOH.player_1, 1);
-	Snake.WIDTH = 15;
+	Snake.WIDTH = 20;
 	
 	//if multiplayer, make sure player 2 has the correct color
 	if (numPlayers == 2){
@@ -843,9 +898,9 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    GOH.player_2.setSnakeTailColor("orange");
 
 	    if(p2WidthFlag)
-		Snake.WIDTH = 30;
+		Snake.WIDTH = 40;
 	    generateNewSnake(GOH.player_2, 2);
-	    Snake.WIDTH = 15;
+	    Snake.WIDTH = 20;
 	}
 
 
