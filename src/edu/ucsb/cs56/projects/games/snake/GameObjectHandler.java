@@ -12,8 +12,8 @@ import java.awt.event.*;
  */
 public class GameObjectHandler implements KeyListener {
     //create private default position variables
-    private int defaultX = SnakeFrame.getFrameWidth()/5*3;
-    private int defaultY = SnakeFrame.getFrameHeight()/5*3;
+    private int defaultX = SnakeFrame.getFrameWidth()/5*2;
+    private int defaultY = SnakeFrame.getFrameHeight()/5*2;
     
     //create private snake objects since the GameObjectHandler is the only one changing their state.
     public Snake player_1; 
@@ -46,7 +46,7 @@ public class GameObjectHandler implements KeyListener {
      * Default constructor. Initializes player_1 and player_2 back to their default positions.
      */
     public GameObjectHandler() {
-	player_1 = new Snake(defaultX-150, defaultY-150);
+	player_1 = new Snake(defaultX-160, defaultY-160);
 	player_2 = new Snake(defaultX, defaultY);
     }
     
@@ -79,7 +79,7 @@ public class GameObjectHandler implements KeyListener {
      * @see Snake
      */
     public void newPlayers(){
-	player_1 = new Snake(defaultX-150, defaultY-150);
+	player_1 = new Snake(defaultX-160, defaultY-160);
 	player_2 = new Snake(defaultX, defaultY);
     }
     
@@ -89,7 +89,7 @@ public class GameObjectHandler implements KeyListener {
      */
     public void restartPlayer(int playerNum){
 	if (playerNum == 1){
-	    player_1 = new Snake(defaultX-150, defaultY-150); 
+	    player_1 = new Snake(defaultX-160, defaultY-160); 
 	}
 	else
 	    player_2 = new Snake(defaultX, defaultY);
@@ -100,10 +100,12 @@ public class GameObjectHandler implements KeyListener {
      * @see Snake
      */
     public void respawnPlayer(Snake player){
-	int x = (int) ((Math.random()*31 + 10) * Snake.WIDTH);
-        int y = (int) ((Math.random()*31 + 10) * Snake.WIDTH);
+		int x_pos = (int) (Math.random()*((SnakeFrame.getFrameWidth()-20)/20 +1) + 0);
+        int y_pos = (int) (Math.random()*((SnakeFrame.getFrameWidth()-20)/20 +1) + 0);
+        int x = x_pos*20;
+        int y = y_pos*20;
         player.setGameObjectPos(x, y, 0);
-        player.setGameObjectPos(x, y + Snake.WIDTH, 1);
+        player.setGameObjectPos(x, y + (2*Snake.WIDTH), 1);
         player.setGameObjectPos(x, y + (2*Snake.WIDTH), 2);
     }
     /**
