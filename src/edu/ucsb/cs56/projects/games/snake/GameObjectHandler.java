@@ -85,8 +85,9 @@ public class GameObjectHandler implements KeyListener {
     
     /**Restarts the indicated player to its initial state
      * @param playerNum the player to be restarted
-     * @see Snake
+     * @see Snake  ok
      */
+
     public void restartPlayer(int playerNum){
 	if (playerNum == 1){
 	    player_1 = new Snake(defaultX-150, defaultY-150); 
