@@ -24,7 +24,7 @@ import javax.sound.sampled.Clip;
 
 public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
     // This variable determines the speed of the snake, and corresponds to the difficulty
-    private int speed= 75;
+    private int speed= 80;
     
     //create private variables for the snakeFrame size
     private static int frameWidth;
@@ -711,11 +711,11 @@ public void DrawGrid(Graphics g){
 	else if(walls == true){g.fillRect(300, 325, 70, 40);}
         else if (reversed==true) {g.fillRect(410,325,90,40);}
 	// The methods below highlight the difficulty of the snake game at the bottom of the main menu.
-	if (speed == 75) {
+	if (speed == 80) {
 	    g.fillRect(115, 410, 50, 30);
-	} else if (speed == 50) {
+	} else if (speed == 40) {
 	    g.fillRect(205, 410, 75, 30);
-	} else if (speed ==25) {
+	} else if (speed ==20) {
 	    g.fillRect(320, 410, 75, 30);
 	}
 
@@ -1238,7 +1238,7 @@ public void DrawGrid(Graphics g){
 	}
 	else if (key == KeyEvent.VK_8){
 	    if (menu == 0 ){
-		speed=75;
+		speed=80;
 		atime.stop();
 		atime.setDelay(speed);
 		atime.restart();
@@ -1246,7 +1246,7 @@ public void DrawGrid(Graphics g){
 	}
 	else if (key == KeyEvent.VK_9){
 	    if (menu == 0 ){
-		speed=50;
+		speed=40;
 		atime.stop();
 		atime.setDelay(speed);
 		atime.restart();
@@ -1254,7 +1254,7 @@ public void DrawGrid(Graphics g){
 	}
 	else if (key == KeyEvent.VK_0){
 	    if (menu == 0 ){
-		speed=25;
+		speed=20;
 		atime.stop();
 		atime.setDelay(speed);
 		atime.restart();
