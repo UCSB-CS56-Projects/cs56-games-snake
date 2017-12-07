@@ -90,4 +90,18 @@ In the walls gamemode, the wall collision is not consistent on all sides (especi
 4: What opportunites exist for refactoring:
 Refactoring the menu into multiple action listeners for mouse clicks instead of relying on different keystrokes is a huge opportunity. Refactoring the game board into a discrete grid would make the game seem more legitimate. Also, refactor the snake object so that you can update speed and size individually.
 
+F17 final remarks
+=================
+1: What the code does:
+In this legacy code, the SnakeFrame(Jframe), game object, fruit, tail, snake, and collision detector are in different java files. The snake is an arraylist of game objetcs, which are squares of different colors. When a snkae intersect with a fruit, a square(object) is added to the arraylist corresponding to the snake. The whole game is based on a grid(discrete), and the wall is untouchable, which means the game is over when the snakes hit the walls. Another game mode, Reversed is added. The directions the player intend to do is reversed; when player presses UP, snake goes down, etc. 
+
+2: What features could you add:
+Some sound effects can be added to this game. For example, when a snake eats a fruit, a 'ding' is played. Also, a background picture can be added to the menu. (We spent 20 hours on this issue but couldn't figure it out) 
+
+3: What bugs exist:
+When a snake eats a SpeedFruit, the game continues to be in high speed. In one-player mode, the snake always respawn in the same position when the game restarts. 
+
+4: What opportunites exist for refactoring:
+The SnakeFrame class sound be refactored in to multiple componenets. The GUI, game controls, graphics, checking for snake collision, are all opportunities to be in separate files. 
+
 

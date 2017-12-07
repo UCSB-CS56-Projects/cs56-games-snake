@@ -20,6 +20,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+
 //Note to self: SnakeFrame is similar to Game.java
 
 public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
@@ -526,7 +527,7 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 	    if (players == 1){
 		g.drawString("Game Over!", this.getWidth() / 2 - fm.stringWidth("Game Over!") / 2, 240);
 		g.setColor(Color.WHITE);
-	    } else {
+	   /* } else {
 		g.drawString("Game Over!", this.getWidth() / 2 - fm.stringWidth("Game Over!") / 2, 280);
 		g.setColor(Color.WHITE);
 		if (GOH.player_1.size() == GOH.player_2.size()) {
@@ -535,11 +536,12 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    g.drawString("Green Wins!", this.getWidth() / 2 - fm.stringWidth("Green Wins!") / 2, 300);
 		} else {
 		    g.drawString("Orange Wins!", this.getWidth() / 2 - fm.stringWidth("Orange Wins!") / 2, 300);
-		}
-	    }
-	    g.drawString("Do you want to play again?", this.getWidth()/2-fm.stringWidth("Do you want to play again?") / 2, 260);
+		}*/
+		g.drawString("Do you want to play again?", this.getWidth()/2-fm.stringWidth("Do you want to play again?") / 2, 260);
 	    g.drawString("Yes [Y] or No [N]", this.getWidth() / 2 - fm.stringWidth("Yes [Y] or No [N]") / 2, 280);
 	    g.drawString("Return to Menu [M]", this.getWidth() / 2 - fm.stringWidth("Return to Menu [M]") / 2, 300);
+	    }
+	    
 	}
 	
 	waitFlag = true;
@@ -579,7 +581,18 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_1);
 		    score1 = 0;
+		    loser++;
+
+		    g.setColor(Color.RED);
+		    g.drawString("Game Over!", this.getWidth() / 2 - fm.stringWidth("Game Over!") / 2, 240);
+		    g.setColor(Color.ORANGE);
+		    g.drawString("Orange Wins!", this.getWidth() / 2 - fm.stringWidth("Orange Wins!") / 2, 400);
+		    g.drawString("Do you want to play again?", this.getWidth()/2-fm.stringWidth("Do you want to play again?") / 2, 260);
+	   		g.drawString("Yes [Y] or No [N]", this.getWidth() / 2 - fm.stringWidth("Yes [Y] or No [N]") / 2, 280);
+	    	g.drawString("Return to Menu [M]", this.getWidth() / 2 - fm.stringWidth("Return to Menu [M]") / 2, 300);
+
 		}
+		waitFlag = true; 
 	    }
 
 	    // If the new random location for one snake is on top of the others tail, create new random location
@@ -600,8 +613,17 @@ public class SnakeFrame extends JFrame implements KeyListener,MouseListener {
 		    hasIntersected = true;
 		    GOH.respawnPlayer(GOH.player_2);
 		    score2 = 0;
+		    loser++;
+		    
+		    g.setColor(Color.RED);
+		    g.drawString("Game Over!", this.getWidth() / 2 - fm.stringWidth("Game Over!") / 2, 240);
+		    g.setColor(Color.GREEN);
+		    g.drawString("Green Wins!", this.getWidth() / 2 - fm.stringWidth("Green Wins!") / 2, 400);
+		    g.drawString("Do you want to play again?", this.getWidth()/2-fm.stringWidth("Do you want to play again?") / 2, 260);
+	   		g.drawString("Yes [Y] or No [N]", this.getWidth() / 2 - fm.stringWidth("Yes [Y] or No [N]") / 2, 280);
+	    	g.drawString("Return to Menu [M]", this.getWidth() / 2 - fm.stringWidth("Return to Menu [M]") / 2, 300);
 		}
-
+		waitFlag = true; 
 	    }
 
 	    //make sure the player 2 respawn location is valid
@@ -956,15 +978,18 @@ public void DrawGrid(Graphics g){
 		    // If the Snake head intersects with fruit, randomly generate new location for fruit away from the snake
 		    if (head.intersects(fruit)) {
 
-		   		try{
-		    		clip.start();
-		    		clip.setFramePosition(0);
-		    	}
-		    	catch(Exception e)
-		    	{
-		    		e.printStackTrace();
-		    	}
-		    	
+				try {
+					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("eact.wav").getAbsoluteFile( ));
+		   			Clip clip = AudioSystem.getClip( );
+		    		clip.open(audioInputStream);
+		    		clip.start( );
+		   		}
+		   		catch(Exception ex)
+		   		{
+		     		System.out.println("Error with playing sound.");
+		     		ex.printStackTrace( );
+		   		}
+				    	
 			    while (head.intersects(GOH.getBasicFruit(0).getX(), GOH.getBasicFruit(0).getY(), BasicFruit.WIDTH, BasicFruit.WIDTH)) {
 
 				//find out what powerup was in the fruit
