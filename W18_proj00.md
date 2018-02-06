@@ -26,5 +26,12 @@ Matt Gottlieb, Derek Zhang
  * Make the procedure to run the game more clear.
  * More headings and organization.
 
-6. 
+6. The current state of the build.xml file is runnable. It is using Ant, ...
+
+7. There is enough issues that you could earn 1000 points, it might be a little difficult if you can't complete some of hte higher point issues though. The issues are clear in terms of what the expectations are.
+The main issues that make the game unplayable are:
+  * After eating speed fruit, the snake permanentaly stays at that speed even after death.
+  * The snake goes through the top or bottom once, when it should kill the snake
+  * It is not possible to get fruits that appear on the edge of the screen
+  * The high score is not working.
  
