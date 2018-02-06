@@ -34,4 +34,11 @@ The main issues that make the game unplayable are:
   * The snake goes through the top or bottom once, when it should kill the snake
   * It is not possible to get fruits that appear on the edge of the screen
   * The high score is not working.
+  
+
+8. The code in this project is structured so that every individual piece of the game (such as fruits and their generator, the snake, the high score) are separated into their own individual classes. From what I can tell, SnakeFrame.java is what holds everything together and does most of the functions related to running the game. Objects in the game, like fruit and pellets, are derived from the GameObject class, with GameObjectHandler handling these instances. The snake itself is separated into Snake.java, which holds the snake object, and tail.java, which seems to be what comprises the table. However, the mainpulation of the snake regarding user input seems to be handled by SnakeFrame.java. One thing that might be a problem is that a lot of the code and functions are held within SnakeFrame.jave; I will have to look into detail on the functions and code to see if this is really a problem though.
+
+While the code isn't too hard to follow in some aspects (classes and functions are labeled/named clearly, code is commented with explanations), there are parts that may need cleaning (for example, large blocks of commented-out code).
+
+9. As far as I can tell, test coverage is not great. The only test file is TailTest.java, which only covers the Tail object. Everything else needs test coverage.
  
